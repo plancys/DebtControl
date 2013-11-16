@@ -4,3 +4,4 @@
 target/
 debtcontrol-android/target
 debtcontrol-server/target
+.idea
