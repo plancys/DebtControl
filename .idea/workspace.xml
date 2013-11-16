@@ -11,12 +11,18 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f5ca96a-f7ad-4226-b6c3-e55580c44884" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    <list default="true" id="1f5ca96a-f7ad-4226-b6c3-e55580c44884" name="Default" comment="updating .gitignore&#10;">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="db9cf5a7-efa7-41e5-839b-b36c0ce6adac" name="New changelist" comment="" />
     <ignored path="debtcontrol-parent.iws" />
     <ignored path=".idea/workspace.xml" />
+    <ignored path="debtcontrol-android/target/" />
+    <ignored path="debtcontrol-server/target/" />
+    <ignored path="debtcontrol-parent.iml" />
+    <ignored path="debtcontrol-server/debtcontrol-server.iml" />
+    <ignored path="debtcontrol-android/debtcontrol-android.iml" />
+    <ignored path=".idea/" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,15 +117,26 @@
         <entry file="file://$PROJECT_DIR$/debtcontrol-server/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state line="24" column="45" selection-start="852" selection-end="852" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="585">
+              <folding>
+                <marker date="1384628135000" expanded="true" signature="673:1030" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReadMe.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/debtcontrol-server/ReadMe.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="3" column="0" selection-start="138" selection-end="138" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="135">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReadMe.txt" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/debtcontrol-server/ReadMe.txt">
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="0" selection-start="138" selection-end="138" vertical-scroll-proportion="0.074875206" vertical-offset="0" max-vertical-offset="601">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="601">
               <folding />
             </state>
           </provider>
@@ -299,9 +316,13 @@
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="FullScreen" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/debtcontrol-server" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.idea" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Ignored.Files" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager" selected="Maven.DebtControl Server run">
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
@@ -502,7 +523,15 @@
       <created>1384630289447</created>
       <updated>1384630289447</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="another test&#10;">
+      <created>1384630371333</created>
+      <updated>1384630371333</updated>
+    </task>
+    <task id="LOCAL-00004" summary="updating .gitignore">
+      <created>1384630636305</created>
+      <updated>1384630636305</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -510,7 +539,7 @@
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32942432" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32942432" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25373933" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -527,7 +556,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24786325" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24786325" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942432" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -551,7 +580,9 @@
     </option>
     <MESSAGE value="&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;#&#10;# Initial commit&#10;#&#10;# Changes to be committed:&#10;#   (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)&#10;#&#10;#&#9;new file:   .DS_Store&#10;#&#9;new file:   android/.DS_Store&#10;#&#9;new file:   android/AndroidManifest.xml&#10;#&#9;new file:   android/default.properties&#10;#&#9;new file:   android/pom.xml&#10;#&#9;new file:   android/res/drawable-hdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-mdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-xhdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-xxhdpi/ic_launcher.png&#10;#&#9;new file:   android/res/layout/activity_main.xml&#10;#&#9;new file:   android/res/menu/main.xml&#10;#&#9;new file:   android/res/values-sw600dp/dimens.xml&#10;#&#9;new file:   android/res/values-sw720dp-land/dimens.xml&#10;#&#9;new file:   android/res/values-v11/styles.xml&#10;#&#9;new file:   android/res/values-v14/styles.xml&#10;#&#9;new file:   android/res/values/dimens.xml&#10;#&#9;new file:   android/res/values/strings.xml&#10;#&#9;new file:   android/res/values/styles.xml&#10;#&#9;new file:   android/src/main/java/com/kalandyk/HelloAndroidActivity.java&#10;#&#10;" />
     <MESSAGE value="another test" />
-    <option name="LAST_COMMIT_MESSAGE" value="another test" />
+    <MESSAGE value="another test&#10;" />
+    <MESSAGE value="updating .gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="updating .gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -584,13 +615,22 @@
     <entry file="file://$PROJECT_DIR$/debtcontrol-server/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="24" column="45" selection-start="852" selection-end="852" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="585">
-          <folding />
+          <folding>
+            <marker date="1384628135000" expanded="true" signature="673:1030" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/debtcontrol-server/ReadMe.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="138" selection-end="138" vertical-scroll-proportion="0.074875206" vertical-offset="0" max-vertical-offset="601">
+        <state line="3" column="0" selection-start="138" selection-end="138" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="135">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="601">
           <folding />
         </state>
       </provider>
