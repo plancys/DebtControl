@@ -11,52 +11,8 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f5ca96a-f7ad-4226-b6c3-e55580c44884" name="Default" comment="&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;#&#10;# Initial commit&#10;#&#10;# Changes to be committed:&#10;#   (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)&#10;#&#10;#&#9;new file:   .DS_Store&#10;#&#9;new file:   android/.DS_Store&#10;#&#9;new file:   android/AndroidManifest.xml&#10;#&#9;new file:   android/default.properties&#10;#&#9;new file:   android/pom.xml&#10;#&#9;new file:   android/res/drawable-hdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-mdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-xhdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-xxhdpi/ic_launcher.png&#10;#&#9;new file:   android/res/layout/activity_main.xml&#10;#&#9;new file:   android/res/menu/main.xml&#10;#&#9;new file:   android/res/values-sw600dp/dimens.xml&#10;#&#9;new file:   android/res/values-sw720dp-land/dimens.xml&#10;#&#9;new file:   android/res/values-v11/styles.xml&#10;#&#9;new file:   android/res/values-v14/styles.xml&#10;#&#9;new file:   android/res/values/dimens.xml&#10;#&#9;new file:   android/res/values/strings.xml&#10;#&#9;new file:   android/res/values/styles.xml&#10;#&#9;new file:   android/src/main/java/com/kalandyk/HelloAndroidActivity.java&#10;#&#10;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore.swp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/debtcontrol-android/target/generated-sources/r/com/kalandyk/Manifest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_android_android_4_1_1_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_3_8_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_json_json_20080701.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_khronos_opengl_api_gl1_1_android_2_1_r1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__xerces_xmlParserAPIs_2_6_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__xpp3_xpp3_1_1_4c.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/debtcontrol-server/ReadMe.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/debtcontrol-android/debtcontrol-android.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/debtcontrol-parent.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/debtcontrol-server/debtcontrol-server.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="1f5ca96a-f7ad-4226-b6c3-e55580c44884" name="Default" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/AndroidManifest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/default.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/pom.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/drawable-hdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/drawable-mdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/drawable-xhdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/drawable-xxhdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/layout/activity_main.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/menu/main.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/values-sw600dp/dimens.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/values-sw720dp-land/dimens.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/values-v11/styles.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/values-v14/styles.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/values/dimens.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/values/strings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/res/values/styles.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/src/main/java/com/kalandyk/HelloAndroidActivity.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debtcontrol-android/target/generated-sources/r/com/kalandyk/BuildConfig.java" afterPath="$PROJECT_DIR$/debtcontrol-android/target/generated-sources/r/com/kalandyk/BuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debtcontrol-server/pom.xml" afterPath="$PROJECT_DIR$/debtcontrol-server/pom.xml" />
     </list>
     <list id="db9cf5a7-efa7-41e5-839b-b36c0ce6adac" name="New changelist" comment="" />
     <ignored path="debtcontrol-parent.iws" />
@@ -542,7 +498,11 @@
       <created>1384627184270</created>
       <updated>1384627184270</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="another test">
+      <created>1384630289447</created>
+      <updated>1384630289447</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -550,7 +510,7 @@
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32942432" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25373933" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -567,8 +527,8 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24786325" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32942432" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24786325" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942432" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -590,7 +550,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;#&#10;# Initial commit&#10;#&#10;# Changes to be committed:&#10;#   (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)&#10;#&#10;#&#9;new file:   .DS_Store&#10;#&#9;new file:   android/.DS_Store&#10;#&#9;new file:   android/AndroidManifest.xml&#10;#&#9;new file:   android/default.properties&#10;#&#9;new file:   android/pom.xml&#10;#&#9;new file:   android/res/drawable-hdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-mdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-xhdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-xxhdpi/ic_launcher.png&#10;#&#9;new file:   android/res/layout/activity_main.xml&#10;#&#9;new file:   android/res/menu/main.xml&#10;#&#9;new file:   android/res/values-sw600dp/dimens.xml&#10;#&#9;new file:   android/res/values-sw720dp-land/dimens.xml&#10;#&#9;new file:   android/res/values-v11/styles.xml&#10;#&#9;new file:   android/res/values-v14/styles.xml&#10;#&#9;new file:   android/res/values/dimens.xml&#10;#&#9;new file:   android/res/values/strings.xml&#10;#&#9;new file:   android/res/values/styles.xml&#10;#&#9;new file:   android/src/main/java/com/kalandyk/HelloAndroidActivity.java&#10;#&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;#&#10;# Initial commit&#10;#&#10;# Changes to be committed:&#10;#   (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)&#10;#&#10;#&#9;new file:   .DS_Store&#10;#&#9;new file:   android/.DS_Store&#10;#&#9;new file:   android/AndroidManifest.xml&#10;#&#9;new file:   android/default.properties&#10;#&#9;new file:   android/pom.xml&#10;#&#9;new file:   android/res/drawable-hdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-mdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-xhdpi/ic_launcher.png&#10;#&#9;new file:   android/res/drawable-xxhdpi/ic_launcher.png&#10;#&#9;new file:   android/res/layout/activity_main.xml&#10;#&#9;new file:   android/res/menu/main.xml&#10;#&#9;new file:   android/res/values-sw600dp/dimens.xml&#10;#&#9;new file:   android/res/values-sw720dp-land/dimens.xml&#10;#&#9;new file:   android/res/values-v11/styles.xml&#10;#&#9;new file:   android/res/values-v14/styles.xml&#10;#&#9;new file:   android/res/values/dimens.xml&#10;#&#9;new file:   android/res/values/strings.xml&#10;#&#9;new file:   android/res/values/styles.xml&#10;#&#9;new file:   android/src/main/java/com/kalandyk/HelloAndroidActivity.java&#10;#&#10;" />
+    <MESSAGE value="another test" />
+    <option name="LAST_COMMIT_MESSAGE" value="another test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
