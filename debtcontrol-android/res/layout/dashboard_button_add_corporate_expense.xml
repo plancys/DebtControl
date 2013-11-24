@@ -47,7 +47,7 @@
             android:layout_marginTop="10dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:gravity="center"
-            android:text="ADD CORPORATE EXPENSE"
+            android:text="ADD GROUP EXPENSE"
             android:id="@+id/textView" />
 
 

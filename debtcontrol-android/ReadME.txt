@@ -1,0 +1,2 @@
+I have some problems with maven build but I hacked this by adding android-support-v4 to maven repository from jar:
+ mvn install:install-file -Dfile=libs/android-support-v4.jar -DgroupId=com.google.android -DartifactId=support-v4 -Dversion=r11 -Dpackaging=jar
