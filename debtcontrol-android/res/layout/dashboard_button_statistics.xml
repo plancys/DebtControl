@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/header"
+    android:orientation="horizontal"
+    android:layout_width="0dp"
+    android:layout_weight="0.5"
+    android:layout_height="150dp">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.5"
+        android:paddingBottom="30dp"
+        android:weightSum="1"
+        android:gravity="center_horizontal">
+
+
+        <RelativeLayout
+            android:layout_width="75dp"
+            android:layout_height="75dp">
+
+            <Button
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_weight="0.75"
+                android:background="@drawable/dashboard_tile_drawable"
+                android:onClick="onButtonClickEvent"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="25dp"
+                android:id="@+id/imageView"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/statistics" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center"
+            android:text="STATISTICS"
+            android:id="@+id/textView" />
+
+    </LinearLayout>
+
+
+    <!--<Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.5"
+        android:background="@drawable/dashboard_tile_drawable"
+        android:text="STATYSTYKI"/>-->
+</LinearLayout>

@@ -13,7 +13,6 @@
     <modules>
         <module>debtcontrol-android</module>
         <module>debtcontrol-server</module>
-        <module>debtcontrol-android-AppEngine</module>
     </modules>
 
     <build>

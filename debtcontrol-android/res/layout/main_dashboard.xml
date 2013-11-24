@@ -1,17 +1,83 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
-</RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:padding="10dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="WELCOME, "
+            android:id="@+id/textView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="YOU ARE LOGGED AS k.kalandyk"
+            android:id="@+id/textView2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_weight="0.41"
+        android:padding="20dp"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="130dp"
+            android:weightSum="1"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <include layout="@layout/dashboard_button_add_debt" />
+
+            <include layout="@layout/dashboard_button_add_corporate_expense" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="130dp"
+            android:weightSum="1"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <include layout="@layout/dashboard_button_confirm" />
+
+            <include layout="@layout/dashboard_button_statistics" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.39"
+        android:padding="10dp">
+        
+
+
+    </LinearLayout>
+</LinearLayout>
