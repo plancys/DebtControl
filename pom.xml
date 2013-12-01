@@ -11,6 +11,7 @@
     <name>Debt Control Parent</name>
 
     <modules>
+        <module>debtcontrol-api</module>
         <module>debtcontrol-android</module>
         <module>debtcontrol-server</module>
     </modules>

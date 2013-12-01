@@ -28,6 +28,11 @@
             <artifactId>support-v4</artifactId>
             <version>r11</version>
         </dependency>
+        <dependency>
+            <groupId>com.kalandyk</groupId>
+            <artifactId>debtcontrol-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
 
 	</dependencies>

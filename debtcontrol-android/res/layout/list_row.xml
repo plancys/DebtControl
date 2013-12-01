@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+	<!--  ListRow Left sied Thumbnail image -->
+    <!-- android:background="@drawable/image_bg" -->
+	<LinearLayout android:id="@+id/thumbnail" 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="3dip"		
+        android:layout_alignParentLeft="true"
+	    android:layout_marginRight="5dip">
+        
+		<ImageView     
+			android:id="@+id/list_image"   
+	        android:layout_width="50dip"
+	        android:layout_height="50dip"
+	        android:src="@drawable/person"/>
+        
+	</LinearLayout>
+    
+	<!-- Title Of Song-->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="You owe 10 PLN"
+        android:textColor="#040404"
+        android:typeface="sans" 
+        android:textSize="15dip"
+        android:textStyle="bold"/>
+
+	<!-- Artist Name -->
+    <TextView
+        android:id="@+id/artist"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:textColor="#343434"
+        android:textSize="10dip"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Description : Money for beer last night \nStatus: Confirmed" />
+
+	<!-- Rightend Duration -->
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/title"
+        android:gravity="right"
+        android:text="22 Nov 2014 19:30"
+        android:layout_marginRight="5dip"
+        android:textSize="10dip"
+        android:textColor="#ff8d8d8d"
+        android:textStyle="bold"/>
+      
+     <!-- Rightend Arrow -->    
+     <ImageView android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+     	android:src="@drawable/arrow"
+     	android:layout_alignParentRight="true"
+     	android:layout_centerVertical="true"/>
+
+    <LinearLayout
+        android:id="@+id/context_menu"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="140dp"
+        android:layout_below="@+id/artist"
+        android:visibility="visible"
+        android:layout_alignParentLeft="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="5dp"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="center"
+                android:lineSpacingExtra="8dp"
+                android:text="not confirmed debt\nconfirmed debt\nnot confirmed debt pay of\nconfirmed debt pay off"
+                android:id="@+id/textView" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

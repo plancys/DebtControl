@@ -23,10 +23,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.kalandyk.R;
+import com.kalandyk.api.model.Debt;
+import com.kalandyk.fragments.DebtListFragment;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-public class HelloAndroidActivity extends Activity {
+public abstract class AbstractActivity extends Activity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -41,8 +45,6 @@ public class HelloAndroidActivity extends Activity {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_dashboard);
-
         setContentView(R.layout.main_view);
 
         mTitle = mDrawerTitle = getTitle();
@@ -82,9 +84,7 @@ public class HelloAndroidActivity extends Activity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        if (savedInstanceState == null) {
-            selectItem(0);
-        }
+        replaceFragment(getContentFragment());
     }
 
     @Override
@@ -118,55 +118,19 @@ public class HelloAndroidActivity extends Activity {
         }
     }
 
-
-    public void onButtonClickEvent(View view){
-        Log.e("-------->", "Action performed!");
-
-    }
-
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            //TODO: Add another fragments
         }
     }
 
-    private void selectItem(int position) {
-        // update the main content by replacing fragments
-        Fragment fragment = new PlanetFragment();
-        Bundle args = new Bundle();
-        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-        fragment.setArguments(args);
-
+    protected final void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
-
-
-
     }
 
-    public static class PlanetFragment extends Fragment {
-        public static final String ARG_PLANET_NUMBER = "planet_number";
-
-        public PlanetFragment() {
-            // Empty constructor required for fragment subclasses
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.main_dashboard, container, false);
-
-
-
-            return rootView;
-        }
-    }
+    protected abstract Fragment getContentFragment();
 
 }
 

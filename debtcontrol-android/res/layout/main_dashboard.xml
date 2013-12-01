@@ -50,7 +50,6 @@
 
             <include layout="@layout/dashboard_button_add_debt" />
 
-            <include layout="@layout/dashboard_button_add_corporate_expense" />
         </LinearLayout>
 
         <LinearLayout

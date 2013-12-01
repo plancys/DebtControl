@@ -22,7 +22,7 @@
                 android:right="1dp"
                 android:top="0dp" />
 
-            <solid android:color="#10363636" />
+            <solid android:color="#101f1f1f" />
 
 
         </shape>
@@ -86,7 +86,7 @@
 
             <stroke
                 android:width="0.1dip"
-                android:color="#50363636" />
+                android:color="#000000" />
         </shape>
     </item>
 

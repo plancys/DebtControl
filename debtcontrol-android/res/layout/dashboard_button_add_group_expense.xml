@@ -25,11 +25,12 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="5dp"
-            android:layout_alignParentTop="true"
-            android:textStyle="bold"
-            android:gravity="top|center"
             android:textSize="12dip"
-            android:text="CONFIRM"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:gravity="top|center"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="ADD GROUP EXPENSE"
             />
 
         <ImageView
@@ -40,6 +41,6 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/confirm" />
+            android:src="@drawable/corporate" />
     </RelativeLayout>
 </LinearLayout>
