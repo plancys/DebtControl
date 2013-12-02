@@ -3,34 +3,23 @@ package com.kalandyk.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.SearchManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.kalandyk.R;
-import com.kalandyk.api.model.Debt;
-import com.kalandyk.fragments.DebtListFragment;
+import com.kalandyk.fragments.AddDebtDialogFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-public abstract class AbstractActivity extends Activity {
+public abstract class AbstractActivity extends FragmentActivity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -40,12 +29,14 @@ public abstract class AbstractActivity extends Activity {
     private CharSequence mTitle;
     private String[] mPlanetTitles;
 
+    protected Fragment currentFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_view);
+        setContentView(R.layout.activity_main_view);
 
         mTitle = mDrawerTitle = getTitle();
         mPlanetTitles = getResources().getStringArray(R.array.drawer_items_array);
@@ -128,9 +119,15 @@ public abstract class AbstractActivity extends Activity {
     protected final void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        currentFragment = fragment;
     }
 
     protected abstract Fragment getContentFragment();
+
+    public void onAddDebtButtonClick(View v){
+        AddDebtDialogFragment addDebtDialogFragment = new AddDebtDialogFragment();
+        addDebtDialogFragment.show(getFragmentManager(), "XX");
+    }
 
 }
 

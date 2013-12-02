@@ -18,11 +18,6 @@ import java.util.List;
  */
 public class DebtListFragment extends ListFragment {
 
-   /* public static DebtListFragment newInstance(List<Debt> debtList) {
-
-        return new DebtListFragment();
-    }*/
-
     public DebtListFragment(List<Debt> debts){
         this.debts = debts;
     }
@@ -43,19 +38,8 @@ public class DebtListFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         adapter = new DebtsArrayAdapter(getActivity(), debts );
         setListAdapter(adapter);
-        //adapter.addAll(createDataList(100));
+
     }
-
-    private static List<String> createDataList(int counts) {
-        List<String> list = new ArrayList<String>();
-        for (int i = 0; i < counts; i++) {
-            list.add("i=" + i);
-        }
-        return list;
-    }
-
-
 }
