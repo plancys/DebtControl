@@ -76,23 +76,43 @@
         android:layout_height="140dp"
         android:layout_below="@+id/artist"
         android:visibility="visible"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:weightSum="1">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
+            android:orientation="vertical"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_marginTop="5dp"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:layout_weight="0.6">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:gravity="center"
-                android:lineSpacingExtra="8dp"
-                android:text="not confirmed debt\nconfirmed debt\nnot confirmed debt pay of\nconfirmed debt pay off"
+                style="@style/statusTextStyleInactive"
+                android:text="not confirmed debt"
                 android:id="@+id/textView" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/statusTextStyleInactive"
+                android:text="confirmed debt"
+                android:id="@+id/textView" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/statusTextStyleActive"
+                android:text="not confirmed debt pay of"
+                android:id="@+id/textView"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/statusTextStyleInactive"
+                android:text="confirmed debt pay off"
+                android:id="@+id/textView"
+                />
         </LinearLayout>
     </LinearLayout>
 
