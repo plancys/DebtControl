@@ -5,7 +5,7 @@
   <artifactId>debtcontrol-server</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>debtcontrol-server Maven Webapp</name>
+  <name>debtcontrol-server</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>

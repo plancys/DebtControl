@@ -18,5 +18,23 @@
     </style>
 
 
+    <!-- Styles for status text in main list -->
+
+    <style name="statusTextBase">
+        <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="statusTextStyleInactive" parent="statusTextBase">
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="statusTextStyleActive" parent="statusTextBase">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/oval</item>
+    </style>
+
 
 </resources>
