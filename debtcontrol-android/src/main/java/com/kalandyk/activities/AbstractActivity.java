@@ -8,6 +8,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,9 +18,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.kalandyk.R;
+import com.kalandyk.api.model.Debt;
 import com.kalandyk.fragments.AddDebtDialogFragment;
+import com.kalandyk.listeners.NewDebtListener;
 
 public abstract class AbstractActivity extends FragmentActivity {
+
+    public static final String TAG = "com.kalandyk.debtcontrol";
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -127,6 +132,12 @@ public abstract class AbstractActivity extends FragmentActivity {
     public void onAddDebtButtonClick(View v){
         AddDebtDialogFragment addDebtDialogFragment = new AddDebtDialogFragment();
         addDebtDialogFragment.show(getFragmentManager(), "XX");
+        addDebtDialogFragment.setNewDebtListener(new NewDebtListener() {
+            @Override
+            public void newDebtAdded(Debt debt) {
+                Log.d(TAG, "New debt added");
+            }
+        });
     }
 
 }

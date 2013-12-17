@@ -16,7 +16,8 @@
 
     <string-array name="debt_types">
         <item>Debt with confirmation from other side</item>
-        <item>Simple debt</item>
+        <item>Simple debt without external confirmation</item>
+        <item>Debt with QR code confirmation</item>
     </string-array>
 
 
@@ -24,7 +25,11 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
-
+    <string name="description_add_debt_label">Description:</string>
+    <string name="amount_add_debt">Amount:</string>
+    <string name="choose_person_add_debt">Choose</string>
+    <string name="person_connected_with_debt">Subject connected:</string>
+    <string name="debt_type">Debt type:</string>
 
 
 </resources>

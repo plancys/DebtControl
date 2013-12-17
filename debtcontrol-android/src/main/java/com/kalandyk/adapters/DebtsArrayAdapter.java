@@ -24,6 +24,7 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
     private List<Debt> data;
     private Activity activity;
 
+
     public DebtsArrayAdapter(Activity context, List<Debt> objects) {
         super(context, R.layout.list_row, objects);
         this.data = objects;
