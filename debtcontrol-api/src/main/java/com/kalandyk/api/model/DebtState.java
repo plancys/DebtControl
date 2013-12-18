@@ -6,19 +6,29 @@ package com.kalandyk.api.model;
 public enum DebtState {
     // Debt with confirmation
     /* */
-    NOT_CONFIRMED_DEBT,
+    NOT_CONFIRMED_DEBT(0),
     /* */
-    NOT_PAYED_OFF_CONFIRMED_DEBT,
+    NOT_PAYED_OFF_CONFIRMED_DEBT(1),
     /* */
-    NOT_CONFIRMED_PAY_OFF_DEBT,
+    NOT_CONFIRMED_PAY_OFF_DEBT(2),
     /* */
-    CONFIRMED_PAY_OFF_DEBT,
+    CONFIRMED_PAY_OFF_DEBT(3),
 
     // Debt without confirmation
-    UNPAID_DEBT,
-    PAYED_OFF_DEBT,
+    UNPAID_DEBT(4),
+    PAYED_OFF_DEBT(5),
 
-    ARCHIVED,
-    DELETED
+    ARCHIVED(7),
+    DELETED(8);
+
+    private int code;
+
+    private DebtState(int code){
+        this.code = code;
+    }
+
+    public int getCode(){
+        return code;
+    }
 
 }

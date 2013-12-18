@@ -1,9 +1,12 @@
 package com.kalandyk.services;
 
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtState;
+import com.kalandyk.api.model.DebtType;
 import com.kalandyk.api.model.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,29 +16,57 @@ public class DebtService {
 
     private static DebtService instance;
 
-    private DebtService(){
+    private DebtService() {
 
     }
 
-    public static DebtService getInstance(){
-        if(instance == null){
+    public static DebtService getInstance() {
+        if (instance == null) {
             instance = new DebtService();
         }
         return instance;
     }
 
-    public List<Debt> getDebtsForUser(User user){
+    public List<Debt> getDebtsForUser(User user) {
         List<Debt> debts = new ArrayList<Debt>();
-        debts.add(new Debt());
-        debts.add(new Debt());
-        debts.add(new Debt());
-        debts.add(new Debt());
-        debts.add(new Debt());
-        debts.add(new Debt());
-        debts.add(new Debt());
-        debts.add(new Debt());
-        debts.add(new Debt());
-        debts.add(new Debt());
+
+        //TODO: add builder?
+        debts = new ArrayList<Debt>();
+
+        //Mock
+        for (int i = 0; i < 5; i++) {
+            User creditor = new User();
+            User debtor = new User();
+            Debt debt = new Debt();
+
+            if (i % 2 == 0) {
+                debt.setAmount(25L);
+                debt.setDescription("Dinner after work");
+                debt.setCreationDate(new Date());
+                debtor.setName("Me");
+                creditor.setName("Johny");
+
+                debt.setDebtor(debtor);
+                debt.setCreditor(creditor);
+                debt.setDebtState(DebtState.UNPAID_DEBT);
+                debt.setDebtType(DebtType.DEBT_WITHOUT_CONFIRMATION);
+
+            } else {
+                debt.setAmount(25L);
+                debt.setDescription("Dinner after work");
+                debt.setCreationDate(new Date());
+                debtor.setName("Me");
+                creditor.setName("Johny");
+
+                debt.setDebtor(debtor);
+                debt.setCreditor(creditor);
+                debt.setDebtState(DebtState.CONFIRMED_PAY_OFF_DEBT);
+                debt.setDebtType(DebtType.DEBT_WITH_CONFIRMATION);
+            }
+
+            debts.add(debt);
+
+        }
 
         return debts;
     }

@@ -75,7 +75,7 @@ public class AddDebtDialogFragment extends DialogFragment {
         amountSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                amountEditText.setText(String.valueOf(1000 * i / 100)  );
+                amountEditText.setText(String.valueOf(200 * i / 100)  );
             }
 
             @Override
@@ -128,7 +128,6 @@ public class AddDebtDialogFragment extends DialogFragment {
         debt.setDescription(description.getText().toString());
 
         debt.setAmount(Long.parseLong(amountEditText.getText().toString()));
-
 
 
         return debt;
