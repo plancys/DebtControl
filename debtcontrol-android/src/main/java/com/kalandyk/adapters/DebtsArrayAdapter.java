@@ -77,6 +77,8 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
             debtSurfaceLinearLayout.setVisibility(View.GONE);
         }
 
+
+
         return view;
     }
 
@@ -151,5 +153,9 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
 
     public Debt getDebtObject(int position) {
         return getItem(position);
+    }
+
+    public List<Debt> getObjectList(){
+        return data;
     }
 }

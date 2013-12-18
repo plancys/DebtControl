@@ -17,6 +17,8 @@ import android.widget.Spinner;
 
 import com.kalandyk.R;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtState;
+import com.kalandyk.api.model.DebtType;
 import com.kalandyk.api.model.User;
 import com.kalandyk.listeners.NewDebtListener;
 
@@ -68,6 +70,7 @@ public class AddDebtDialogFragment extends DialogFragment {
                 if (newDebtListener != null) {
                     Debt debt = buildDebtFromDialog();
                     newDebtListener.newDebtAdded(debt);
+                    AddDebtDialogFragment.this.dismiss();
                 }
             }
         });
@@ -105,12 +108,13 @@ public class AddDebtDialogFragment extends DialogFragment {
         debtTypeSpinner = (Spinner) view.findViewById(R.id.debt_type_spinner);
 
         amountSeekBar = (SeekBar) view.findViewById(R.id.sb_amount_add_debt);
-
-        personConnected = (EditText) view.findViewById(R.id.et_person_conn_add_debt);
+        view.findViewById(R.id.et_person_conn_add_debt);
 
         description = (EditText) view.findViewById(R.id.et_description_add_debt);
 
         amountEditText = (EditText) view.findViewById(R.id.et_amount_add_debt);
+
+        personConnected = (EditText) view.findViewById(R.id.et_person_conn_add_debt);
 
         addDebtButton = (Button) view.findViewById(R.id.bt_add_debt);
 
@@ -129,6 +133,9 @@ public class AddDebtDialogFragment extends DialogFragment {
 
         debt.setAmount(Long.parseLong(amountEditText.getText().toString()));
 
+        debt.setDebtType(debtTypeSpinner.getSelectedItemPosition() == 0 ? DebtType.DEBT_WITH_CONFIRMATION : DebtType.DEBT_WITHOUT_CONFIRMATION);
+
+        debt.setDebtState(debtTypeSpinner.getSelectedItemPosition() == 0 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.UNPAID_DEBT);
 
         return debt;
     }

@@ -48,7 +48,14 @@ public class DebtsListFragment extends Fragment {
 
     private void onClickDebtListItemAction(int selectedItem) {
         Debt debtObject = adapter.getDebtObject(selectedItem);
-        debtObject.setSelected(!debtObject.isSelected());
+        for(Debt debt : adapter.getObjectList()){
+            debt.setSelected(false);
+        }
+        debtObject.setSelected(true);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void notifyDataChanged(){
         adapter.notifyDataSetChanged();
     }
 }

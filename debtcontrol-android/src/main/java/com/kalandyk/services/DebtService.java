@@ -16,8 +16,10 @@ public class DebtService {
 
     private static DebtService instance;
 
-    private DebtService() {
+    private  List<Debt> debts;
 
+    private DebtService() {
+        debts = new ArrayList<Debt>();
     }
 
     public static DebtService getInstance() {
@@ -27,8 +29,12 @@ public class DebtService {
         return instance;
     }
 
+    public void addDebt(Debt debt){
+        debts.add(debt);
+    }
+
     public List<Debt> getDebtsForUser(User user) {
-        List<Debt> debts = new ArrayList<Debt>();
+
 
         //TODO: add builder?
         debts = new ArrayList<Debt>();

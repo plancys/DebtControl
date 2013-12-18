@@ -17,7 +17,7 @@
     <string-array name="debt_types">
         <item>Debt with confirmation from other side</item>
         <item>Simple debt without external confirmation</item>
-        <item>Debt with QR code confirmation</item>
+        <!--<item>Debt with QR code confirmation</item>-->
     </string-array>
 
 
