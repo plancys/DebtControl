@@ -31,5 +31,11 @@
     <string name="person_connected_with_debt">Subject connected:</string>
     <string name="debt_type">Debt type:</string>
 
+    <!-- Debts Actions -->
+    <string name="debt_pay_off">Pay off debt</string>
+    <string name="debt_delete">Delete Debt</string>
+    <string name="debt_cancel_pay_off_request">Cancel debt pay off request</string>
+
+
 
 </resources>

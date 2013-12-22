@@ -1,6 +1,5 @@
 package com.kalandyk.activities;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -37,7 +36,7 @@ public abstract class AbstractActivity extends FragmentActivity {
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mPlanetTitles;
+    private String[] drawerMenuItems;
 
     protected Fragment currentFragment;
 
@@ -51,7 +50,7 @@ public abstract class AbstractActivity extends FragmentActivity {
         setContentView(R.layout.activity_main_view);
 
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.drawer_items_array);
+        drawerMenuItems = getResources().getStringArray(R.array.drawer_items_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -59,7 +58,7 @@ public abstract class AbstractActivity extends FragmentActivity {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
+                R.layout.drawer_list_item, drawerMenuItems));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer

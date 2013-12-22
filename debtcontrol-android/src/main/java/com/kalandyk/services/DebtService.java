@@ -66,7 +66,8 @@ public class DebtService {
 
                 debt.setDebtor(debtor);
                 debt.setCreditor(creditor);
-                debt.setDebtState(DebtState.CONFIRMED_PAY_OFF_DEBT);
+                Date date = new Date();
+                debt.setDebtState(date.getTime() % 2 == 0 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.NOT_CONFIRMED_PAY_OFF_DEBT);
                 debt.setDebtType(DebtType.DEBT_WITH_CONFIRMATION);
             }
 

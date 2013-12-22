@@ -2,6 +2,7 @@ package com.kalandyk.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.kalandyk.R;
+import com.kalandyk.activities.AbstractActivity;
 import com.kalandyk.adapters.DebtsArrayAdapter;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.listeners.DebtItemAction;
 import com.kalandyk.services.DebtService;
 
 /**
@@ -19,21 +22,54 @@ import com.kalandyk.services.DebtService;
 public class DebtsListFragment extends Fragment {
 
     private DebtsArrayAdapter adapter;
-
     private DebtService debtService;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
+    public DebtsListFragment() {
         debtService = DebtService.getInstance();
+    }
 
-        View inflate = inflater.inflate(R.layout.fragment_debt_list, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        View debtListItemView = inflater.inflate(R.layout.fragment_debt_list, container, false);
+
+        adapter = initDebtsArrayAdapter();
+
+        initListView(debtListItemView);
+
+        return debtListItemView;
+    }
+
+    public void notifyDataChanged() {
+        adapter.notifyDataSetChanged();
+    }
+
+    protected void showDetailsFragment(Debt debt) {
+
+    }
+
+    private DebtsArrayAdapter initDebtsArrayAdapter() {
+        DebtsArrayAdapter debtsArrayAdapter = new DebtsArrayAdapter(getActivity(), debtService.getDebtsForUser(null));
+
+
+        debtsArrayAdapter.setDebtItemAction(new DebtItemAction() {
+            @Override
+            public void onDetails(Debt debt) {
+                showDetailsFragment(debt);
+            }
+
+            @Override
+            public void onChangeDebtState(Debt debt) {
+                Log.d(AbstractActivity.TAG, " [DebtListFragment] onChangeDebtState() triggered");
+            }
+        });
+
+        return debtsArrayAdapter;
+    }
+
+    private void initListView(View inflate) {
         ListView listView = (ListView) inflate.findViewById(R.id.debt_list_view);
 
-        adapter = new DebtsArrayAdapter(getActivity(), debtService.getDebtsForUser(null));
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -42,20 +78,14 @@ public class DebtsListFragment extends Fragment {
                 onClickDebtListItemAction(i);
             }
         });
-
-        return  inflate;
     }
 
     private void onClickDebtListItemAction(int selectedItem) {
         Debt debtObject = adapter.getDebtObject(selectedItem);
-        for(Debt debt : adapter.getObjectList()){
+        for (Debt debt : adapter.getObjectList()) {
             debt.setSelected(false);
         }
         debtObject.setSelected(true);
-        adapter.notifyDataSetChanged();
-    }
-
-    public void notifyDataChanged(){
         adapter.notifyDataSetChanged();
     }
 }

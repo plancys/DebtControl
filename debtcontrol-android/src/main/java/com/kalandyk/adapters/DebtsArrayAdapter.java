@@ -6,12 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kalandyk.R;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtType;
+import com.kalandyk.debt.action.DebtAction;
+import com.kalandyk.debt.logic.DebtStateObject;
+import com.kalandyk.listeners.DebtItemAction;
 
 import java.util.List;
 
@@ -20,21 +24,30 @@ import java.util.List;
  */
 public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
 
+    private DebtItemAction debtItemAction;
+
     private LayoutInflater layoutInflater;
+
     private List<Debt> data;
     private Activity activity;
-
     private TextView mainInfoTextView;
+
     private TextView descriptionTextView;
     private TextView dateTextView;
     private LinearLayout debtSurfaceLinearLayout;
-
+    private Button detailsButton;
+    private Button executeActionButton;
 
     public DebtsArrayAdapter(Activity context, List<Debt> objects) {
         super(context, R.layout.list_row, objects);
         this.data = objects;
         this.activity = context;
         layoutInflater = context.getLayoutInflater();
+    }
+
+
+    public void setDebtItemAction(DebtItemAction debtItemAction) {
+        this.debtItemAction = debtItemAction;
     }
 
 
@@ -50,7 +63,7 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view;
 
         if (convertView == null) {
@@ -61,7 +74,8 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
 
         initUIItems(view);
 
-        Debt item = getItem(position);
+        final Debt item = getItem(position);
+        DebtStateObject debtStateObject = new DebtStateObject(activity, item.getDebtType(), item.getDebtState());
 
         mainInfoTextView.setText("You owe " + item.getAmount() + " PLN");
         descriptionTextView.setText(item.getDescription());
@@ -78,9 +92,39 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
         }
 
 
+        detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (debtItemAction != null) {
+                    debtItemAction.onDetails(getItem(position));
+                }
+            }
+        });
+
+        List<DebtAction> possibleDebtActions = debtStateObject.getPossibleDebtActions();
+        final DebtAction debtAction = possibleDebtActions.get(0);
+        executeActionButton.setText(debtAction.getDebtActionString());
+        executeActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (debtItemAction != null) {
+                    debtAction.executeAction(item);
+                    debtItemAction.onChangeDebtState(getItem(position));
+                }
+            }
+        });
 
         return view;
     }
+
+    protected void onClickDetailsButtonAction(Debt debt) {
+
+    }
+
+    protected void onClickExecuteDebtAction(Debt debt) {
+
+    }
+
 
     private void setDebtState(View view, Debt item) {
         if (item.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION)) {
@@ -147,7 +191,8 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
         descriptionTextView = (TextView) view.findViewById(R.id.tv_debt_description);
         dateTextView = (TextView) view.findViewById(R.id.tv_debt_date);
         debtSurfaceLinearLayout = (LinearLayout) view.findViewById(R.id.context_menu);
-
+        detailsButton = (Button) view.findViewById(R.id.button_details);
+        executeActionButton = (Button) view.findViewById(R.id.button_excecute_debt_action);
 
     }
 
@@ -155,7 +200,7 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
         return getItem(position);
     }
 
-    public List<Debt> getObjectList(){
+    public List<Debt> getObjectList() {
         return data;
     }
 }
