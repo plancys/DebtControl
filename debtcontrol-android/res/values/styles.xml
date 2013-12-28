@@ -41,12 +41,20 @@
         <item name="android:layout_marginTop">15dp</item>
     </style>
 
-    <style name="ButtonInListStyle">
+    <style name="ButtonInListStyleBase">
         <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:background">@drawable/button_grey</item>
         <item name="android:textSize">12dip</item>
         <item name="android:layout_gravity">right</item>
         <item name="android:layout_marginTop">10dp</item>
+    </style>
+    <style name="ButtonInListStyleGrey" parent="ButtonInListStyleBase">
+        <item name="android:background">@drawable/button_grey</item>
+    </style>
+    <style name="ButtonInListStyleGreen" parent="ButtonInListStyleBase">
+        <item name="android:background">@drawable/button_green</item>
+    </style>
+    <style name="ButtonInListStyleRed" parent="ButtonInListStyleBase">
+        <item name="android:background">@drawable/button_red</item>
     </style>
 
 

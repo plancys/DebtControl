@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:orientation="horizontal"
+                android:padding="5dip">
+
+    <LinearLayout
+        android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:padding="3dip">
+
+        <ImageView
+            android:id="@+id/list_image"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/person"/>
+
+    </LinearLayout>
+
+    <!-- Title Of Song-->
+    <TextView
+        android:id="@+id/tv_main_debt_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="User X claims that you owe him 100PLN"
+        android:textColor="#040404"
+        android:textSize="15dip"
+        android:textStyle="bold"
+        android:typeface="sans"/>
+
+    <!-- Artist Name -->
+    <TextView
+        android:id="@+id/tv_debt_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_main_debt_info"
+        android:layout_marginRight="120dp"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Description : Money for beer last night "
+        android:textColor="#343434"
+        android:textSize="10dip"/>
+
+    <!-- Rightend Duration -->
+    <TextView
+        android:id="@+id/tv_debt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_main_debt_info"
+        android:layout_marginRight="5dip"
+        android:gravity="right"
+        android:text="22 Nov 2014 19:30"
+        android:textColor="#ff8d8d8d"
+        android:textSize="10dip"
+        android:textStyle="bold"/>
+
+    <!-- Rightend Arrow -->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/arrow"/>
+
+    <LinearLayout
+        android:id="@+id/context_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_debt_description"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="1">
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            >
+
+            <Button
+                android:id="@+id/button_details"
+                style="@style/ButtonInListStyleGreen"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.5"
+                android:text="Accept"/>
+
+            <Button
+                android:id="@+id/button_excecute_debt_action"
+                style="@style/ButtonInListStyleRed"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.5"
+                android:text="Reject"/>
+            <!--
+            Buttons:
+                -   details
+                -   I paid off debt
+            -->
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

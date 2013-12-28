@@ -41,7 +41,7 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
     private Button executeActionButton;
 
     public DebtsArrayAdapter(Activity context, List<Debt> objects) {
-        super(context, R.layout.list_row, objects);
+        super(context, R.layout.list_row_debts, objects);
         this.data = objects;
         this.activity = context;
         layoutInflater = context.getLayoutInflater();
@@ -70,7 +70,7 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
         View view;
 
         //TODO: add action when convertView is not empty
-        view = layoutInflater.inflate(R.layout.list_row, parent, false);
+        view = layoutInflater.inflate(R.layout.list_row_debts, parent, false);
 
 
         initUIItems(view);
