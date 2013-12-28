@@ -7,7 +7,8 @@ import com.kalandyk.api.model.DebtType;
 import com.kalandyk.debt.action.DebtAction;
 import com.kalandyk.debt.action.DebtCancelPaidOfRequestAction;
 import com.kalandyk.debt.action.DebtDeleteAction;
-import com.kalandyk.debt.action.DebtPayOffAction;
+import com.kalandyk.debt.action.DebtPayOffActionWithConfirmation;
+import com.kalandyk.debt.action.DebtPayOffActionWithoutConfirmation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class DebtStateObject {
         switch (debtState){
             case UNPAID_DEBT:
                 debtActions.add(new DebtDeleteAction(activity));
-                debtActions.add(new DebtPayOffAction(activity));
+                debtActions.add(new DebtPayOffActionWithoutConfirmation(activity));
                 break;
             case PAYED_OFF_DEBT:
                 //TODO: figure out whether this is useful or not
@@ -62,7 +63,7 @@ public class DebtStateObject {
                 debtActions.add(new DebtDeleteAction(activity));
                 break;
             case NOT_PAYED_OFF_CONFIRMED_DEBT:
-                debtActions.add(new DebtPayOffAction(activity));
+                debtActions.add(new DebtPayOffActionWithConfirmation(activity));
                 break;
             case NOT_CONFIRMED_PAY_OFF_DEBT:
                 debtActions.add(new DebtCancelPaidOfRequestAction(activity));

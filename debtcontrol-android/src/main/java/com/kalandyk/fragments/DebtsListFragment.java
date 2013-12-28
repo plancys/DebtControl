@@ -61,6 +61,7 @@ public class DebtsListFragment extends Fragment {
             @Override
             public void onChangeDebtState(Debt debt) {
                 Log.d(AbstractActivity.TAG, " [DebtListFragment] onChangeDebtState() triggered");
+                adapter.notifyDataSetChanged();
             }
         });
 

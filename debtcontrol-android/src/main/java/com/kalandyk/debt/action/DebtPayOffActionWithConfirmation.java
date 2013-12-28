@@ -6,14 +6,16 @@ import android.util.Log;
 import com.kalandyk.R;
 import com.kalandyk.activities.AbstractActivity;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtState;
 import com.kalandyk.debt.action.DebtAction;
+import com.kalandyk.services.DebtService;
 
 /**
  * Created by kamil on 12/22/13.
  */
-public class DebtPayOffAction extends DebtAction {
+public class DebtPayOffActionWithConfirmation extends DebtAction {
 
-    public DebtPayOffAction(Activity activity) {
+    public DebtPayOffActionWithConfirmation(Activity activity) {
         super(activity);
     }
 
@@ -25,5 +27,7 @@ public class DebtPayOffAction extends DebtAction {
     @Override
     public void executeAction(Debt debt) {
         Log.d(AbstractActivity.TAG, "[DebtAction] Triggered debt pay off action");
+        //TODO: Delegate this action to service or sth like that
+        debt.setDebtState(DebtState.NOT_CONFIRMED_PAY_OFF_DEBT);
     }
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.kalandyk.R;
 import com.kalandyk.activities.AbstractActivity;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.services.DebtService;
 
 /**
  * Created by kamil on 12/22/13.
@@ -26,5 +27,6 @@ public class DebtDeleteAction extends DebtAction {
     @Override
     public void executeAction(Debt debt) {
         Log.d(AbstractActivity.TAG, "[DebtAction] Triggered debt delete");
+        debtService.deleteDebt(debt);
     }
 }

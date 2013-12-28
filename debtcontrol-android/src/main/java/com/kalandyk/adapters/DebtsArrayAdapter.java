@@ -2,6 +2,7 @@ package com.kalandyk.adapters;
 
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kalandyk.R;
+import com.kalandyk.activities.AbstractActivity;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtType;
 import com.kalandyk.debt.action.DebtAction;
@@ -63,16 +65,16 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d(AbstractActivity.TAG, "[DebtsArrayAdapter] getView for " + getDebtObject(position).toString());
         View view;
 
-        if (convertView == null) {
-            view = layoutInflater.inflate(R.layout.list_row, parent, false);
-        } else {
-            view = convertView;
-        }
+        //TODO: add action when convertView is not empty
+        view = layoutInflater.inflate(R.layout.list_row, parent, false);
+
 
         initUIItems(view);
+        view.invalidate();
 
         final Debt item = getItem(position);
         DebtStateObject debtStateObject = new DebtStateObject(activity, item.getDebtType(), item.getDebtState());
@@ -83,7 +85,6 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
 
 
         setDebtState(view, item);
-        //view.invalidate();
 
         if (item.isSelected()) {
             debtSurfaceLinearLayout.setVisibility(View.VISIBLE);
@@ -96,7 +97,7 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
             @Override
             public void onClick(View view) {
                 if (debtItemAction != null) {
-                    debtItemAction.onDetails(getItem(position));
+                    debtItemAction.onDetails(item);
                 }
             }
         });
@@ -109,11 +110,10 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
             public void onClick(View view) {
                 if (debtItemAction != null) {
                     debtAction.executeAction(item);
-                    debtItemAction.onChangeDebtState(getItem(position));
+                    debtItemAction.onChangeDebtState(item);
                 }
             }
         });
-
         return view;
     }
 

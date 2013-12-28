@@ -78,4 +78,10 @@ public class DebtService {
         return debts;
     }
 
+    public void deleteDebt(Debt debt){
+        debts.remove(debt);
+    }
+
+
+
 }
