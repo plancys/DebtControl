@@ -37,7 +37,7 @@
 
     <!-- Artist Name -->
     <TextView
-        android:id="@+id/tv_debt_description"
+        android:id="@+id/tv_confirmation_description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_main_debt_info"
@@ -73,16 +73,16 @@
     <LinearLayout
         android:id="@+id/context_menu"
         android:layout_width="fill_parent"
-        android:layout_height="140dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tv_debt_description"
+        android:layout_below="@+id/tv_confirmation_description"
         android:orientation="horizontal"
         android:visibility="visible"
         android:weightSum="1">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_weight="0.5"
             android:background="@drawable/arrow_frost_blue"
@@ -135,9 +135,8 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="5dp"
             android:layout_weight="0.45"
             android:orientation="vertical"
             android:padding="10dp"
@@ -147,20 +146,24 @@
                 android:id="@+id/button_details"
                 style="@style/ButtonInListStyleGrey"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="48dp"
                 android:text="Details"/>
 
             <Button
-                android:id="@+id/button_excecute_debt_action"
+                android:id="@+id/button_excecute_debt_action_1"
                 style="@style/ButtonInListStyleGrey"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:text="I paid off debt"/>
-            <!--
-            Buttons:
-                -   details
-                -   I paid off debt
-            -->
+                android:layout_height="48dp"
+                android:text="Cancel debt pay off request"/>
+
+            <Button
+                android:id="@+id/button_excecute_debt_action_2"
+                style="@style/ButtonInListStyleGrey"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:text="I paid off debt"
+                android:visibility="gone"/>
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

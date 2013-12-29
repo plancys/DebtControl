@@ -38,7 +38,8 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
     private TextView dateTextView;
     private LinearLayout debtSurfaceLinearLayout;
     private Button detailsButton;
-    private Button executeActionButton;
+    private Button executeActionButton_1;
+    private Button executeActionButton_2;
 
     public DebtsArrayAdapter(Activity context, List<Debt> objects) {
         super(context, R.layout.list_row_debts, objects);
@@ -103,17 +104,34 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
         });
 
         List<DebtAction> possibleDebtActions = debtStateObject.getPossibleDebtActions();
-        final DebtAction debtAction = possibleDebtActions.get(0);
-        executeActionButton.setText(debtAction.getDebtActionString());
-        executeActionButton.setOnClickListener(new View.OnClickListener() {
+        final DebtAction debtAction_1 = possibleDebtActions.get(0);
+        executeActionButton_1.setText(debtAction_1.getDebtActionString());
+        executeActionButton_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (debtItemAction != null) {
-                    debtAction.executeAction(item);
+                    debtAction_1.executeAction(item);
                     debtItemAction.onChangeDebtState(item);
                 }
             }
         });
+
+        //TODO: refactor this :)
+        if(possibleDebtActions.size() > 1){
+            final DebtAction debtAction_2 = possibleDebtActions.get(1);
+            executeActionButton_2.setVisibility(View.VISIBLE);
+            executeActionButton_2.setText(debtAction_2.getDebtActionString());
+            executeActionButton_2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (debtItemAction != null) {
+                        debtAction_2.executeAction(item);
+                        debtItemAction.onChangeDebtState(item);
+                    }
+                }
+            });
+        }
+
         return view;
     }
 
@@ -188,11 +206,12 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
 
     private void initUIItems(View view) {
         mainInfoTextView = (TextView) view.findViewById(R.id.tv_main_debt_info);
-        descriptionTextView = (TextView) view.findViewById(R.id.tv_debt_description);
+        descriptionTextView = (TextView) view.findViewById(R.id.tv_confirmation_description);
         dateTextView = (TextView) view.findViewById(R.id.tv_debt_date);
         debtSurfaceLinearLayout = (LinearLayout) view.findViewById(R.id.context_menu);
         detailsButton = (Button) view.findViewById(R.id.button_details);
-        executeActionButton = (Button) view.findViewById(R.id.button_excecute_debt_action);
+        executeActionButton_1 = (Button) view.findViewById(R.id.button_excecute_debt_action_1);
+        executeActionButton_2 = (Button) view.findViewById(R.id.button_excecute_debt_action_2);
 
     }
 

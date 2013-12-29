@@ -36,6 +36,13 @@
     <string name="debt_delete">Delete Debt</string>
     <string name="debt_cancel_pay_off_request">Cancel debt pay off request</string>
 
+    <!-- Confirmations -->
+    <string name="confirmation_you_owes">User %1$s says that you borrow %2$s %3$s from him</string>
+    <string name="confirmation_he_owes">User %1$s says that you lend him %2$s %3$s from him</string>
+    <string name="confirmation_he_paid">User %1$s says that he/she paid of debt (%1$s %2$s, %3$s)</string>
+
+
+
 
 
 </resources>
