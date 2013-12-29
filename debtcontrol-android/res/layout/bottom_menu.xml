@@ -43,6 +43,6 @@ android:weightSum="4">
     android:layout_height="fill_parent"
     android:layout_weight="1">
 
-    <include layout="@layout/bottom_button_statistics" />
+    <include layout="@layout/bottom_button_history" />
 </LinearLayout>
 </LinearLayout>

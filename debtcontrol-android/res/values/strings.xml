@@ -31,6 +31,11 @@
     <string name="person_connected_with_debt">Subject connected:</string>
     <string name="debt_type">Debt type:</string>
 
+    <!-- Debts main message -->
+    <string name="debt_you_owe">You owe %1$s %2$s %3$s</string>
+    <string name="debt_you_lend">You lent %1$s %2$s %3$s</string>
+    <string name="debt_description">Description: %1$s</string>
+
     <!-- Debts Actions -->
     <string name="debt_pay_off">Pay off debt</string>
     <string name="debt_delete">Delete Debt</string>
@@ -40,9 +45,7 @@
     <string name="confirmation_you_owes">User %1$s says that you borrow %2$s %3$s from him</string>
     <string name="confirmation_he_owes">User %1$s says that you lend him %2$s %3$s from him</string>
     <string name="confirmation_he_paid">User %1$s says that he/she paid of debt (%1$s %2$s, %3$s)</string>
-
-
-
+    <string name="not_implemented">Not implemented yet. Be patient.</string>
 
 
 </resources>
