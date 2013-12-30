@@ -27,7 +27,6 @@ public class DebtCancelPaidOfRequestAction extends DebtAction {
     @Override
     public void executeAction(Debt debt) {
         Log.d(AbstractActivity.TAG, "[DebtAction] Triggered debt cancel paid off request");
-        //TODO: delegate this action in another place
-        debt.setDebtState(DebtState.NOT_PAYED_OFF_CONFIRMED_DEBT);
+        debtService.cancelDebtRepayRequest(debt);
     }
 }

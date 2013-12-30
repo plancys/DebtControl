@@ -17,7 +17,7 @@ import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtType;
 import com.kalandyk.debt.action.DebtAction;
 import com.kalandyk.debt.logic.DebtStateObject;
-import com.kalandyk.listeners.DebtItemAction;
+import com.kalandyk.listeners.DebtActionListener;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
 
-    private DebtItemAction debtItemAction;
+    private DebtActionListener debtActionListener;
 
     private LayoutInflater layoutInflater;
 
@@ -49,8 +49,8 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
     }
 
 
-    public void setDebtItemAction(DebtItemAction debtItemAction) {
-        this.debtItemAction = debtItemAction;
+    public void setDebtActionListener(DebtActionListener debtActionListener) {
+        this.debtActionListener = debtActionListener;
     }
 
 
@@ -97,8 +97,8 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
         detailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (debtItemAction != null) {
-                    debtItemAction.onDetails(item);
+                if (debtActionListener != null) {
+                    debtActionListener.onDetails(item);
                 }
             }
         });
@@ -109,9 +109,9 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
         executeActionButton_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (debtItemAction != null) {
+                if (debtActionListener != null) {
                     debtAction_1.executeAction(item);
-                    debtItemAction.onChangeDebtState(item);
+                    debtActionListener.onChangeDebtState(item);
                 }
             }
         });
@@ -124,9 +124,9 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
             executeActionButton_2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (debtItemAction != null) {
+                    if (debtActionListener != null) {
                         debtAction_2.executeAction(item);
-                        debtItemAction.onChangeDebtState(item);
+                        debtActionListener.onChangeDebtState(item);
                     }
                 }
             });

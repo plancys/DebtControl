@@ -13,6 +13,11 @@ public class User {
 
     private String phoneNumber;
 
+    public User(){
+        //TODO: temporary preventing from null pointer exception
+        this.name = "ExamplePerson";
+    }
+
     public String getEmail() {
         return email;
     }

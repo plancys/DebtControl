@@ -1,6 +1,8 @@
 package com.kalandyk.api.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Debt {
 
@@ -14,8 +16,10 @@ public class Debt {
     //Dates
     private Date creationDate;
 
-    public Debt() {
+    private List<DebtEvent> debtEvents;
 
+    public Debt() {
+        debtEvents = new ArrayList<DebtEvent>();
     }
 
     public DebtState getDebtState() {
@@ -84,5 +88,12 @@ public class Debt {
         this.isSelected = isSelected;
     }
 
+    public void addEvent(DebtEvent debtEvent){
+        debtEvents.add(debtEvent);
+    }
 
+    //TODO: add property and setting it in proper places
+    public User getCreator() {
+        return new User();
+    }
 }

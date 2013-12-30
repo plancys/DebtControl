@@ -13,7 +13,7 @@ import com.kalandyk.R;
 import com.kalandyk.activities.AbstractActivity;
 import com.kalandyk.adapters.DebtsArrayAdapter;
 import com.kalandyk.api.model.Debt;
-import com.kalandyk.listeners.DebtItemAction;
+import com.kalandyk.listeners.DebtActionListener;
 import com.kalandyk.services.DebtService;
 
 /**
@@ -52,7 +52,7 @@ public class DebtsListFragment extends Fragment {
         DebtsArrayAdapter debtsArrayAdapter = new DebtsArrayAdapter(getActivity(), debtService.getDebtsForUser(null));
 
 
-        debtsArrayAdapter.setDebtItemAction(new DebtItemAction() {
+        debtsArrayAdapter.setDebtActionListener(new DebtActionListener() {
             @Override
             public void onDetails(Debt debt) {
                 showDetailsFragment(debt);

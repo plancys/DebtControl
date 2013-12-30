@@ -28,6 +28,7 @@ public class DebtPayOffActionWithConfirmation extends DebtAction {
     public void executeAction(Debt debt) {
         Log.d(AbstractActivity.TAG, "[DebtAction] Triggered debt pay off action");
         //TODO: Delegate this action to service or sth like that
-        debt.setDebtState(DebtState.NOT_CONFIRMED_PAY_OFF_DEBT);
+        debtService.requestDebtPayOff(debt);
+
     }
 }

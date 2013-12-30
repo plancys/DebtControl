@@ -62,13 +62,13 @@ public class DebtStateObject {
             case NOT_CONFIRMED_DEBT:
                 debtActions.add(new DebtDeleteAction(activity));
                 break;
-            case NOT_PAYED_OFF_CONFIRMED_DEBT:
+            case CONFIRMED_NOT_REPAID_DEBT:
                 debtActions.add(new DebtPayOffActionWithConfirmation(activity));
                 break;
-            case NOT_CONFIRMED_PAY_OFF_DEBT:
+            case CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT:
                 debtActions.add(new DebtCancelPaidOfRequestAction(activity));
                 break;
-            case CONFIRMED_PAY_OFF_DEBT:
+            case CONFIRMED_REPAID_DEBT:
                 //TODO: This may be useless
                 debtActions.add(new DebtDeleteAction(activity));
                 break;

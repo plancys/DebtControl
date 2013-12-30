@@ -1,6 +1,10 @@
 package com.kalandyk.services;
 
+import com.kalandyk.api.model.Confirmation;
+import com.kalandyk.api.model.ConfirmationType;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtEvent;
+import com.kalandyk.api.model.DebtEventType;
 import com.kalandyk.api.model.DebtState;
 import com.kalandyk.api.model.DebtType;
 import com.kalandyk.api.model.User;
@@ -18,8 +22,11 @@ public class DebtService {
 
     private  List<Debt> debts;
 
+    private ConfirmationService confirmationService;
+
     private DebtService() {
         debts = new ArrayList<Debt>();
+        confirmationService = ConfirmationService.getInstance();
     }
 
     public static DebtService getInstance() {
@@ -30,6 +37,15 @@ public class DebtService {
     }
 
     public void addDebt(Debt debt){
+        DebtEvent debtEvent;
+        if(debt.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION)){
+            Confirmation confirmation = new Confirmation(debt, debt.getCreator(), ConfirmationType.REQUEST_DEBT_ADDING);
+            confirmationService.addConfirmation(confirmation);
+             debtEvent = new DebtEvent(DebtEventType.DEBT_ADDITION_REQUEST, debt.getCreator());
+        } else {
+            debtEvent = new DebtEvent(DebtEventType.DEBT_SIMPLE_ADDITION, debt.getCreator());
+        }
+        debt.addEvent(debtEvent);
         debts.add(debt);
     }
 
@@ -67,7 +83,7 @@ public class DebtService {
                 debt.setDebtor(debtor);
                 debt.setCreditor(creditor);
                 Date date = new Date();
-                debt.setDebtState(date.getTime() % 2 == 0 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.NOT_CONFIRMED_PAY_OFF_DEBT);
+                debt.setDebtState(date.getTime() % 2 == 0 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
                 debt.setDebtType(DebtType.DEBT_WITH_CONFIRMATION);
             }
 
@@ -83,5 +99,22 @@ public class DebtService {
     }
 
 
+    public void requestDebtPayOff(Debt debt) {
+        debt.setDebtState(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
+        DebtEvent debtEvent = new DebtEvent(DebtEventType.DEBT_REQUEST_REPAY, new User());
+        debt.addEvent(debtEvent);
+        //TODO: send confirmation to right person
+        Confirmation confirmation = new Confirmation(debt, new User(), ConfirmationType.REQUEST_DEBT_REPAYING);
+        confirmationService.addConfirmation(confirmation);
 
+    }
+
+    public void cancelDebtRepayRequest(Debt debt) {
+        //TODO: delegate this action in another place
+        debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+        DebtEvent debtEvent = new DebtEvent(DebtEventType.DEBT_CANCEL_REPAY_REQUEST, new User());
+        debt.addEvent(debtEvent);
+        //TODO: delete proper Confirmation
+        confirmationService.getLastConfirmationForDebtByType(debt, ConfirmationType.REQUEST_DEBT_REPAYING);
+    }
 }

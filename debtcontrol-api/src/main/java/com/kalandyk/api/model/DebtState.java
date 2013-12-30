@@ -8,11 +8,11 @@ public enum DebtState {
     /* */
     NOT_CONFIRMED_DEBT(0),
     /* */
-    NOT_PAYED_OFF_CONFIRMED_DEBT(1),
+    CONFIRMED_NOT_REPAID_DEBT(1),
     /* */
-    NOT_CONFIRMED_PAY_OFF_DEBT(2),
+    CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT(2),
     /* */
-    CONFIRMED_PAY_OFF_DEBT(3),
+    CONFIRMED_REPAID_DEBT(3),
 
     // Debt without confirmation
     UNPAID_DEBT(4),

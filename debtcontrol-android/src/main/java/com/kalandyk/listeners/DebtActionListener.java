@@ -5,7 +5,7 @@ import com.kalandyk.api.model.Debt;
 /**
  * Created by kamil on 12/22/13.
  */
-public interface DebtItemAction {
+public interface DebtActionListener {
 
     void onDetails(Debt debt);
 

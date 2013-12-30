@@ -9,7 +9,9 @@ import android.widget.ListView;
 
 import com.kalandyk.R;
 import com.kalandyk.adapters.ConfirmationsArrayAdapter;
+import com.kalandyk.api.model.Confirmation;
 import com.kalandyk.api.model.User;
+import com.kalandyk.listeners.ConfirmationDecisionListener;
 import com.kalandyk.services.ConfirmationService;
 
 /**
@@ -21,10 +23,9 @@ public class ConfirmationFragment extends Fragment {
 
     private ConfirmationsArrayAdapter adapter;
 
-    public ConfirmationFragment(){
+    public ConfirmationFragment() {
         confirmationService = ConfirmationService.getInstance();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,8 +45,22 @@ public class ConfirmationFragment extends Fragment {
     }
 
     private ConfirmationsArrayAdapter initDebtsArrayAdapter() {
-        return new ConfirmationsArrayAdapter(getActivity(), confirmationService.getConfirmationsForUser(new User()));
+        ConfirmationsArrayAdapter confirmationsArrayAdapter =
+                new ConfirmationsArrayAdapter(getActivity(), confirmationService.getConfirmationsForUser(new User()));
+        confirmationsArrayAdapter.setConfirmationDecisionListener(new ConfirmationDecisionListener() {
+
+            @Override
+            public void onAccept(Confirmation confirmation) {
+                confirmationService.accept(confirmation);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onReject(Confirmation confirmation) {
+                confirmationService.reject(confirmation);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        return confirmationsArrayAdapter;
     }
-
-
 }
