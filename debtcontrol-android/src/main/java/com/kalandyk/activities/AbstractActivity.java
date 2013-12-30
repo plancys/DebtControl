@@ -40,7 +40,7 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
     }
 
 
-    protected final void replaceFragment(Fragment fragment) {
+    protected void replaceFragment(Fragment fragment) {
         replaceFragment(fragment, false);
     }
 

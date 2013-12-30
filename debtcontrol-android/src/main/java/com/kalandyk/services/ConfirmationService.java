@@ -36,16 +36,6 @@ public class ConfirmationService {
 
     public List<Confirmation> getConfirmationsForUser(User user) {
 
-
-        //TODO: add builder?
-       /* confirmations = new ArrayList<Confirmation>();
-
-        //Mock
-        confirmations.add(new Confirmation());
-        confirmations.add(new Confirmation());
-*/
-
-
         return confirmations;
     }
 
@@ -60,10 +50,11 @@ public class ConfirmationService {
 
     public void accept(Confirmation confirmation) {
         Debt connectedDebt = confirmation.getConnectedDebt();
-        DebtState debtState = connectedDebt.getDebtState();
-        if(debtState.equals(ConfirmationType.REQUEST_DEBT_ADDING)){
+        ConfirmationType confirmationType = confirmation.getConfirmationType();
+
+        if (confirmationType.equals(ConfirmationType.REQUEST_DEBT_ADDING)) {
             connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
-        } else if(debtState.equals(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT) ) {
+        } else if (confirmationType.equals(ConfirmationType.REQUEST_DEBT_REPAYING)) {
             connectedDebt.setDebtState(DebtState.CONFIRMED_REPAID_DEBT);
         }
         deleteConfirmation(confirmation);
@@ -71,10 +62,11 @@ public class ConfirmationService {
 
     public void reject(Confirmation confirmation) {
         Debt connectedDebt = confirmation.getConnectedDebt();
-        DebtState debtState = connectedDebt.getDebtState();
-        if(debtState.equals(ConfirmationType.REQUEST_DEBT_ADDING)){
+        ConfirmationType confirmationType = confirmation.getConfirmationType();
+
+        if (confirmationType.equals(ConfirmationType.REQUEST_DEBT_ADDING)) {
             connectedDebt.setDebtState(DebtState.DELETED);
-        } else if(debtState.equals(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT) ) {
+        } else if (confirmationType.equals(ConfirmationType.REQUEST_DEBT_REPAYING)) {
             connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
         }
         deleteConfirmation(confirmation);

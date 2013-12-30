@@ -1,9 +1,11 @@
 package com.kalandyk.activities;
 
+import android.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.kalandyk.R;
+import com.kalandyk.fragments.DebtsListFragment;
 
 /**
  * Created by kamil on 12/29/13.
@@ -98,11 +101,25 @@ public abstract class BaseAbstractActivity extends FragmentActivity {
         }
     }
 
+    protected abstract void replaceFragment(Fragment fragment);
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //TODO: Add another fragments
+            Log.d(AbstractActivity.TAG, "onDrawerItemClick()");
+            selectDrawerMenuItem(position);
+
         }
     }
+
+
+    private void selectDrawerMenuItem(int position) {
+        replaceFragment(new DebtsListFragment());
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+
+
 
 }

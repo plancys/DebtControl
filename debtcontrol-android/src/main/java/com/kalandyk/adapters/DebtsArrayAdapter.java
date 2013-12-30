@@ -67,7 +67,6 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(AbstractActivity.TAG, "[DebtsArrayAdapter] getView for " + getDebtObject(position).toString());
         View view;
 
         //TODO: add action when convertView is not empty

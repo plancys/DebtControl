@@ -20,7 +20,7 @@ public class DebtService {
 
     private static DebtService instance;
 
-    private  List<Debt> debts;
+    private List<Debt> debts;
 
     private ConfirmationService confirmationService;
 
@@ -36,12 +36,12 @@ public class DebtService {
         return instance;
     }
 
-    public void addDebt(Debt debt){
+    public void addDebt(Debt debt) {
         DebtEvent debtEvent;
-        if(debt.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION)){
+        if (debt.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION)) {
             Confirmation confirmation = new Confirmation(debt, debt.getCreator(), ConfirmationType.REQUEST_DEBT_ADDING);
             confirmationService.addConfirmation(confirmation);
-             debtEvent = new DebtEvent(DebtEventType.DEBT_ADDITION_REQUEST, debt.getCreator());
+            debtEvent = new DebtEvent(DebtEventType.DEBT_ADDITION_REQUEST, debt.getCreator());
         } else {
             debtEvent = new DebtEvent(DebtEventType.DEBT_SIMPLE_ADDITION, debt.getCreator());
         }
@@ -51,50 +51,51 @@ public class DebtService {
 
     public List<Debt> getDebtsForUser(User user) {
 
+        if (debts.isEmpty()) {
+            //TODO: add builder?
+            debts = new ArrayList<Debt>();
 
-        //TODO: add builder?
-        debts = new ArrayList<Debt>();
+            //Mock
+            for (int i = 0; i < 5; i++) {
+                User creditor = new User();
+                User debtor = new User();
+                Debt debt = new Debt();
 
-        //Mock
-        for (int i = 0; i < 5; i++) {
-            User creditor = new User();
-            User debtor = new User();
-            Debt debt = new Debt();
+                if (i % 2 == 0) {
+                    debt.setAmount(25L);
+                    debt.setDescription("Dinner after work");
+                    debt.setCreationDate(new Date());
+                    debtor.setName("Me");
+                    creditor.setName("Johny");
 
-            if (i % 2 == 0) {
-                debt.setAmount(25L);
-                debt.setDescription("Dinner after work");
-                debt.setCreationDate(new Date());
-                debtor.setName("Me");
-                creditor.setName("Johny");
+                    debt.setDebtor(debtor);
+                    debt.setCreditor(creditor);
+                    debt.setDebtState(DebtState.UNPAID_DEBT);
+                    debt.setDebtType(DebtType.DEBT_WITHOUT_CONFIRMATION);
 
-                debt.setDebtor(debtor);
-                debt.setCreditor(creditor);
-                debt.setDebtState(DebtState.UNPAID_DEBT);
-                debt.setDebtType(DebtType.DEBT_WITHOUT_CONFIRMATION);
+                } else {
+                    debt.setAmount(25L);
+                    debt.setDescription("Dinner after work");
+                    debt.setCreationDate(new Date());
+                    debtor.setName("Me");
+                    creditor.setName("Johny");
 
-            } else {
-                debt.setAmount(25L);
-                debt.setDescription("Dinner after work");
-                debt.setCreationDate(new Date());
-                debtor.setName("Me");
-                creditor.setName("Johny");
+                    debt.setDebtor(debtor);
+                    debt.setCreditor(creditor);
+                    Date date = new Date();
+                    debt.setDebtState(date.getTime() % 2 == 0 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
+                    debt.setDebtType(DebtType.DEBT_WITH_CONFIRMATION);
+                }
 
-                debt.setDebtor(debtor);
-                debt.setCreditor(creditor);
-                Date date = new Date();
-                debt.setDebtState(date.getTime() % 2 == 0 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
-                debt.setDebtType(DebtType.DEBT_WITH_CONFIRMATION);
+                debts.add(debt);
+
             }
-
-            debts.add(debt);
-
         }
 
         return debts;
     }
 
-    public void deleteDebt(Debt debt){
+    public void deleteDebt(Debt debt) {
         debts.remove(debt);
     }
 
