@@ -17,6 +17,9 @@ import com.kalandyk.fragments.HistoryFragment;
 import com.kalandyk.listeners.NewDebtListener;
 import com.kalandyk.services.DebtService;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Stack;
 
 public abstract class AbstractActivity extends BaseAbstractActivity {
@@ -37,6 +40,8 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
         initNavigationDrawer();
 
         replaceFragment(getContentFragment());
+
+
     }
 
 
@@ -44,8 +49,22 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
         replaceFragment(fragment, false);
     }
 
-    private void replaceFragment(Fragment fragment, boolean fromStack) {
-        if (currentFragment != null && !fromStack) {
+    private void replaceFragment(Fragment fragment, boolean fragmentTakenFromFragmentsStack) {
+        if (currentFragment != null && !fragmentTakenFromFragmentsStack) {
+
+            Iterator<Fragment> iterator = fragmentStack.iterator();
+            Fragment fragmentToRemove = null;
+            while (iterator.hasNext()) {
+                Fragment next = iterator.next();
+                if (next.getClass().equals(fragment.getClass())) {
+                    fragmentToRemove = next;
+                }
+            }
+            if (fragmentToRemove != null) {
+                fragmentStack.remove(fragmentToRemove);
+            }
+
+
             fragmentStack.add(currentFragment);
         }
         FragmentManager fragmentManager = getFragmentManager();

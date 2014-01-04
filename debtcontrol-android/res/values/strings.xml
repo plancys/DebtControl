@@ -47,5 +47,20 @@
     <string name="confirmation_he_paid">User %1$s says that he/she paid of debt (%2$s %3$s, %4$s)</string>
     <string name="not_implemented">Not implemented yet. Be patient.</string>
 
+    <!-- Debt details -->
+    <string name="details_debt_simple_addition">You : Added debt</string>
+    <string name="details_debt_simple_repayment">You : Repaid debt</string>
+
+    <string name="details_debt_addition_request">%1$s : Added debt</string>
+    <string name="details_debt_addition_approve">%1$s : Approved debt addition</string>
+    <string name="details_debt_addition_reject">%1$s : Rejected debt addition</string>
+
+    <string name="details_debt_request_repaying">%1$s : Sent request for approving debt repayment</string>
+    <string name="details_debt_request_repaying_approve">%1$s : Approved repayment request</string>
+    <string name="details_debt_request_repaying_reject">%1$s : Rejected repayment request</string>
+    <string name="details_debt_cancel_repayment_request">%1$s : Canceled repayment request</string>
+
+
+
 
 </resources>

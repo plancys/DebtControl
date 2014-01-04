@@ -14,4 +14,19 @@ public class DebtEvent {
         this.eventType = eventType;
     }
 
+    public DebtEventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(DebtEventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public User getEventAuthor() {
+        return eventAuthor;
+    }
+
+    public void setEventAuthor(User eventAuthor) {
+        this.eventAuthor = eventAuthor;
+    }
 }

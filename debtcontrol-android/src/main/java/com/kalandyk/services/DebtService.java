@@ -102,6 +102,7 @@ public class DebtService {
 
     public void requestDebtPayOff(Debt debt) {
         debt.setDebtState(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
+        //Add event
         DebtEvent debtEvent = new DebtEvent(DebtEventType.DEBT_REQUEST_REPAY, new User());
         debt.addEvent(debtEvent);
         //TODO: send confirmation to right person
@@ -113,7 +114,8 @@ public class DebtService {
     public void cancelDebtRepayRequest(Debt debt) {
         //TODO: delegate this action in another place
         debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
-        DebtEvent debtEvent = new DebtEvent(DebtEventType.DEBT_CANCEL_REPAY_REQUEST, new User());
+        //add event
+        DebtEvent debtEvent = new DebtEvent(DebtEventType.DEBT_CANCELING_REPAYMENT_REQUEST, new User());
         debt.addEvent(debtEvent);
         //TODO: delete proper Confirmation
         confirmationService.getLastConfirmationForDebtByType(debt, ConfirmationType.REQUEST_DEBT_REPAYING);

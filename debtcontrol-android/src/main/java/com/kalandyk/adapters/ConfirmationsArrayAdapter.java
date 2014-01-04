@@ -107,7 +107,7 @@ public class ConfirmationsArrayAdapter extends ArrayAdapter<Confirmation> {
 
     private void initUIItems(View view) {
         confirmationMainMessageTextView = (TextView) view.findViewById(R.id.tv_confirmation_main);
-        confirmationDescTextView = (TextView) view.findViewById(R.id.tv_confirmation_description);
+        confirmationDescTextView = (TextView) view.findViewById(R.id.tv_details_description);
 
         acceptButton = (Button) view.findViewById(R.id.bt_confirmation_accept);
         rejectButton = (Button) view.findViewById(R.id.bt_confirmation_reject);

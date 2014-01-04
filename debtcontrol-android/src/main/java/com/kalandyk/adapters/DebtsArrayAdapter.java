@@ -2,7 +2,6 @@ package com.kalandyk.adapters;
 
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kalandyk.R;
-import com.kalandyk.activities.AbstractActivity;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtType;
 import com.kalandyk.debt.action.DebtAction;
@@ -204,9 +202,9 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
     }
 
     private void initUIItems(View view) {
-        mainInfoTextView = (TextView) view.findViewById(R.id.tv_main_debt_info);
-        descriptionTextView = (TextView) view.findViewById(R.id.tv_confirmation_description);
-        dateTextView = (TextView) view.findViewById(R.id.tv_debt_date);
+        mainInfoTextView = (TextView) view.findViewById(R.id.tv_details_main_info);
+        descriptionTextView = (TextView) view.findViewById(R.id.tv_details_description);
+        dateTextView = (TextView) view.findViewById(R.id.tv_debt_action_date);
         debtSurfaceLinearLayout = (LinearLayout) view.findViewById(R.id.context_menu);
         detailsButton = (Button) view.findViewById(R.id.button_details);
         executeActionButton_1 = (Button) view.findViewById(R.id.button_excecute_debt_action_1);

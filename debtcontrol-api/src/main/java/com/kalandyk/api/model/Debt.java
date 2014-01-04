@@ -96,4 +96,12 @@ public class Debt {
     public User getCreator() {
         return new User();
     }
+
+    public List<DebtEvent> getDebtEvents() {
+        return debtEvents;
+    }
+
+    public void setDebtEvents(List<DebtEvent> debtEvents) {
+        this.debtEvents = debtEvents;
+    }
 }

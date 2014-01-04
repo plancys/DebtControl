@@ -69,7 +69,7 @@ public class DebtsListFragment extends Fragment {
     }
 
     private void initListView(View inflate) {
-        ListView listView = (ListView) inflate.findViewById(R.id.debt_list_view);
+        ListView listView = (ListView) inflate.findViewById(R.id.debt_details_list_view);
 
         listView.setAdapter(adapter);
 
