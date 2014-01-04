@@ -12,6 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.85" />
 
+
     <!-- bottom menu needs 15% of height -->
     <include layout="@layout/bottom_menu" />
 

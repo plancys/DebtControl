@@ -1,7 +1,11 @@
 package com.kalandyk.activities;
 
 import android.app.Fragment;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.kalandyk.R;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.fragments.DebtsListFragment;
 import com.kalandyk.fragments.DetailsFragment;
@@ -17,13 +21,14 @@ public class MainActivity extends AbstractActivity {
 
     @Override
     protected Fragment getContentFragment() {
-        return new DebtsListFragment() {
+         Fragment fragment = new DebtsListFragment() {
             @Override
             protected void showDetailsFragment(Debt debt) {
                 MainActivity.this.replaceFragment(new DetailsFragment(debt));
             }
         };
+        return fragment;
+
+
     }
-
-
 }

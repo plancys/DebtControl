@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:neo4j="http://www.springframework.org/schema/data/neo4j"
+       xsi:schemaLocation="
+ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+ http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+ http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+ http://www.springframework.org/schema/data/neo4j
+		http://www.springframework.org/schema/data/neo4j/spring-neo4j.xsd">
+
+    <context:component-scan base-package="com.kalandyk.server"/>
+
+    <mvc:annotation-driven/>
+
+    <!--<import resource="spring-data-context.xml" />-->
+
+    <!--<bean id="graphDatabaseService" class="org.neo4j.kernel.EmbeddedGraphDatabase" destroy-method="shutdown">-->
+    <!--<constructor-arg value="target/graph.db" />-->
+    <!--</bean>-->
+
+    <context:spring-configured/>
+    <context:annotation-config/>
+    <context:component-scan base-package="com.kalandyk.server"/>
+
+    <neo4j:config storeDirectory="neo4j-db"/>
+    <neo4j:repositories base-package="com.kalandyk.server.neo4j"/>
+
+
+</beans>

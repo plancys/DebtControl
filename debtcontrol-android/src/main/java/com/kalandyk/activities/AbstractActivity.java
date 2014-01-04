@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.kalandyk.R;
 import com.kalandyk.api.model.Debt;
@@ -133,7 +135,5 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
             super.onBackPressed();
         }
     }
-
-
 }
 

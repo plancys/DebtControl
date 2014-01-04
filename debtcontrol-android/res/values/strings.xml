@@ -60,7 +60,9 @@
     <string name="details_debt_request_repaying_reject">%1$s : Rejected repayment request</string>
     <string name="details_debt_cancel_repayment_request">%1$s : Canceled repayment request</string>
 
-
+    <string name="no_details_message">There is details for this debt.</string>
+    <string name="no_debt_message">There is no debt.</string>
+    <string name="no_confirmation_message">There is no confirmation to confirm.</string>
 
 
 </resources>

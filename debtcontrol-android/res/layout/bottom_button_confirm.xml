@@ -31,6 +31,25 @@
             android:textSize="12dip"
             android:text="CONFIRM"
             />
+        
+         <LinearLayout
+             android:id="@+id/ll_notification_layout"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="-10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+             android:background="@drawable/oval">
+             <TextView
+                 android:id="@+id/tv_notification_number"
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:gravity="center"
+                 android:textSize="20dp"
+                 android:textStyle="bold"
+                 android:textColor="@android:color/white"
+                 android:text="15"/>
+            </LinearLayout>
 
         <ImageView
             android:layout_width="60dp"
@@ -40,6 +59,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/confirm" />
+            android:src="@drawable/confirm"
+            />
     </RelativeLayout>
 </LinearLayout>
