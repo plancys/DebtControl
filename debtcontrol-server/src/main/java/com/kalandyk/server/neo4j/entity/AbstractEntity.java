@@ -1,4 +1,4 @@
-package com.kalandyk.server.neo4j;
+package com.kalandyk.server.neo4j.entity;
 
 import org.springframework.data.neo4j.annotation.GraphId;
 

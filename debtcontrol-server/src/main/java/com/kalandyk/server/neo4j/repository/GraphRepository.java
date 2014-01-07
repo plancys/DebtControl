@@ -1,4 +1,4 @@
-package com.kalandyk.server.neo4j;
+package com.kalandyk.server.neo4j.repository;
 
 import org.springframework.data.neo4j.repository.CRUDRepository;
 import org.springframework.data.neo4j.repository.IndexRepository;

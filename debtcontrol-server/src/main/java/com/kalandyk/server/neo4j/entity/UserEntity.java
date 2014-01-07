@@ -1,23 +1,32 @@
-package com.kalandyk.server.neo4j;
+package com.kalandyk.server.neo4j.entity;
 
-import com.kalandyk.server.neo4j.AbstractEntity;
+import com.kalandyk.api.model.User;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**
  * Created by kamil on 1/4/14.
  */
 @NodeEntity
-public class User extends AbstractEntity {
+public class UserEntity extends AbstractEntity {
 
+    @Indexed(unique = true)
     private String email;
+
+    //@Indexed(unique = true)
     private String username;
+
     private String password;
 
-    public User(){
+    public UserEntity(){
 
     }
 
-    public User(String email, String username, String password) {
+    public UserEntity(User user){
+
+    }
+
+    public UserEntity(String email, String username, String password) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -45,5 +54,15 @@ public class User extends AbstractEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public User toUserModel() {
+        User user = new User();
+        user.setName(this.username);
+        user.setEmail(this.email);
+
+
+
+        return user;
     }
 }
