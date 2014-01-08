@@ -35,7 +35,7 @@ public class UserService {
     }
 
     public User findUserByUsername(String username){
-        UserEntity byUsername = userRepository.findByUsername(username);
+        UserEntity byUsername = userRepository.findByLogin(username);
         return byUsername.toUserModel();
     }
 

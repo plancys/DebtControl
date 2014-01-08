@@ -1,8 +1,15 @@
 package com.kalandyk.server.neo4j.entity;
 
 import com.kalandyk.api.model.User;
+
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by kamil on 1/4/14.
@@ -14,22 +21,47 @@ public class UserEntity extends AbstractEntity {
     private String email;
 
     //@Indexed(unique = true)
-    private String username;
+    private String login;
+
+    private String name;
+
+    private String forename;
 
     private String password;
 
-    public UserEntity(){
+    @RelatedTo(type = "KNOWS", elementClass = UserEntity.class)
+    @Fetch
+    private Set<UserEntity> friends;
+
+    public UserEntity() {
 
     }
 
-    public UserEntity(User user){
-
+    public UserEntity(User user) {
+        setEmail(user.getEmail());
+        setLogin(user.getLogin());
+        setPassword(user.getPassword());
+        setName(user.getName());
+        setForename(user.getForename());
+        setFriends(convertFriendsFromUser(user.getFriends()));
     }
 
-    public UserEntity(String email, String username, String password) {
+    private Set<UserEntity> convertFriendsFromUser(Set<User> friends) {
+        if(friends == null){
+            return new HashSet<UserEntity>();
+        }
+        Set<UserEntity> userFriends = new HashSet<UserEntity>();
+        Iterator<User> iterator = friends.iterator();
+        while (iterator.hasNext()) {
+            userFriends.add(new UserEntity(iterator.next()));
+        }
+        return userFriends;
+    }
+
+    public UserEntity(String email, String login, String password) {
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.login = login;
     }
 
     public String getEmail() {
@@ -40,12 +72,12 @@ public class UserEntity extends AbstractEntity {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -56,11 +88,34 @@ public class UserEntity extends AbstractEntity {
         this.password = password;
     }
 
+    public Set<UserEntity> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<UserEntity> friends) {
+        this.friends = friends;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getForename() {
+        return forename;
+    }
+
+    public void setForename(String forename) {
+        this.forename = forename;
+    }
+
     public User toUserModel() {
         User user = new User();
-        user.setName(this.username);
+        user.setLogin(this.login);
         user.setEmail(this.email);
-
 
 
         return user;

@@ -65,8 +65,8 @@ public class DebtService {
                     debt.setAmount(25L);
                     debt.setDescription("Dinner after work");
                     debt.setCreationDate(new Date());
-                    debtor.setName("Me");
-                    creditor.setName("Johny");
+                    debtor.setLogin("Me");
+                    creditor.setLogin("Johny");
 
                     debt.setDebtor(debtor);
                     debt.setCreditor(creditor);
@@ -77,8 +77,8 @@ public class DebtService {
                     debt.setAmount(25L);
                     debt.setDescription("Dinner after work");
                     debt.setCreationDate(new Date());
-                    debtor.setName("Me");
-                    creditor.setName("Johny");
+                    debtor.setLogin("Me");
+                    creditor.setLogin("Johny");
 
                     debt.setDebtor(debtor);
                     debt.setCreditor(creditor);

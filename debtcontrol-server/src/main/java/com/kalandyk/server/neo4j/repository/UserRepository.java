@@ -11,6 +11,6 @@ public interface UserRepository extends GraphRepository<UserEntity> {
 
     UserEntity findOne(Long id);
 
-    UserEntity findByUsername(String name);
+    UserEntity findByLogin(String name);
 
 }

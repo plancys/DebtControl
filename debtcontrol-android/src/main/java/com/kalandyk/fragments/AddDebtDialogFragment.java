@@ -127,7 +127,7 @@ public class AddDebtDialogFragment extends DialogFragment {
         debt.setCreationDate(new Date());
         //TODO: find user
         User user = new User();
-        user.setName(personConnected.getText().toString());
+        user.setLogin(personConnected.getText().toString());
 
         debt.setDescription(description.getText().toString());
 

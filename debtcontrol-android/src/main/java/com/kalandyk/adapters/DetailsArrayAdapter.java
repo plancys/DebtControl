@@ -5,14 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.kalandyk.R;
-import com.kalandyk.api.model.Confirmation;
-import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtEvent;
-import com.kalandyk.api.model.User;
 import com.kalandyk.listeners.ConfirmationDecisionListener;
 
 import java.util.List;
@@ -63,25 +59,25 @@ public class DetailsArrayAdapter extends ArrayAdapter<DebtEvent> {
                 message = activity.getString(R.string.details_debt_simple_repayment);
                 break;
             case DEBT_ADDITION_REQUEST:
-                message = activity.getString(R.string.details_debt_addition_request, item.getEventAuthor().getName());
+                message = activity.getString(R.string.details_debt_addition_request, item.getEventAuthor().getLogin());
                 break;
             case DEBT_ADDITION_APPROVING:
-                message = activity.getString(R.string.details_debt_addition_approve, item.getEventAuthor().getName());
+                message = activity.getString(R.string.details_debt_addition_approve, item.getEventAuthor().getLogin());
                 break;
             case DEBT_ADDITION_REJECTING:
-                message = activity.getString(R.string.details_debt_addition_reject, item.getEventAuthor().getName());
+                message = activity.getString(R.string.details_debt_addition_reject, item.getEventAuthor().getLogin());
                 break;
             case DEBT_REQUEST_REPAY:
-                message = activity.getString(R.string.details_debt_request_repaying, item.getEventAuthor().getName());
+                message = activity.getString(R.string.details_debt_request_repaying, item.getEventAuthor().getLogin());
                 break;
             case DEBT_APPROVING_REPAYMENT_REQUEST:
-                message = activity.getString(R.string.details_debt_request_repaying_approve, item.getEventAuthor().getName());
+                message = activity.getString(R.string.details_debt_request_repaying_approve, item.getEventAuthor().getLogin());
                 break;
             case DEBT_REJECTING_REPAYMENT_REQUEST:
-                message = activity.getString(R.string.details_debt_request_repaying_reject, item.getEventAuthor().getName());
+                message = activity.getString(R.string.details_debt_request_repaying_reject, item.getEventAuthor().getLogin());
                 break;
             case DEBT_CANCELING_REPAYMENT_REQUEST:
-                message = activity.getString(R.string.details_debt_cancel_repayment_request, item.getEventAuthor().getName());
+                message = activity.getString(R.string.details_debt_cancel_repayment_request, item.getEventAuthor().getLogin());
                 break;
 
         }
