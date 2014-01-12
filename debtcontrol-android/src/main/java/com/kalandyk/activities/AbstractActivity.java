@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.kalandyk.R;
 import com.kalandyk.api.model.Debt;
@@ -19,9 +17,7 @@ import com.kalandyk.fragments.HistoryFragment;
 import com.kalandyk.listeners.NewDebtListener;
 import com.kalandyk.services.DebtService;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Stack;
 
 public abstract class AbstractActivity extends BaseAbstractActivity {

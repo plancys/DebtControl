@@ -1,12 +1,15 @@
 package com.kalandyk.api.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by kamil on 12/2/13.
  */
-public class User implements Serializable{
+public class User implements Serializable {
+
+    private Long id;
 
     private String email;
 
@@ -22,9 +25,17 @@ public class User implements Serializable{
 
     private Set<User> friends;
 
-    public User(){
+    public User() {
         //TODO: temporary preventing from null pointer exception
         this.login = "ExamplePerson";
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -65,6 +76,13 @@ public class User implements Serializable{
 
     public void setFriends(Set<User> friends) {
         this.friends = friends;
+    }
+
+    public void addFriend(User friend) {
+        if (friends == null) {
+            friends = new HashSet<User>();
+        }
+        friends.add(friend);
     }
 
     public String getName() {

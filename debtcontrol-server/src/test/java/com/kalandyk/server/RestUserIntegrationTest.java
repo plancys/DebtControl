@@ -1,8 +1,7 @@
 package com.kalandyk.server;
-import com.kalandyk.api.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.kalandyk.api.model.FriendshipRequest;
+import com.kalandyk.api.model.User;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -13,7 +12,12 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by kamil on 1/8/14.
  */
@@ -22,6 +26,11 @@ public class RestUserIntegrationTest {
 
     private RestTemplate restTemplate;
     private final String baseUrl = "http://localhost:8080/";
+
+    private final String usernameJohny = "Johny";
+    private final String usernameRichard = "Richard";
+    private final String usernameAnna = "Anna";
+    private final String usernameMarry = "Marry";
 
     @Before
     public void setUp(){
@@ -53,27 +62,86 @@ public class RestUserIntegrationTest {
     @Test
     public void createNewUserFriendsNetworkTest(){
 
+        final String url = baseUrl + "users/createUser";
+
         User johny = new User();
         johny.setEmail("johny@emial.com");
-        johny.setName("Johny");
+        johny.setLogin(usernameJohny);
 
         User richard = new User();
-        johny.setEmail("richard@emial.com");
-        johny.setName("Richard");
+        richard.setEmail("richard@emial.com");
+        richard.setLogin(usernameRichard);
+
 
         User anna = new User();
-        johny.setEmail("anna@emial.com");
-        johny.setName("Anna");
+        anna.setEmail("anna@emial.com");
+        anna.setLogin(usernameAnna);
+
 
         User marry = new User();
-        johny.setEmail("marry@emial.com");
-        johny.setName("Marry");
+        marry.setEmail("marry@emial.com");
+        marry.setLogin(usernameMarry);
+
+
+
+        richard = restTemplate.postForObject(url, richard, User.class);
+        assertNotNull(richard);
+
+        johny = restTemplate.postForObject(url, johny, User.class);
+        assertNotNull(johny);
+
+        anna = restTemplate.postForObject(url, anna, User.class);
+        assertNotNull(anna);
+
+        marry = restTemplate.postForObject(url, marry, User.class);
+        assertNotNull(johny);
+
+
+        String addFriendUrl = "users/addFriend";
+        FriendshipRequest friendshipRequest = new FriendshipRequest();
+        friendshipRequest.setRequester(richard);
+        friendshipRequest.setTarget(johny);
+        Boolean friendRequestAdded = restTemplate.postForObject(baseUrl+addFriendUrl, friendshipRequest, Boolean.class);
+        assertTrue(friendRequestAdded);
+
+        friendshipRequest.setRequester(anna);
+        friendshipRequest.setTarget(marry);
+        friendRequestAdded = restTemplate.postForObject(baseUrl+addFriendUrl, friendshipRequest, Boolean.class);
+        assertTrue(friendRequestAdded);
+
+        friendshipRequest.setRequester(richard);
+        friendshipRequest.setTarget(marry);
+        friendRequestAdded = restTemplate.postForObject(baseUrl+addFriendUrl, friendshipRequest, Boolean.class);
+        assertTrue(friendRequestAdded);
+
+        String acceptFriendUrl = "users/acceptFriendshipRequest";
+        friendshipRequest.setRequester(richard);
+        friendshipRequest.setTarget(marry);
+        friendRequestAdded = restTemplate.postForObject(baseUrl+acceptFriendUrl, friendshipRequest, Boolean.class);
+        assertTrue(friendRequestAdded);
+
+
+        String cancelFriendUrl = "users/cancelFriendshipRequest";
+        friendshipRequest.setRequester(richard);
+        friendshipRequest.setTarget(johny);
+        friendRequestAdded = restTemplate.postForObject(baseUrl+cancelFriendUrl, friendshipRequest, Boolean.class);
+        assertTrue(friendRequestAdded);
 
 
 
 
 
+    }
 
+    @Test
+    public void addUser(){
+        final String url = baseUrl + "users/createUser";
+
+        User johny = new User();
+        johny.setEmail("johny@emial.com");
+        johny.setLogin(usernameJohny);
+        johny = restTemplate.postForObject(url, johny, User.class);
+        assertNotNull(johny);
 
 
     }

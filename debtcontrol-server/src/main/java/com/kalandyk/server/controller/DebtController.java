@@ -1,13 +1,9 @@
 package com.kalandyk.server.controller;
 
 import com.kalandyk.api.model.Debt;
-
-import com.kalandyk.server.neo4j.entity.UserEntity;
-import com.kalandyk.server.neo4j.repository.UserRepository;
 import com.kalandyk.server.service.UserService;
-import org.neo4j.graphdb.Node;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;

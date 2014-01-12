@@ -26,7 +26,7 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="com.kalandyk.server"/>
-    <neo4j:config storeDirectory="../neo4j-db"/>
+    <neo4j:config storeDirectory="neo4j-db"/>
     <neo4j:repositories base-package="com.kalandyk.server.neo4j"/>
 
 
