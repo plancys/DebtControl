@@ -1,31 +1,56 @@
 package com.kalandyk.server.neo4j.entity;
 
+import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtState;
+import com.kalandyk.api.model.DebtType;
+
+import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by kamil on 1/5/14.
  */
 @NodeEntity
-public class DebtEntity extends  AbstractEntity{
+public class DebtEntity extends AbstractEntity {
 
-    private  String description;
+    public static final String DEBT_CREDITOR_RELATION = "HAS_CREDITOR";
+    public static final String DEBT_DEBTOR_RELATION = "HAS_DEBTOR";
+    public static final String DEBT_HAS_EVENT = "HAS_EVENT";
+
+    private String description;
 
     private Long amount;
 
     private Date creationDate;
 
-//    private DebtStateEntity debtStateEntity;
-//
-//    private DebtTypeEntity debtTypeEntity;
-
-    @RelatedTo(type = "HAS_DEBTOR", elementClass = UserEntity.class)
+    @RelatedTo(type = DEBT_DEBTOR_RELATION, elementClass = UserEntity.class, direction = Direction.OUTGOING)
+    @Fetch
     private UserEntity debtor;
 
-    @RelatedTo(type = "HAS_CREDITOR", elementClass = UserEntity.class)
+    @RelatedTo(type = DEBT_CREDITOR_RELATION, elementClass = UserEntity.class, direction = Direction.OUTGOING)
+    @Fetch
     private UserEntity creditor;
+
+    @RelatedTo(type = DEBT_HAS_EVENT, elementClass = DebtEventEntity.class, direction = Direction.OUTGOING)
+    @Fetch
+    private List<DebtEventEntity> events;
+
+    private DebtState debtState;
+
+    private DebtType debtType;
+
+    public DebtEntity() {
+
+    }
+
+    public DebtEntity(Debt debt) {
+        //TODO: set fields
+    }
 
     public String getDescription() {
         return description;
@@ -66,13 +91,34 @@ public class DebtEntity extends  AbstractEntity{
     public void setCreditor(UserEntity creditor) {
         this.creditor = creditor;
     }
+
+    public List<DebtEventEntity> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<DebtEventEntity> events) {
+        this.events = events;
+    }
+
+    public DebtState getDebtState() {
+        return debtState;
+    }
+
+    public void setDebtState(DebtState debtState) {
+        this.debtState = debtState;
+    }
+
+    public DebtType getDebtType() {
+        return debtType;
+    }
+
+    public void setDebtType(DebtType debtType) {
+        this.debtType = debtType;
+    }
+
+
+    public Debt toDebt() {
+        //TODO: set fields
+        return new Debt();
+    }
 }
-      /*      private boolean isSelected;
-    private DebtState debtState;
-    private DebtType debtType;
-    private String description;
-    private Long amount;
-    private User debtor;
-    private User creditor;
-    //Dates
-    private Date creationDate; */

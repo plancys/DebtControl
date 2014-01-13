@@ -5,6 +5,8 @@ package com.kalandyk.api.model;
  */
 public class Confirmation {
 
+    private Long id;
+
     private Debt connectedDebt;
 
     private User requestApplicant;
@@ -15,6 +17,14 @@ public class Confirmation {
         this.confirmationType = confirmationType;
         this.connectedDebt = connectedDebt;
         this.requestApplicant = requestApplicant;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public ConfirmationType getConfirmationType() {

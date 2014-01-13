@@ -6,20 +6,29 @@ import java.util.List;
 
 public class Debt {
 
-    private boolean isSelected;
-    private DebtState debtState;
-    private DebtType debtType;
+    private Long id;
     private String description;
     private Long amount;
-    private User debtor;
-    private User creditor;
     //Dates
     private Date creationDate;
+    private DebtState debtState;
+    private DebtType debtType;
+    private User debtor;
+    private User creditor;
+    private boolean isSelected;
 
     private List<DebtEvent> debtEvents;
 
     public Debt() {
         debtEvents = new ArrayList<DebtEvent>();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public DebtState getDebtState() {
@@ -88,7 +97,7 @@ public class Debt {
         this.isSelected = isSelected;
     }
 
-    public void addEvent(DebtEvent debtEvent){
+    public void addEvent(DebtEvent debtEvent) {
         debtEvents.add(debtEvent);
     }
 

@@ -44,7 +44,7 @@ public class UserService {
         UserEntity requester = userRepository.findOne(requesterUser.getId());
         UserEntity decisionMaker = userRepository.findOne(decisionUser.getId());
 
-        Set<UserEntity> requests = decisionMaker.getAddingToFriendsRequests();
+        Set<UserEntity> requests = decisionMaker.getFriendshipInvitation();
         if (!requests.contains(requester)) {
             return false;
         }
@@ -55,7 +55,7 @@ public class UserService {
         UserEntity requester = userRepository.findOne(requesterUser.getId());
         UserEntity decisionMaker = userRepository.findOne(decisionUser.getId());
 
-        Set<UserEntity> requests = decisionMaker.getAddingToFriendsRequests();
+        Set<UserEntity> requests = decisionMaker.getFriendshipInvitation();
         requests.remove(requester);
 
         decisionMaker = userRepository.save(decisionMaker);
@@ -66,7 +66,7 @@ public class UserService {
         UserEntity requester = userRepository.findOne(requesterUser.getId());
         UserEntity decisionMaker = userRepository.findOne(decisionUser.getId());
 
-        Set<UserEntity> requests = decisionMaker.getAddingToFriendsRequests();
+        Set<UserEntity> requests = decisionMaker.getFriendshipInvitation();
         requests.add(requester);
 
         decisionMaker = userRepository.save(decisionMaker);
@@ -80,7 +80,7 @@ public class UserService {
         requesterFriends.add(decisionMaker);
         approverFriends.add(requester);
 
-        Set<UserEntity> requests = decisionMaker.getAddingToFriendsRequests();
+        Set<UserEntity> requests = decisionMaker.getFriendshipInvitation();
         boolean removed = requests.remove(requester);
 
         decisionMaker = userRepository.save(decisionMaker);

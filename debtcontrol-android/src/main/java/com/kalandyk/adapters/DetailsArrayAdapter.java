@@ -59,25 +59,25 @@ public class DetailsArrayAdapter extends ArrayAdapter<DebtEvent> {
                 message = activity.getString(R.string.details_debt_simple_repayment);
                 break;
             case DEBT_ADDITION_REQUEST:
-                message = activity.getString(R.string.details_debt_addition_request, item.getEventAuthor().getLogin());
+                message = activity.getString(R.string.details_debt_addition_request, item.getEventCreator().getLogin());
                 break;
             case DEBT_ADDITION_APPROVING:
-                message = activity.getString(R.string.details_debt_addition_approve, item.getEventAuthor().getLogin());
+                message = activity.getString(R.string.details_debt_addition_approve, item.getEventCreator().getLogin());
                 break;
             case DEBT_ADDITION_REJECTING:
-                message = activity.getString(R.string.details_debt_addition_reject, item.getEventAuthor().getLogin());
+                message = activity.getString(R.string.details_debt_addition_reject, item.getEventCreator().getLogin());
                 break;
             case DEBT_REQUEST_REPAY:
-                message = activity.getString(R.string.details_debt_request_repaying, item.getEventAuthor().getLogin());
+                message = activity.getString(R.string.details_debt_request_repaying, item.getEventCreator().getLogin());
                 break;
             case DEBT_APPROVING_REPAYMENT_REQUEST:
-                message = activity.getString(R.string.details_debt_request_repaying_approve, item.getEventAuthor().getLogin());
+                message = activity.getString(R.string.details_debt_request_repaying_approve, item.getEventCreator().getLogin());
                 break;
             case DEBT_REJECTING_REPAYMENT_REQUEST:
-                message = activity.getString(R.string.details_debt_request_repaying_reject, item.getEventAuthor().getLogin());
+                message = activity.getString(R.string.details_debt_request_repaying_reject, item.getEventCreator().getLogin());
                 break;
             case DEBT_CANCELING_REPAYMENT_REQUEST:
-                message = activity.getString(R.string.details_debt_cancel_repayment_request, item.getEventAuthor().getLogin());
+                message = activity.getString(R.string.details_debt_cancel_repayment_request, item.getEventCreator().getLogin());
                 break;
 
         }

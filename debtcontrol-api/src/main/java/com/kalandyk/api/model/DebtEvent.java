@@ -1,16 +1,22 @@
 package com.kalandyk.api.model;
 
+import java.util.Date;
+
 /**
  * Created by kamil on 12/29/13.
  */
 public class DebtEvent {
 
+    private Long id;
+
     private DebtEventType eventType;
 
-    private User eventAuthor;
+    private User eventCreator;
 
-    public DebtEvent(DebtEventType eventType, User eventAuthor){
-        this.eventAuthor = eventAuthor;
+    private Date creationDate;
+
+    public DebtEvent(DebtEventType eventType, User eventCreator){
+        this.eventCreator = eventCreator;
         this.eventType = eventType;
     }
 
@@ -22,11 +28,27 @@ public class DebtEvent {
         this.eventType = eventType;
     }
 
-    public User getEventAuthor() {
-        return eventAuthor;
+    public User getEventCreator() {
+        return eventCreator;
     }
 
-    public void setEventAuthor(User eventAuthor) {
-        this.eventAuthor = eventAuthor;
+    public void setEventCreator(User eventCreator) {
+        this.eventCreator = eventCreator;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
