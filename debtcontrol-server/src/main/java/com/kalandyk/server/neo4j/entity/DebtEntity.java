@@ -10,7 +10,6 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by kamil on 1/5/14.
@@ -20,7 +19,7 @@ public class DebtEntity extends AbstractEntity {
 
     public static final String DEBT_CREDITOR_RELATION = "HAS_CREDITOR";
     public static final String DEBT_DEBTOR_RELATION = "HAS_DEBTOR";
-    public static final String DEBT_HAS_EVENT = "HAS_EVENT";
+    public static final String DEBT_HAS_HISTORY = "HAS_HISTORY";
 
     private String description;
 
@@ -36,9 +35,9 @@ public class DebtEntity extends AbstractEntity {
     @Fetch
     private UserEntity creditor;
 
-    @RelatedTo(type = DEBT_HAS_EVENT, elementClass = DebtEventEntity.class, direction = Direction.OUTGOING)
+    @RelatedTo(type = DEBT_HAS_HISTORY, elementClass = DebtHistoryEntity.class, direction = Direction.OUTGOING)
     @Fetch
-    private List<DebtEventEntity> events;
+    private DebtHistoryEntity history;
 
     private DebtState debtState;
 
@@ -46,10 +45,6 @@ public class DebtEntity extends AbstractEntity {
 
     public DebtEntity() {
 
-    }
-
-    public DebtEntity(Debt debt) {
-        //TODO: set fields
     }
 
     public String getDescription() {
@@ -92,14 +87,6 @@ public class DebtEntity extends AbstractEntity {
         this.creditor = creditor;
     }
 
-    public List<DebtEventEntity> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<DebtEventEntity> events) {
-        this.events = events;
-    }
-
     public DebtState getDebtState() {
         return debtState;
     }
@@ -116,9 +103,21 @@ public class DebtEntity extends AbstractEntity {
         this.debtType = debtType;
     }
 
+    public DebtHistoryEntity getHistory() {
+        if (history == null) {
+            history = new DebtHistoryEntity();
+        }
+        return history;
+    }
 
-    public Debt toDebt() {
-        //TODO: set fields
-        return new Debt();
+    public void setHistory(DebtHistoryEntity history) {
+        this.history = history;
+    }
+
+    public void addDebtEvent(DebtEventEntity event){
+        if (history == null) {
+            history = new DebtHistoryEntity();
+        }
+        history.addEvent(event);
     }
 }

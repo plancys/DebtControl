@@ -15,6 +15,7 @@ public class Debt {
     private DebtType debtType;
     private User debtor;
     private User creditor;
+    private User creator;
     private boolean isSelected;
 
     private List<DebtEvent> debtEvents;
@@ -103,7 +104,7 @@ public class Debt {
 
     //TODO: add property and setting it in proper places
     public User getCreator() {
-        return new User();
+        return creator;
     }
 
     public List<DebtEvent> getDebtEvents() {
@@ -112,5 +113,9 @@ public class Debt {
 
     public void setDebtEvents(List<DebtEvent> debtEvents) {
         this.debtEvents = debtEvents;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }

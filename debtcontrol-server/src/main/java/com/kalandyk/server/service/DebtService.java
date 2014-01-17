@@ -1,22 +1,28 @@
 package com.kalandyk.server.service;
 
-import com.kalandyk.api.model.Confirmation;
 import com.kalandyk.api.model.ConfirmationType;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtEventType;
 import com.kalandyk.api.model.DebtState;
 import com.kalandyk.api.model.User;
 import com.kalandyk.exception.IllegalDebtOperationException;
 import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
 import com.kalandyk.server.neo4j.entity.DebtEntity;
+import com.kalandyk.server.neo4j.entity.DebtEventEntity;
+import com.kalandyk.server.neo4j.entity.DebtHistoryEntity;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.ConfirmationRepository;
+import com.kalandyk.server.neo4j.repository.DebtHistoryRepository;
 import com.kalandyk.server.neo4j.repository.DebtRepository;
+import com.kalandyk.server.neo4j.repository.DebtEventRepository;
 import com.kalandyk.server.neo4j.repository.UserRepository;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * Created by kamil on 1/12/14.
@@ -36,18 +42,51 @@ public class DebtService {
     private ConfirmationRepository confirmationRepository;
 
     @Autowired
+    private ConfirmationService confirmationService;
+
+    @Autowired
+    private DebtEventRepository debtEventRepository;
+
+    @Autowired
+    private  DebtEventService debtEventService;
+
+
+
+    @Autowired
     private Mapper mapper;
 
-    public Debt createDebt(Debt debt) {
+    public Debt createDebt(User debtCreator, Debt debt) {
         if (debtExist(debt)) {
             return debt;
+        }
+        if( !userExist(debtCreator) ){
+            return null;
         }
         //Prepare
         DebtEntity entityToSave = mapper.map(debt, DebtEntity.class);
         entityToSave.setDebtState(DebtState.NOT_CONFIRMED_DEBT);
         //Save
         entityToSave = debtRepository.save(entityToSave);
+
+        boolean confirmationCreated = confirmationService.createNewDebtConfirmation(debtCreator, mapper.map(entityToSave, Debt.class));
+
+        if( !confirmationCreated ){
+            //TODO: raise some exception or sth
+        }
+
+        debtEventService.createEvent(debtCreator, debt, DebtEventType.DEBT_ADDITION_REQUEST);
+
         return mapper.map(entityToSave, Debt.class);
+    }
+
+
+
+    private boolean userExist(User debtCreator) {
+        if(debtCreator.getId() == null){
+            return false;
+        }
+        UserEntity user = userRepository.findOne(debtCreator.getId());
+        return user != null;
     }
 
     public boolean requestRepayDebt(User user, Debt debt) throws IllegalDebtOperationException {
@@ -68,6 +107,23 @@ public class DebtService {
 
         return true;
 
+    }
+
+    public boolean acceptRepayDebtRequest(User user, Debt debt) throws IllegalDebtOperationException {
+        UserEntity approver = mapper.map(user, UserEntity.class);
+        DebtEntity connectedDebt = mapper.map(debt, DebtEntity.class);
+
+        if (!connectedDebt.getDebtor().equals(approver)) {
+            throw new IllegalDebtOperationException();
+        }
+        if (!connectedDebt.getDebtState().equals(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT)) {
+            throw new IllegalDebtOperationException();
+        }
+
+        connectedDebt.setDebtState(DebtState.CONFIRMED_REPAID_DEBT);
+        debtRepository.save(connectedDebt);
+
+        return true;
     }
 
     private ConfirmationEntity getConfirmationForDebtRepayingRequest(UserEntity requester, DebtEntity connectedDebt) {

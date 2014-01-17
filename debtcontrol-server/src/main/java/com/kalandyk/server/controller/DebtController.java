@@ -38,6 +38,12 @@ public class DebtController {
     public Debt saveTest() {
         Debt debt = new Debt();
         debt.setCreationDate(new Date());
+        User creator = new User();
+        creator.setId(1l);
+        //debt.setDebtor(creator);
+        debt.setCreator(creator);
+
+
         debt.setAmount(100l);
         User debtor = new User();
         debtor.setId(1l);
@@ -46,13 +52,13 @@ public class DebtController {
         creditor.setId(2l);
         debt.setDescription("Flaszka wodki");
         debt.setCreditor(creditor);
-        return debtService.createDebt(debt);
+        return debtService.createDebt(debt.getCreator(), debt);
     }
 
     @RequestMapping(value = "createDebt", method = RequestMethod.POST)
     @ResponseBody
     public Debt createUser(@RequestBody Debt debt) {
-        return debtService.createDebt(debt);
+        return debtService.createDebt(debt.getCreator(), debt);
     }
 
 }
