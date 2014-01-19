@@ -46,6 +46,7 @@ public class UserEntity extends AbstractEntity {
     private List<DebtEntity> debtList;
 
     public UserEntity() {
+        super();
     }
 
     public UserEntity(User user) {

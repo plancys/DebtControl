@@ -2,17 +2,16 @@ package com.kalandyk.server.service;
 
 import com.kalandyk.api.model.ConfirmationType;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtEvent;
 import com.kalandyk.api.model.DebtEventType;
 import com.kalandyk.api.model.DebtState;
 import com.kalandyk.api.model.User;
 import com.kalandyk.exception.IllegalDebtOperationException;
 import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
 import com.kalandyk.server.neo4j.entity.DebtEntity;
-import com.kalandyk.server.neo4j.entity.DebtEventEntity;
 import com.kalandyk.server.neo4j.entity.DebtHistoryEntity;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.ConfirmationRepository;
-import com.kalandyk.server.neo4j.repository.DebtHistoryRepository;
 import com.kalandyk.server.neo4j.repository.DebtRepository;
 import com.kalandyk.server.neo4j.repository.DebtEventRepository;
 import com.kalandyk.server.neo4j.repository.UserRepository;
@@ -22,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by kamil on 1/12/14.
@@ -64,6 +63,7 @@ public class DebtService {
         }
         //Prepare
         DebtEntity entityToSave = mapper.map(debt, DebtEntity.class);
+        entityToSave.updateTimestamp();
         entityToSave.setDebtState(DebtState.NOT_CONFIRMED_DEBT);
         //Save
         entityToSave = debtRepository.save(entityToSave);
@@ -74,7 +74,10 @@ public class DebtService {
             //TODO: raise some exception or sth
         }
 
-        debtEventService.createEvent(debtCreator, debt, DebtEventType.DEBT_ADDITION_REQUEST);
+        List<DebtEvent> event = debtEventService.createEvent(debtCreator, debt, DebtEventType.DEBT_ADDITION_REQUEST);
+
+        DebtHistoryEntity history = entityToSave.getHistory();
+        //history.
 
         return mapper.map(entityToSave, Debt.class);
     }

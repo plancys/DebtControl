@@ -1,8 +1,8 @@
 package com.kalandyk.api.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Debt {
 
@@ -18,10 +18,10 @@ public class Debt {
     private User creator;
     private boolean isSelected;
 
-    private List<DebtEvent> debtEvents;
+    private Set<DebtEvent> events;
 
     public Debt() {
-        debtEvents = new ArrayList<DebtEvent>();
+        events = new HashSet<DebtEvent>();
     }
 
     public Long getId() {
@@ -99,7 +99,7 @@ public class Debt {
     }
 
     public void addEvent(DebtEvent debtEvent) {
-        debtEvents.add(debtEvent);
+        events.add(debtEvent);
     }
 
     //TODO: add property and setting it in proper places
@@ -107,12 +107,12 @@ public class Debt {
         return creator;
     }
 
-    public List<DebtEvent> getDebtEvents() {
-        return debtEvents;
+    public Set<DebtEvent> getEvents() {
+        return events;
     }
 
-    public void setDebtEvents(List<DebtEvent> debtEvents) {
-        this.debtEvents = debtEvents;
+    public void setEvents(Set<DebtEvent> events) {
+        this.events = events;
     }
 
     public void setCreator(User creator) {

@@ -29,12 +29,15 @@ public class ConfirmationService {
         ConfirmationEntity confirmation = new ConfirmationEntity();
         confirmation.setConfirmationType(ConfirmationType.REQUEST_DEBT_ADDING);
         DebtEntity connectedDebt = mapper.map(debt, DebtEntity.class);
+        connectedDebt.updateTimestamp();
         confirmation.setConnectedDebt(connectedDebt);
 
         UserEntity creatorEntity = mapper.map(creator, UserEntity.class);
+        creatorEntity.updateTimestamp();
         confirmation.setRequestApplicant(creatorEntity);
 
         UserEntity receiver = getConfirmationReceiver(connectedDebt, creatorEntity);
+        receiver.updateTimestamp();
         confirmation.setReceiver(receiver);
 
         confirmation = confirmationRepository.save(confirmation);

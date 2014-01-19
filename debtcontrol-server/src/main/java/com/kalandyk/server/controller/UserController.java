@@ -35,10 +35,10 @@ public class UserController {
     @Autowired
     private Neo4jTemplate neo4jTemplate;
 
-    @RequestMapping(value = "getUserByName/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "getUserByLogin/{login}", method = RequestMethod.GET)
     @ResponseBody
-    public User getUserByUsername(@PathVariable String username) {
-        return userService.findUserByUsername(username);
+    public User getUserByUsername(@PathVariable String login) {
+        return userService.findUserByLogin(login);
     }
 
     @RequestMapping(value = "getUsersFriends/{username}", method = RequestMethod.GET)

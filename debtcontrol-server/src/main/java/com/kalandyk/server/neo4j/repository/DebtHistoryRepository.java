@@ -1,6 +1,5 @@
 package com.kalandyk.server.neo4j.repository;
 
-import com.kalandyk.server.neo4j.entity.DebtEntity;
 import com.kalandyk.server.neo4j.entity.DebtHistoryEntity;
 
 /**

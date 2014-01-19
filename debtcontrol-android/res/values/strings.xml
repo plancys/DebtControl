@@ -63,6 +63,7 @@
     <string name="no_details_message">There is details for this debt.</string>
     <string name="no_debt_message">There is no debt.</string>
     <string name="no_confirmation_message">There is no confirmation to confirm.</string>
+    <string name="service_name">DebtControllDataService</string>
 
 
 </resources>

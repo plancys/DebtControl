@@ -27,6 +27,11 @@ public class ConfirmationEntity extends AbstractEntity {
 
     private ConfirmationType confirmationType;
 
+
+    public ConfirmationEntity() {
+        super();
+    }
+
     public DebtEntity getConnectedDebt() {
         return connectedDebt;
     }

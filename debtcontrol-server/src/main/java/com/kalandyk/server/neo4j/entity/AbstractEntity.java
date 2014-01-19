@@ -2,13 +2,21 @@ package com.kalandyk.server.neo4j.entity;
 
 import org.springframework.data.neo4j.annotation.GraphId;
 
+import java.util.Date;
+
 /**
  * Created by kamil on 1/4/14.
  */
 public abstract class AbstractEntity {
 
     @GraphId
-    protected Long id;
+    private Long id;
+
+    private Date timestamp;
+
+    public AbstractEntity(){
+        timestamp = new Date();
+    }
 
     public Long getId() {
         return id;
@@ -36,5 +44,10 @@ public abstract class AbstractEntity {
     @Override
     public int hashCode() {
         return id == null ? 0 : id.hashCode();
+    }
+
+    public void updateTimestamp(){
+        //TODO: implement Visitor or sth
+        timestamp = new Date();
     }
 }

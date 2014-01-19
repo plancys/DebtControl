@@ -1,6 +1,5 @@
 package com.kalandyk.server.neo4j.entity;
 
-import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtState;
 import com.kalandyk.api.model.DebtType;
 
@@ -44,7 +43,7 @@ public class DebtEntity extends AbstractEntity {
     private DebtType debtType;
 
     public DebtEntity() {
-
+        super();
     }
 
     public String getDescription() {

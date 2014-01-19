@@ -4,11 +4,15 @@
           xsi:schemaLocation="http://dozer.sourceforge.net
                               http://dozer.sourceforge.net/schema/beanmapping.xsd">
     <mapping>
-        <class-a>com.kalandyk.api.model.Debt</class-a>
-        <class-b>com.kalandyk.server.neo4j.entity.DebtEntity</class-b>
+        <class-a>com.kalandyk.server.neo4j.entity.DebtEntity</class-a>
+        <class-b>com.kalandyk.api.model.Debt</class-b>
         <field>
             <a>id</a>
             <b>id</b>
+        </field>
+        <field>
+            <a>history.events</a>
+            <b>events</b>
         </field>
     </mapping>
     <mapping>

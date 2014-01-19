@@ -23,6 +23,10 @@ public class DebtEventEntity extends AbstractEntity {
 
     private Date creationTime;
 
+    public DebtEventEntity() {
+        super();
+    }
+
     public DebtEventType getEventType() {
         return eventType;
     }

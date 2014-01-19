@@ -57,5 +57,34 @@
         <item name="android:background">@drawable/button_red</item>
     </style>
 
+    <style name="TextWelcome">
+        <item name="android:lineSpacingExtra">1dp</item>
+        <item name="android:padding">5dp</item>
+        <!--<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>-->
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+    <style name="TextLogin">
+        <item name="android:lineSpacingExtra">1dp</item>
+        <!--<item name="android:padding">5dp</item>-->
+        <!--<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>-->
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textStyle">bold</item>
+        <!--<item name="android:gravity">center</item>-->
+        <!--<item name="android:layout_marginTop">10dp</item>-->
+    </style>
+
+    <style name="ButtonNormal">
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/button_grey</item>
+    </style>
 
 </resources>

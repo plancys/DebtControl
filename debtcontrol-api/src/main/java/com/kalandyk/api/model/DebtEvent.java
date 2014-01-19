@@ -20,6 +20,10 @@ public class DebtEvent {
         this.eventType = eventType;
     }
 
+    public DebtEvent(){
+
+    }
+
     public DebtEventType getEventType() {
         return eventType;
     }

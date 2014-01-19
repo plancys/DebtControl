@@ -4,6 +4,7 @@ import com.kalandyk.api.model.User;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.UserRepository;
 
+import org.dozer.Mapper;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class UserService {
 
     @Autowired
     private Neo4jTemplate neo4jTemplate;
+
+    @Autowired
+    private Mapper mapper;
 
     public User createUser(User user) {
         UserEntity toSave = new UserEntity(user);
@@ -88,12 +92,12 @@ public class UserService {
         return removed && decisionMaker != null && requester != null;
     }
 
-    public User findUserByUsername(String username) {
+    public User findUserByLogin(String username) {
         UserEntity byUsername = userRepository.findByLogin(username);
         if(byUsername == null){
             return null;
         }
-        return byUsername.toUserModel();
+        return mapper.map(byUsername, User.class);
     }
 
     public List<User> findUsersFriends(String username) {

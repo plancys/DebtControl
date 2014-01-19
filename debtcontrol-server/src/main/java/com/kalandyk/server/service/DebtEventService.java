@@ -1,6 +1,7 @@
 package com.kalandyk.server.service;
 
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtEvent;
 import com.kalandyk.api.model.DebtEventType;
 import com.kalandyk.api.model.User;
 import com.kalandyk.server.neo4j.entity.DebtEntity;
@@ -14,7 +15,9 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by kamil on 1/17/14.
@@ -31,20 +34,33 @@ public class DebtEventService {
     @Autowired
     private DebtHistoryRepository debtHistoryRepository;
 
-    public boolean createEvent(User debtCreator, Debt debt, DebtEventType debtEventType){
+    public List<DebtEvent> createEvent(User debtCreator, Debt debt, DebtEventType debtEventType){
 
         DebtHistoryEntity debtHistoryEntity = mapper.map(debt, DebtEntity.class).getHistory();
+        debtHistoryEntity.updateTimestamp();
         DebtEventEntity event = new DebtEventEntity();
         event.setCreationTime(new Date());
-        event.setEventCreator(mapper.map(debtCreator, UserEntity.class));
+        UserEntity eventCreator = mapper.map(debtCreator, UserEntity.class);
+        eventCreator.updateTimestamp();
+        event.setEventCreator(eventCreator);
         event.setEventType(DebtEventType.DEBT_ADDITION_REQUEST);
         event = debtEventRepository.save(event);
         debtHistoryEntity.addEvent(event);
         debtHistoryEntity = debtHistoryRepository.save(debtHistoryEntity);
         //TODO: debt events mapping
-        //debt.setDebtEvents(de);
+        //debt.setEvents(de);
 
-        return true;
+        List<DebtEvent> events = getConvertedDebtEvents(debtHistoryEntity);
+        return events;
+    }
+
+    private List<DebtEvent> getConvertedDebtEvents(DebtHistoryEntity debtHistoryEntity) {
+        List<DebtEvent> events = new ArrayList<DebtEvent>();
+        for(DebtEventEntity debtEvent : debtHistoryEntity.getEvents()){
+            DebtEvent mapped = mapper.map(debtEvent, DebtEvent.class);
+            events.add(mapped);
+        }
+        return events;
     }
 
 }
