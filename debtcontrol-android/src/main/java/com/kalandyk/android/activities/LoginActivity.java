@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -17,15 +16,6 @@ import android.widget.Toast;
 import com.kalandyk.R;
 import com.kalandyk.android.service.DataUpdateService;
 import com.kalandyk.api.model.User;
-
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by kamil on 1/5/14.
@@ -53,7 +43,7 @@ public class LoginActivity extends Activity {
             public void onClick(View view) {
                 if(service != null){
                 String userToString = service.getCurrentUser().toString();
-                Log.e(AbstractActivity.TAG, userToString);
+                Log.e(AbstractDebtActivity.TAG, userToString);
                 userTextView.setText(userToString);
                 }
             }
@@ -118,7 +108,7 @@ public class LoginActivity extends Activity {
 
 
             } catch (Exception e) {
-                Log.e(AbstractActivity.TAG, e.getMessage(), e);
+                Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
             }
             return null;
         }

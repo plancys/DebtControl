@@ -3,25 +3,20 @@ package com.kalandyk.android.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.kalandyk.R;
-import com.kalandyk.android.DebtDataContainer;
-import com.kalandyk.api.model.Debt;
-import com.kalandyk.android.fragments.AddDebtDialogFragment;
-import com.kalandyk.android.fragments.AddGroupExpenseFragment;
-import com.kalandyk.android.fragments.ConfirmationFragment;
-import com.kalandyk.android.fragments.DebtsListFragment;
-import com.kalandyk.android.fragments.HistoryFragment;
-import com.kalandyk.android.listeners.NewDebtListener;
-import com.kalandyk.android.services.DebtService;
+import com.kalandyk.android.fragments.*;
+import com.kalandyk.android.listeners.AddingPersonToDebtListener;
+import com.kalandyk.android.persistent.DebtDataContainer;
+import com.kalandyk.android.utils.SharedPreferencesBuilder;
+import com.kalandyk.api.model.User;
 
 import java.util.Iterator;
 import java.util.Stack;
 
-public abstract class AbstractActivity extends BaseAbstractActivity {
+public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
     public static final String TAG = "com.kalandyk.debtcontrol";
 
@@ -31,6 +26,7 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
     protected Fragment currentFragment;
 
     private Stack<Fragment> fragmentStack;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,8 +41,16 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
     }
 
 
-    protected void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         replaceFragment(fragment, false);
+    }
+
+    public void replaceFragmentWithStackClearing(Fragment fragment) {
+        fragmentStack.clear();
+        fragmentStack.push(fragment);
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        currentFragment = fragment;
     }
 
     private void replaceFragment(Fragment fragment, boolean fragmentTakenFromFragmentsStack) {
@@ -104,20 +108,10 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
         replaceFragment(new AddGroupExpenseFragment());
     }
 
-    private void onAddDebtButtonClick() {
-        AddDebtDialogFragment addDebtDialogFragment = new AddDebtDialogFragment();
-        addDebtDialogFragment.show(getFragmentManager(), "ADD DEBT DIALOG");
-        addDebtDialogFragment.setNewDebtListener(new NewDebtListener() {
-            @Override
-            public void newDebtAdded(Debt debt) {
-                Log.d(TAG, "New debt added");
-                DebtService instance = DebtService.getInstance();
-                instance.addDebt(debt);
-                if (currentFragment instanceof DebtsListFragment) {
-                    ((DebtsListFragment) currentFragment).notifyDataChanged();
-                }
-            }
-        });
+    public void onAddDebtButtonClick() {
+        //TODO: implement this in better way
+        DebtAddingFragment addDebtDialogFragment = new DebtAddingFragment(this) ;
+        replaceFragment(addDebtDialogFragment);
     }
 
     private void onConfirmationButtonClick() {
@@ -126,12 +120,12 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
 
     @Override
     public void onBackPressed() {
-        if (!fragmentStack.empty()) {
-            Fragment lastFragment = fragmentStack.pop();
-            replaceFragment(lastFragment, true);
-        } else {
+        if (fragmentStack.empty()) {
             super.onBackPressed();
+            return;
         }
+        Fragment lastFragment = fragmentStack.pop();
+        replaceFragment(lastFragment, true);
     }
 
     public DebtDataContainer getCashedData() {
@@ -140,6 +134,10 @@ public abstract class AbstractActivity extends BaseAbstractActivity {
 
     public void setCashedData(DebtDataContainer cashedData) {
         this.cashedData = cashedData;
+    }
+
+    public SharedPreferencesBuilder getSharedPreferencesBuilder() {
+        return sharedPreferencesBuilder;
     }
 }
 

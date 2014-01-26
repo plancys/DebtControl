@@ -15,12 +15,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.kalandyk.R;
+import com.kalandyk.android.activities.drawer.actions.DrawerAction;
 import com.kalandyk.android.fragments.DebtsListFragment;
+import com.kalandyk.android.fragments.WelcomeFragment;
+import com.kalandyk.android.utils.SharedPreferencesBuilder;
 
 /**
  * Created by kamil on 12/29/13.
  */
 public abstract class BaseAbstractActivity extends FragmentActivity {
+
+    protected final SharedPreferencesBuilder sharedPreferencesBuilder = new SharedPreferencesBuilder(this);
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -103,11 +108,13 @@ public abstract class BaseAbstractActivity extends FragmentActivity {
 
     protected abstract void replaceFragment(Fragment fragment);
 
+    protected abstract void replaceFragmentWithStackClearing(Fragment fragment);
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //TODO: Add another fragments
-            Log.d(AbstractActivity.TAG, "onDrawerItemClick()");
+            Log.d(AbstractDebtActivity.TAG, "onDrawerItemClick()");
             selectDrawerMenuItem(position);
 
         }
@@ -115,11 +122,22 @@ public abstract class BaseAbstractActivity extends FragmentActivity {
 
 
     private void selectDrawerMenuItem(int position) {
-        replaceFragment(new DebtsListFragment());
+
+        switch (position) {
+            case DrawerAction.DASHBOARD:
+                replaceFragment(new DebtsListFragment());
+                break;
+            case DrawerAction.LOGOUT:
+                sharedPreferencesBuilder.saveCurrentUser(null);
+                replaceFragmentWithStackClearing(new WelcomeFragment());
+                break;
+
+            default:
+                replaceFragment(new DebtsListFragment());
+        }
+
         mDrawerLayout.closeDrawer(mDrawerList);
     }
-
-
 
 
 }

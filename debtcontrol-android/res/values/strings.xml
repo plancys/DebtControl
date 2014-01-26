@@ -11,6 +11,8 @@
         <item>Friends</item>
         <item>Balance</item>
         <item>Expenses control</item>
+        <item>Logout</item>
+        <item>My account</item>
         <item>Exit</item>
     </string-array>
 
@@ -18,6 +20,11 @@
         <item>Debt with confirmation from other side</item>
         <item>Simple debt without external confirmation</item>
         <!--<item>Debt with QR code confirmation</item>-->
+    </string-array>
+
+    <string-array name="debt_roles">
+        <item>Debtor</item>
+        <item>Creditor</item>
     </string-array>
 
 
@@ -28,7 +35,7 @@
     <string name="description_add_debt_label">Description:</string>
     <string name="amount_add_debt">Amount:</string>
     <string name="choose_person_add_debt">Choose</string>
-    <string name="person_connected_with_debt">Subject connected:</string>
+    <string name="person_connected_with_debt">Person connected:</string>
     <string name="debt_type">Debt type:</string>
 
     <!-- Debts main message -->
@@ -64,6 +71,7 @@
     <string name="no_debt_message">There is no debt.</string>
     <string name="no_confirmation_message">There is no confirmation to confirm.</string>
     <string name="service_name">DebtControllDataService</string>
+    <string name="you_are">You are:</string>
 
 
 </resources>

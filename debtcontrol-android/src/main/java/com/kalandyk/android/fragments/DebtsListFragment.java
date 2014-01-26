@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.kalandyk.R;
-import com.kalandyk.android.activities.AbstractActivity;
+import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.adapters.DebtsArrayAdapter;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.android.listeners.DebtActionListener;
@@ -60,7 +60,7 @@ public class DebtsListFragment extends Fragment {
 
             @Override
             public void onChangeDebtState(Debt debt) {
-                Log.d(AbstractActivity.TAG, " [DebtListFragment] onChangeDebtState() triggered");
+                Log.d(AbstractDebtActivity.TAG, " [DebtListFragment] onChangeDebtState() triggered");
                 adapter.notifyDataSetChanged();
             }
         });

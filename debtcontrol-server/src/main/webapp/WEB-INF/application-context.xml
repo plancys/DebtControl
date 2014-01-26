@@ -23,7 +23,6 @@
     <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.kalandyk.server"/>
     <neo4j:config storeDirectory="neo4j-db"/>
     <neo4j:repositories base-package="com.kalandyk.server.neo4j"/>
 

@@ -12,6 +12,8 @@ import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -100,8 +102,27 @@ public class UserService {
         return mapper.map(byUsername, User.class);
     }
 
-    public List<User> findUsersFriends(String username) {
-        return null;
+    public Set<User> findUserFriendsByLogin(String login) {
+        Set<User> usersFriends = new HashSet<User>();
+        UserEntity user = userRepository.findByLogin(login);
+        for(UserEntity friend : user.getFriends()){
+            UserEntity friendFetched = userRepository.findOne(friend.getId());
+            usersFriends.add(mapper.map(friendFetched, User.class));
+        }
+        return usersFriends;
+    }
+
+    public User authenticateUser(String login, String password) {
+        UserEntity user = userRepository.findByLogin(login);
+        if(user == null){
+            return null;
+        }
+
+        if( user.getPassword() != null && !user.getPassword().equals(password)){
+            return null;
+        }
+
+        return mapper.map(user, User.class);
     }
 
 

@@ -2,6 +2,8 @@ package com.kalandyk.server.controller;
 
 import com.kalandyk.api.model.FriendshipRequest;
 import com.kalandyk.api.model.User;
+import com.kalandyk.api.model.UserCredentials;
+import com.kalandyk.api.model.wrapers.Friends;
 import com.kalandyk.server.neo4j.repository.UserRepository;
 import com.kalandyk.server.service.UserService;
 
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kamil on 1/5/14.
@@ -41,10 +45,19 @@ public class UserController {
         return userService.findUserByLogin(login);
     }
 
-    @RequestMapping(value = "getUsersFriends/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "getUsersFriends/{login}", method = RequestMethod.GET)
     @ResponseBody
-    public List<User> getUsersFriends(@PathVariable String username) {
-        return userService.findUsersFriends(username);
+    public Friends getUsersFriends(@PathVariable String login) {
+        Set<User> userFriendsByLogin = userService.findUserFriendsByLogin(login);
+        //TODO: create some abstract method for this
+        List<User> friends = new ArrayList<User>();
+        for(User user: userFriendsByLogin){
+            friends.add(user);
+        }
+        Friends friendsObj = new Friends();
+        friendsObj.setFriends(friends);
+
+        return friendsObj;
     }
 
     @RequestMapping(value = "createUser", method = RequestMethod.POST)
@@ -71,5 +84,9 @@ public class UserController {
         return userService.cancelAddingToFriendRequest(request.getTarget(), request.getRequester());
     }
 
-
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    @ResponseBody
+    public User login(@RequestBody UserCredentials credentials) {
+        return userService.authenticateUser(credentials.getLogin(), credentials.getPassword());
+    }
 }

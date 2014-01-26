@@ -18,7 +18,7 @@
         android:debuggable="true"
         android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
         <activity
-            android:name=".android.activities.MainActivity"
+            android:name=".android.activities.MainActivityDebt"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

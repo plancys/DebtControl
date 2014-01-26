@@ -2,6 +2,7 @@ package com.kalandyk.server;
 
 import com.kalandyk.api.model.FriendshipRequest;
 import com.kalandyk.api.model.User;
+import com.kalandyk.api.model.UserCredentials;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 public class RestUserIntegrationTest {
 
     private RestTemplate restTemplate;
-    private final String baseUrl = "http://localhost:8080/";
+    private final String baseUrl = "http://192.168.0.22:8080";
 
     private final String usernameJohny = "Johny";
     private final String usernameRichard = "Richard";
@@ -143,6 +144,16 @@ public class RestUserIntegrationTest {
         johny = restTemplate.postForObject(url, johny, User.class);
         assertNotNull(johny);
 
+
+    }
+
+    @Test
+    public void login(){
+        UserCredentials userCredentials = new UserCredentials();
+        userCredentials.setLogin("Johny");
+        userCredentials.setPassword("");
+        User user = restTemplate.postForObject(baseUrl+"users/login", userCredentials, User.class);
+        assertNotNull(user);
 
     }
 

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.kalandyk.R;
-import com.kalandyk.android.activities.AbstractActivity;
+import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Debt;
 
 /**
@@ -25,7 +25,7 @@ public class DebtCancelPaidOfRequestAction extends DebtAction {
 
     @Override
     public void executeAction(Debt debt) {
-        Log.d(AbstractActivity.TAG, "[DebtAction] Triggered debt cancel paid off request");
+        Log.d(AbstractDebtActivity.TAG, "[DebtAction] Triggered debt cancel paid off request");
         debtService.cancelDebtRepayRequest(debt);
     }
 }

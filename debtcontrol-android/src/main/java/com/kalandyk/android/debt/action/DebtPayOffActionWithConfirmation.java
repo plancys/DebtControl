@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.kalandyk.R;
-import com.kalandyk.android.activities.AbstractActivity;
+import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Debt;
 
 /**
@@ -23,7 +23,7 @@ public class DebtPayOffActionWithConfirmation extends DebtAction {
 
     @Override
     public void executeAction(Debt debt) {
-        Log.d(AbstractActivity.TAG, "[DebtAction] Triggered debt pay off action");
+        Log.d(AbstractDebtActivity.TAG, "[DebtAction] Triggered debt pay off action");
         //TODO: Delegate this action to service or sth like that
         debtService.requestDebtPayOff(debt);
 

@@ -15,7 +15,10 @@ public class Debt {
     private DebtType debtType;
     private User debtor;
     private User creditor;
+
     private User creator;
+    private User connectedPerson;
+
     private boolean isSelected;
 
     private Set<DebtEvent> events;
@@ -117,5 +120,13 @@ public class Debt {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public User getConnectedPerson() {
+        return connectedPerson;
+    }
+
+    public void setConnectedPerson(User connectedPerson) {
+        this.connectedPerson = connectedPerson;
     }
 }

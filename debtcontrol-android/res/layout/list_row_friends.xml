@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:orientation="horizontal"
+                android:padding="5dip">
+
+    <LinearLayout
+            android:id="@+id/thumbnail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dip"
+            android:padding="3dip">
+
+        <ImageView
+                android:id="@+id/list_image"
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:src="@drawable/person"/>
+
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/friend_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/thumbnail"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:text="Login"
+            android:textColor="#040404"
+            android:textSize="15dip"
+            android:textStyle="bold"
+            android:typeface="sans"
+            android:layout_marginRight="80dp"
+            />
+
+    <!--<TextView-->
+            <!--android:id="@+id/tv_details_description"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/tv_details_main_info"-->
+            <!--android:layout_marginRight="120dp"-->
+            <!--android:layout_marginTop="1dip"-->
+            <!--android:layout_toRightOf="@+id/thumbnail"-->
+            <!--android:text="Description : Money for beer last night \nStatus: Confirmed"-->
+            <!--android:textColor="#343434"-->
+            <!--android:textSize="10dip"/>-->
+
+    <!-- Rightend Arrow -->
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arrow"/>
+    <Button
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            style="@style/ButtonInListStyleBase"
+            android:text="Choose"
+            android:id="@+id/friend_choose" android:layout_alignParentTop="true" android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

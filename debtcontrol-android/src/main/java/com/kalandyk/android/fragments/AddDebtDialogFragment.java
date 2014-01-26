@@ -1,14 +1,9 @@
 package com.kalandyk.android.fragments;
 
-import android.app.DialogFragment;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.kalandyk.R;
+import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtState;
 import com.kalandyk.api.model.DebtType;
@@ -27,7 +23,7 @@ import java.util.Date;
 /**
  * Created by kamil on 12/2/13.
  */
-public class AddDebtDialogFragment extends DialogFragment {
+public class AddDebtDialogFragment extends AbstractFragment {
 
     private NewDebtListener newDebtListener;
     private Spinner debtTypeSpinner;
@@ -70,7 +66,7 @@ public class AddDebtDialogFragment extends DialogFragment {
                 if (newDebtListener != null) {
                     Debt debt = buildDebtFromDialog();
                     newDebtListener.newDebtAdded(debt);
-                    AddDebtDialogFragment.this.dismiss();
+                    dismiss();
                 }
             }
         });
@@ -95,13 +91,25 @@ public class AddDebtDialogFragment extends DialogFragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddDebtDialogFragment.this.dismiss();
+                dismiss();
+            }
+        });
+
+        Button friendsButton = (Button) view.findViewById(R.id.bt_add_debt_friends);
+        friendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //((AbstractDebtActivity)AddDebtDialogFragment.this.getActivity()).replaceFragment(new FriendsFragment());
             }
         });
 
 
 
         return view;
+    }
+
+    private void dismiss() {
+
     }
 
     private void init(View view) {
@@ -141,11 +149,11 @@ public class AddDebtDialogFragment extends DialogFragment {
     }
 
     private void setDialogStyle() {
-        Window window = getDialog().getWindow();
-        //set transparent background
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        window.setTitle("Add debt");
+//        Window window = getDialog().getWindow();
+//        //set transparent background
+//        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        window.setTitle("Add debt");
     }
 }
