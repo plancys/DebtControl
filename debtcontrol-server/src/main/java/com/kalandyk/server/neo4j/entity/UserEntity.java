@@ -44,7 +44,7 @@ public class UserEntity extends AbstractEntity {
     private Set<UserEntity> friendshipInvitation;
 
     @RelatedTo(type = USERS_DEBTS, elementClass = DebtEntity.class, direction = Direction.OUTGOING)
-    private List<DebtEntity> debtList;
+    private Set<DebtEntity> debtList;
 
     public UserEntity() {
         super();
@@ -123,14 +123,14 @@ public class UserEntity extends AbstractEntity {
         this.friendshipInvitation = friendshipInvitation;
     }
 
-    public List<DebtEntity> getDebtList() {
+    public Set<DebtEntity> getDebtList() {
         if (debtList == null) {
-            debtList = new ArrayList<DebtEntity>();
+            debtList = new HashSet<DebtEntity>();
         }
         return debtList;
     }
 
-    public void setDebtList(List<DebtEntity> debtList) {
+    public void setDebtList(Set<DebtEntity> debtList) {
         this.debtList = debtList;
     }
 

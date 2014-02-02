@@ -2,6 +2,7 @@ package com.kalandyk.android.persistent;
 
 import android.app.Activity;
 
+import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.activities.MainActivityDebt;
 import com.kalandyk.android.utils.SharedPreferencesBuilder;
 import com.kalandyk.api.model.Confirmation;
@@ -27,7 +28,7 @@ public class DebtDataContainer {
 
     private List<User> friends;
 
-    public DebtDataContainer(MainActivityDebt activity) {
+    public DebtDataContainer(AbstractDebtActivity activity) {
         this.activity = activity;
         this.sharedPreferencesBuilder = new SharedPreferencesBuilder(activity);
         initializeData();

@@ -14,20 +14,13 @@ import android.widget.Toast;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.persistent.DebtDataContainer;
+import com.kalandyk.android.utils.DebtUrls;
 import com.kalandyk.android.utils.PasswordDecoder;
-import com.kalandyk.android.utils.UrlUtil;
 import com.kalandyk.api.model.User;
 import com.kalandyk.api.model.UserCredentials;
 
 import com.kalandyk.api.model.wrapers.Friends;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by kamil on 1/19/14.
@@ -72,9 +65,7 @@ public class WelcomeFragment extends AbstractFragment {
                 //TODO: Go to registration
             }
         });
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Please Wait");
-        progressDialog.setMessage("Application is logging to server");
+        progressDialog = getAbstractDebtActivity().getProgressDialog("Application is logging to server");
     }
 
     protected void login(String login, String encodedPassword) {
@@ -105,13 +96,11 @@ public class WelcomeFragment extends AbstractFragment {
             Log.d(AbstractDebtActivity.TAG, "Started TASK");
             User user = null;
             try {
-                RestTemplate restTemplate = getRestTemplate();
-                final String url = UrlUtil.getBaseUrl(getActivity()) + "users/login";
-                user = restTemplate.postForObject("http://192.168.0.22:8080/"+"users/login", credentials[0], User.class);
-
-                Friends friends = restTemplate.getForObject("http://192.168.0.22:8080/"+"users/getUsersFriends/"+user.getLogin(), Friends.class);
+                RestTemplate restTemplate = getAbstractDebtActivity().getRestTemplate();
+                DebtUrls urls = new DebtUrls(getAbstractDebtActivity());
+                user = restTemplate.postForObject(urls.getLoginUrl(), credentials[0], User.class);
+                Friends friends = restTemplate.getForObject(urls.getUserFriendsUrl(user.getLogin()), Friends.class);
                 cachedData.setFriends(friends.getFriends());
-                //user = restTemplate.postForObject(url, credentials, User.class);
             } catch (Exception e) {
                 Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
             }

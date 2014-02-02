@@ -1,6 +1,8 @@
 package com.kalandyk.android.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -16,6 +18,7 @@ import java.util.List;
  */
 public abstract class AbstractFragment extends Fragment {
     private AbstractDebtActivity abstractDebtActivity;
+    private ProgressDialog progressDialog;
 
     protected AbstractDebtActivity getAbstractDebtActivity() {
         if (abstractDebtActivity == null) {
@@ -24,13 +27,22 @@ public abstract class AbstractFragment extends Fragment {
         return abstractDebtActivity;
     }
 
-    protected RestTemplate getRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter());
-        messageConverters.add(new MappingJacksonHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-        return restTemplate;
-    }
+//    protected ProgressDialog getProgressDialog(String message){
+//        if(progressDialog == null) {
+//            progressDialog = new ProgressDialog(getAbstractDebtActivity());
+//            progressDialog.setTitle(getAbstractDebtActivity().getString(R.string.progress_dialog_please_wait));
+//            progressDialog.setMessage(message != null ? message : getAbstractDebtActivity().getString(R.string.progress_dialog_default_message));
+//        }
+//        return progressDialog;
+//    }
+
+//    protected RestTemplate getRestTemplate() {
+//        RestTemplate restTemplate = new RestTemplate();
+//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+//        messageConverters.add(new FormHttpMessageConverter());
+//        messageConverters.add(new StringHttpMessageConverter());
+//        messageConverters.add(new MappingJacksonHttpMessageConverter());
+//        restTemplate.setMessageConverters(messageConverters);
+//        return restTemplate;
+//    }
 }

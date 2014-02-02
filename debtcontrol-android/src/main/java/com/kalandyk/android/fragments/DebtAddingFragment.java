@@ -1,5 +1,7 @@
 package com.kalandyk.android.fragments;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,10 +11,11 @@ import android.widget.*;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.listeners.NewDebtListener;
-import com.kalandyk.api.model.Debt;
-import com.kalandyk.api.model.DebtState;
-import com.kalandyk.api.model.DebtType;
-import com.kalandyk.api.model.User;
+import com.kalandyk.android.persistent.DebtDataContainer;
+import com.kalandyk.android.utils.DebtUrls;
+import com.kalandyk.api.model.*;
+import com.kalandyk.api.model.wrapers.Friends;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 
@@ -23,8 +26,6 @@ public class DebtAddingFragment extends AbstractFragment {
 
     private Debt debt;
 
-
-    private NewDebtListener newDebtListener;
     private Spinner debtTypeSpinner;
     private Spinner debtRoleSpinner;
 
@@ -37,13 +38,10 @@ public class DebtAddingFragment extends AbstractFragment {
     private Button addDebtButton;
     private Button cancelButton;
 
-
-    private User userConnected;
     private AbstractDebtActivity activity;
 
-//    public void setNewDebtListener(NewDebtListener newDebtListener) {
-//        this.newDebtListener = newDebtListener;
-//    }
+    private DebtDataContainer cachedData;
+    private ProgressDialog progressDialog;
 
     public DebtAddingFragment(AbstractDebtActivity activity) {
         this.activity = activity;
@@ -57,7 +55,8 @@ public class DebtAddingFragment extends AbstractFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(AbstractDebtActivity.TAG, "onCreateView -> ADDING FRIEND");
-        View view = inflater.inflate(R.layout.dialog_fragment_add_debt, container, false);
+        this.cachedData = activity.getCashedData();
+        View view = inflater.inflate(R.layout.fragment_add_debt, container, false);
 
         initGuiObjectReferences(view);
         initSpinnersActions();
@@ -77,16 +76,10 @@ public class DebtAddingFragment extends AbstractFragment {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 amountEditText.setText(String.valueOf(200 * i / 100));
             }
-
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
+            public void onStartTrackingTouch(SeekBar seekBar) { }
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) { }
         });
     }
 
@@ -102,12 +95,7 @@ public class DebtAddingFragment extends AbstractFragment {
         addDebtButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (newDebtListener != null) {
-                    buildDebtFromGui();
-                    Debt debt = DebtAddingFragment.this.debt;
-                    newDebtListener.newDebtAdded(DebtAddingFragment.this.debt);
-                    dismiss();
-                }
+                saveNewDebt(debt);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +104,12 @@ public class DebtAddingFragment extends AbstractFragment {
                 dismiss();
             }
         });
+    }
+
+    private void saveNewDebt(Debt debt) {
+        progressDialog.show();
+        buildDebtFromGui();
+        new SaveDebtTask().execute(debt);
     }
 
     private void initSpinnersActions() {
@@ -128,8 +122,8 @@ public class DebtAddingFragment extends AbstractFragment {
         debtRoleSpinner.setAdapter(roleAdapter);
     }
 
-    private void dismiss() {
-
+    protected void dismiss() {
+        activity.replaceFragment(new DebtsListFragment());
     }
 
     private void initGuiObjectReferences(View view) {
@@ -145,6 +139,7 @@ public class DebtAddingFragment extends AbstractFragment {
         cancelButton = (Button) view.findViewById(R.id.bt_cancel_debt);
         addDebtButton = (Button) view.findViewById(R.id.bt_add_debt);
         addPersonConnectedButton = (Button) view.findViewById(R.id.bt_add_debt_friends);
+        progressDialog = getAbstractDebtActivity().getProgressDialog(activity.getString(R.string.progress_dialog_saving_debt));
     }
 
     private void loadGuiFromDebtObject() {
@@ -187,6 +182,17 @@ public class DebtAddingFragment extends AbstractFragment {
         debt.setDebtType(debtTypeSpinner.getSelectedItemPosition() == 0 ? DebtType.DEBT_WITH_CONFIRMATION : DebtType.DEBT_WITHOUT_CONFIRMATION);
 
         debt.setDebtState(debtTypeSpinner.getSelectedItemPosition() == 0 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.UNPAID_DEBT);
+
+        User loggedUser = cachedData.getLoggedUser();
+        if(debtRoleSpinner.getSelectedItemPosition() == 0 ){
+            //debtor
+            debt.setDebtor(loggedUser);
+            debt.setCreditor(debt.getConnectedPerson());
+        } else {
+            debt.setCreditor(loggedUser);
+            debt.setDebtor(debt.getConnectedPerson());
+        }
+        debt.setCreator(loggedUser);
     }
 
     protected void showFriendsFragment() {
@@ -194,6 +200,35 @@ public class DebtAddingFragment extends AbstractFragment {
     }
 
     protected void friendChosen(User user) {
+
+    }
+
+    private class SaveDebtTask extends AsyncTask<Debt, Void, Debt> {
+
+        @Override
+        protected Debt doInBackground(Debt... credentials) {
+            Log.d(AbstractDebtActivity.TAG, "Started TASK");
+            Debt addedDebt = null;
+            try {
+                RestTemplate restTemplate = activity.getRestTemplate();
+                DebtUrls urls = new DebtUrls(activity);
+                addedDebt = restTemplate.postForObject(urls.getAddDebtUrl(), debt, Debt.class);
+
+            } catch (Exception e) {
+                Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
+            }
+            return addedDebt;
+
+        }
+        @Override
+        protected void onPostExecute(Debt result) {
+            Log.d(AbstractDebtActivity.TAG, "onPostExcecute");
+            if(result != null){
+                cachedData.getDebts().add(result);
+            }
+            progressDialog.dismiss();
+            dismiss();
+        }
 
     }
 }

@@ -2,7 +2,10 @@ package com.kalandyk.android.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -10,10 +13,21 @@ import com.kalandyk.R;
 import com.kalandyk.android.fragments.*;
 import com.kalandyk.android.listeners.AddingPersonToDebtListener;
 import com.kalandyk.android.persistent.DebtDataContainer;
+import com.kalandyk.android.utils.DebtUrls;
 import com.kalandyk.android.utils.SharedPreferencesBuilder;
+import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.User;
+import com.kalandyk.api.model.UserCredentials;
+import com.kalandyk.api.model.wrapers.Debts;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 
 public abstract class AbstractDebtActivity extends BaseAbstractActivity {
@@ -27,6 +41,7 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
     private Stack<Fragment> fragmentStack;
 
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,12 +49,15 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         fragmentStack = new Stack<Fragment>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
-
         initNavigationDrawer();
-
-        replaceFragment(getContentFragment());
+        showProgressDialog();
+        new LoadDataFromServerTask().execute(getCashedData());
     }
 
+    private void showProgressDialog() {
+        progressDialog = getProgressDialog(getString(R.string.progress_dialog_fetching_data));
+        progressDialog.show();
+    }
 
     public void replaceFragment(Fragment fragment) {
         replaceFragment(fragment, false);
@@ -110,7 +128,8 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
     public void onAddDebtButtonClick() {
         //TODO: implement this in better way
-        DebtAddingFragment addDebtDialogFragment = new DebtAddingFragment(this) ;
+        DebtAddingFragment addDebtDialogFragment = new DebtAddingFragment(this);
+
         replaceFragment(addDebtDialogFragment);
     }
 
@@ -129,6 +148,9 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
     }
 
     public DebtDataContainer getCashedData() {
+        if(cashedData == null){
+            cashedData = new DebtDataContainer(this);
+        }
         return cashedData;
     }
 
@@ -138,6 +160,62 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
     public SharedPreferencesBuilder getSharedPreferencesBuilder() {
         return sharedPreferencesBuilder;
+    }
+
+    public ProgressDialog getProgressDialog(String message){
+        if(progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle(this.getString(R.string.progress_dialog_please_wait));
+            progressDialog.setMessage(message != null ? message : this.getString(R.string.progress_dialog_default_message));
+        }
+        return progressDialog;
+    }
+
+    public RestTemplate getRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+        messageConverters.add(new FormHttpMessageConverter());
+        messageConverters.add(new StringHttpMessageConverter());
+        messageConverters.add(new MappingJacksonHttpMessageConverter());
+        restTemplate.setMessageConverters(messageConverters);
+        return restTemplate;
+    }
+
+
+    private class LoadDataFromServerTask extends AsyncTask<DebtDataContainer, Void, DebtDataContainer>{
+
+        @Override
+        protected void onPostExecute(DebtDataContainer result) {
+            replaceFragment(getContentFragment());
+            progressDialog.dismiss();
+        }
+
+        @Override
+        protected DebtDataContainer doInBackground(DebtDataContainer... debtDataContainers) {
+            DebtDataContainer cachedData = debtDataContainers[0];
+            RestTemplate restTemplate = getRestTemplate();
+            DebtUrls urls = new DebtUrls(AbstractDebtActivity.this);
+            UserCredentials credentials = getUserCredentials(cachedData);
+
+            loadDebts(restTemplate, urls, credentials);
+
+            return cachedData;
+        }
+
+        private void loadDebts(RestTemplate restTemplate, DebtUrls urls, UserCredentials credentials) {
+            Debts debts = restTemplate.postForObject(urls.getUserDebt(), credentials, Debts.class);
+            if(debts != null){
+                Log.d(TAG, debts.toString());
+                cashedData.setDebts(debts.getDebts());
+            }
+        }
+
+        private UserCredentials getUserCredentials(DebtDataContainer cachedData) {
+            UserCredentials credentials = new UserCredentials();
+            credentials.setLogin(cachedData.getLoggedUser().getLogin());
+            credentials.setPassword(cachedData.getLoggedUser().getPassword());
+            return credentials;
+        }
     }
 }
 

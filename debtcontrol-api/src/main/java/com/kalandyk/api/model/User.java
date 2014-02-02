@@ -111,7 +111,7 @@ public class User implements Serializable {
                 ", forename='" + forename + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", password='" + password + '\'' +
-                ", friends=" + friends +
+//                ", friends[Size]=" + friends.size() +
                 '}';
     }
 }

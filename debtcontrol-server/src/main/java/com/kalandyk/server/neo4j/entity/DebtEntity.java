@@ -27,15 +27,15 @@ public class DebtEntity extends AbstractEntity {
     private Date creationDate;
 
     @RelatedTo(type = DEBT_DEBTOR_RELATION, elementClass = UserEntity.class, direction = Direction.OUTGOING)
-    @Fetch
+    //@Fetch
     private UserEntity debtor;
 
     @RelatedTo(type = DEBT_CREDITOR_RELATION, elementClass = UserEntity.class, direction = Direction.OUTGOING)
-    @Fetch
+    //@Fetch
     private UserEntity creditor;
 
     @RelatedTo(type = DEBT_HAS_HISTORY, elementClass = DebtHistoryEntity.class, direction = Direction.OUTGOING)
-    @Fetch
+    //@Fetch
     private DebtHistoryEntity history;
 
     private DebtState debtState;

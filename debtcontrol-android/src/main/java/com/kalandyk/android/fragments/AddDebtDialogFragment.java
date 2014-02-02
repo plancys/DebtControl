@@ -11,7 +11,6 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.kalandyk.R;
-import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtState;
 import com.kalandyk.api.model.DebtType;
@@ -48,7 +47,7 @@ public class AddDebtDialogFragment extends AbstractFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_fragment_add_debt, container);
+        View view = inflater.inflate(R.layout.fragment_add_debt, container);
 
         init(view);
 

@@ -21,8 +21,6 @@ public class MainActivityDebt extends AbstractDebtActivity {
     @Override
     protected Fragment getContentFragment() {
 
-        prepareCachedData();
-
         if(getCashedData().getLoggedUser() == null){
             return new WelcomeFragment();
         }
@@ -36,7 +34,5 @@ public class MainActivityDebt extends AbstractDebtActivity {
         return fragment;
     }
 
-    private void prepareCachedData() {
-        setCashedData(new DebtDataContainer(this));
-    }
+
 }

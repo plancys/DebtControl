@@ -2,6 +2,8 @@ package com.kalandyk.server.controller;
 
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.User;
+import com.kalandyk.api.model.UserCredentials;
+import com.kalandyk.api.model.wrapers.Debts;
 import com.kalandyk.server.service.DebtService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,12 @@ public class DebtController {
     @ResponseBody
     public Debt createUser(@RequestBody Debt debt) {
         return debtService.createDebt(debt.getCreator(), debt);
+    }
+
+    @RequestMapping(value = "getUserDebts", method = RequestMethod.POST)
+    @ResponseBody
+    public Debts createUser(@RequestBody UserCredentials credentials) {
+        return debtService.getUserDebts(credentials);
     }
 
 }

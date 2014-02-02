@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--       U R L ' s         -->
+    <string name="url_base">http://192.168.0.22:8080/</string>
+    <string name="url_add_user"></string>
+    <string name="url_add_debt">debts/createDebt</string>
+    <string name="url_get_user_debts">debts/getUserDebts</string>
+    <string name="url_get_user_friends">users/getUsersFriends/%1$s</string>
+    <string name="url_login">users/login</string>
+
+
     <string name="app_name">DebtControl</string>
     <string name="hello">Hello debtcontrol-android!</string>
     <string name="action_settings">Settings</string>
@@ -72,6 +81,10 @@
     <string name="no_confirmation_message">There is no confirmation to confirm.</string>
     <string name="service_name">DebtControllDataService</string>
     <string name="you_are">You are:</string>
+    <string name="progress_dialog_please_wait">Please Wait</string>
+    <string name="progress_dialog_default_message">Application is sending/receiving data from server</string>
+    <string name="progress_dialog_saving_debt">Saving debt</string>
+    <string name="progress_dialog_fetching_data">Fetching data from server.</string>
 
 
 </resources>

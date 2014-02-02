@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.adapters.DebtsArrayAdapter;
+import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.android.listeners.DebtActionListener;
 import com.kalandyk.android.services.DebtService;
@@ -19,18 +20,17 @@ import com.kalandyk.android.services.DebtService;
 /**
  * Created by kamil on 12/1/13.
  */
-public class DebtsListFragment extends Fragment {
+public class DebtsListFragment extends AbstractFragment {
 
     private DebtsArrayAdapter adapter;
-    private DebtService debtService;
+    private DebtDataContainer cachedData;
 
     public DebtsListFragment() {
-        debtService = DebtService.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        cachedData = getAbstractDebtActivity().getCashedData();
         View debtListItemView = inflater.inflate(R.layout.fragment_debt_list, container, false);
 
         adapter = initDebtsArrayAdapter();
@@ -49,7 +49,7 @@ public class DebtsListFragment extends Fragment {
     }
 
     private DebtsArrayAdapter initDebtsArrayAdapter() {
-        DebtsArrayAdapter debtsArrayAdapter = new DebtsArrayAdapter(getActivity(), debtService.getDebtsForUser(null));
+        DebtsArrayAdapter debtsArrayAdapter = new DebtsArrayAdapter(getActivity(), cachedData.getDebts());
 
 
         debtsArrayAdapter.setDebtActionListener(new DebtActionListener() {

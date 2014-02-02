@@ -1,11 +1,7 @@
 package com.kalandyk.server.service;
 
-import com.kalandyk.api.model.ConfirmationType;
-import com.kalandyk.api.model.Debt;
-import com.kalandyk.api.model.DebtEvent;
-import com.kalandyk.api.model.DebtEventType;
-import com.kalandyk.api.model.DebtState;
-import com.kalandyk.api.model.User;
+import com.kalandyk.api.model.*;
+import com.kalandyk.api.model.wrapers.Debts;
 import com.kalandyk.exception.IllegalDebtOperationException;
 import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
 import com.kalandyk.server.neo4j.entity.DebtEntity;
@@ -49,8 +45,6 @@ public class DebtService {
     @Autowired
     private  DebtEventService debtEventService;
 
-
-
     @Autowired
     private Mapper mapper;
 
@@ -68,6 +62,9 @@ public class DebtService {
         //Save
         entityToSave = debtRepository.save(entityToSave);
 
+        addRelationToDebtFromUsers(entityToSave);
+
+
         boolean confirmationCreated = confirmationService.createNewDebtConfirmation(debtCreator, mapper.map(entityToSave, Debt.class));
 
         if( !confirmationCreated ){
@@ -82,6 +79,18 @@ public class DebtService {
         return mapper.map(entityToSave, Debt.class);
     }
 
+    private void addRelationToDebtFromUsers(DebtEntity entityToSave) {
+        UserEntity creditor = entityToSave.getCreditor();
+        creditor = userRepository.findOne(creditor.getId());
+        creditor.getDebtList().add(entityToSave);
+
+        UserEntity debtor = entityToSave.getDebtor();
+        debtor = userRepository.findOne(debtor.getId());
+        debtor.getDebtList().add(entityToSave);
+
+        debtor = userRepository.save(debtor);
+        creditor = userRepository.save(creditor);
+    }
 
 
     private boolean userExist(User debtCreator) {
@@ -152,4 +161,19 @@ public class DebtService {
     }
 
 
+    public Debts getUserDebts(UserCredentials credentials) {
+        UserEntity user = userRepository.findByLogin(credentials.getLogin());
+        if(user == null ) {//|| !user.getPassword().equals(credentials.getPassword())){
+            //TODO: check users credentials
+            return null;
+        }
+
+        Debts debts = new Debts();
+        for(DebtEntity debt : user.getDebtList()){
+            debt = debtRepository.findOne(debt.getId());
+            Debt debtToAdd = mapper.map(debt, Debt.class);
+            debts.getDebts().add(debtToAdd);
+        }
+        return debts;
+    }
 }
