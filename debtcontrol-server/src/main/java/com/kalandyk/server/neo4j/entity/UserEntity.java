@@ -46,6 +46,9 @@ public class UserEntity extends AbstractEntity {
     @RelatedTo(type = USERS_DEBTS, elementClass = DebtEntity.class, direction = Direction.OUTGOING)
     private Set<DebtEntity> debtList;
 
+    @RelatedTo(type = ConfirmationEntity.CONFIRMATION_RECEIVER_RELATION, elementClass = ConfirmationEntity.class, direction = Direction.INCOMING)
+    private Set<ConfirmationEntity> confirmations;
+
     public UserEntity() {
         super();
     }
@@ -134,24 +137,14 @@ public class UserEntity extends AbstractEntity {
         this.debtList = debtList;
     }
 
-    private User toUserModelWithoutFriends() {
-        User user = new User();
-        user.setLogin(this.login);
-        user.setEmail(this.email);
-        user.setPassword(this.password);
-        user.setName(this.name);
-        user.setForename(this.forename);
-        return user;
+    public Set<ConfirmationEntity> getConfirmations() {
+        if(confirmations == null){
+            confirmations = new HashSet<ConfirmationEntity>();
+        }
+        return confirmations;
     }
 
-    public User toUserModel() {
-        User user = new User();
-        user.setId(getId());
-        user.setLogin(getLogin());
-        user.setEmail(getEmail());
-        user.setPassword(getPassword());
-        user.setName(getName());
-        user.setForename(getForename());
-        return user;
+    public void setConfirmations(Set<ConfirmationEntity> confirmations) {
+        this.confirmations = confirmations;
     }
 }

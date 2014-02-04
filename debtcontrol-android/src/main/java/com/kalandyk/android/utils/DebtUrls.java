@@ -30,8 +30,12 @@ public class DebtUrls {
         return baseUrl + activity.getString(R.string.url_add_debt);
     }
 
-    public String getUserDebt(){
+    public String getUserDebtUrl(){
         return baseUrl + activity.getString(R.string.url_get_user_debts);
+    }
+
+    public String getUserConfirmationsUrl(){
+        return baseUrl + activity.getString(R.string.url_get_confirmations);
     }
 
 

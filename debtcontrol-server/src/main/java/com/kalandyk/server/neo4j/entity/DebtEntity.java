@@ -9,6 +9,8 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by kamil on 1/5/14.
@@ -119,4 +121,6 @@ public class DebtEntity extends AbstractEntity {
         }
         history.addEvent(event);
     }
+
+
 }

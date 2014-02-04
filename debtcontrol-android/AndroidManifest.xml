@@ -26,19 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service
-            android:name=".android.service.DataUpdateService"
-            android:icon="@drawable/icon"
-            android:label="@string/service_name" >
-        </service>
 
-        <receiver android:name=".android.receiver.ScheduleReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".android.receiver.StartServiceReceiver" >
-        </receiver>
     </application>
 
 </manifest>

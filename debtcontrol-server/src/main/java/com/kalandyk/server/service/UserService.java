@@ -38,12 +38,12 @@ public class UserService {
         UserEntity toSave = new UserEntity(user);
         UserEntity alreadyExist = userRepository.findByLogin(toSave.getLogin());
         if(alreadyExist != null){
-            return alreadyExist.toUserModel();
+            return mapper.map(alreadyExist, User.class);
         }
         UserEntity savedUser = userRepository.save(toSave);
         Node savedNode = getNodeById(savedUser.getId());
         addRelationToRootNode(savedNode);
-        return savedUser.toUserModel();
+        return mapper.map(savedUser, User.class);
     }
 
     public boolean acceptAddingToFriendRequest(User decisionUser, User requesterUser) {

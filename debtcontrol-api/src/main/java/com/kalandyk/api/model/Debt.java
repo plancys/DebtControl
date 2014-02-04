@@ -107,6 +107,7 @@ public class Debt {
 
     //TODO: add property and setting it in proper places
     public User getCreator() {
+
         return creator;
     }
 

@@ -14,6 +14,7 @@ import org.springframework.http.converter.json.MappingJacksonHttpMessageConverte
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by kamil on 1/8/14.
  */
-@Ignore
+//@Ignore
 public class RestUserIntegrationTest {
 
     private RestTemplate restTemplate;
@@ -154,6 +155,23 @@ public class RestUserIntegrationTest {
         userCredentials.setPassword("");
         User user = restTemplate.postForObject(baseUrl+"users/login", userCredentials, User.class);
         assertNotNull(user);
+
+    }
+
+
+    @Test
+    public void createTwoUserForTest(){
+        final String url = baseUrl + "users/createUser";
+        User test1 = new User();
+        test1.setLogin("test1");
+        test1 = restTemplate.postForObject(url, test1, User.class);
+
+        User test2 = new User();
+        test2.setLogin("test2");
+        test2 = restTemplate.postForObject(url, test2, User.class);
+
+
+
 
     }
 

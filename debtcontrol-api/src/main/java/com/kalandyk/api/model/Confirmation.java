@@ -13,6 +13,10 @@ public class Confirmation {
 
     private ConfirmationType confirmationType;
 
+    public Confirmation() {
+
+    }
+
     public Confirmation(Debt connectedDebt, User requestApplicant, ConfirmationType confirmationType) {
         this.confirmationType = confirmationType;
         this.connectedDebt = connectedDebt;

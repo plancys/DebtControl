@@ -2,6 +2,7 @@ package com.kalandyk.android.persistent;
 
 import android.app.Activity;
 
+import android.util.Log;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.activities.MainActivityDebt;
 import com.kalandyk.android.utils.SharedPreferencesBuilder;
@@ -75,6 +76,38 @@ public class DebtDataContainer {
     public void setFriends(List<User> friends) {
         this.friends = friends;
         sharedPreferencesBuilder.saveFriends(friends);
+    }
+
+    public Debt enrichDebt(Debt debt){
+        boolean foundedInCache = false;
+        for(Debt debtFromCache : debts){
+            if(debtFromCache.getId() == debt.getId()){
+                foundedInCache = true;
+                return debtFromCache;
+            }
+        }
+        if(!foundedInCache){
+            Log.e(AbstractDebtActivity.TAG, "Debt not found");
+            //TODO: temporary action
+            return debts.get(0);
+        }
+        return null;
+    }
+
+    public User enrichUser(User user){
+        boolean foundedInCache = false;
+        for(User userFromCache : friends){
+            if(userFromCache.getId() == user.getId()){
+                foundedInCache = true;
+                return userFromCache;
+            }
+        }
+        if(!foundedInCache){
+            Log.e(AbstractDebtActivity.TAG, "Debt not found");
+            //TODO: correct this
+            return friends.get(0);
+        }
+        return null;
     }
 
 

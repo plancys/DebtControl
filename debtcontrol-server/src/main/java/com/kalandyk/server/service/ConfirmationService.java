@@ -1,14 +1,14 @@
 package com.kalandyk.server.service;
 
-import com.kalandyk.api.model.Confirmation;
-import com.kalandyk.api.model.ConfirmationType;
-import com.kalandyk.api.model.Debt;
-import com.kalandyk.api.model.User;
+import com.kalandyk.api.model.*;
+import com.kalandyk.api.model.wrapers.Confirmations;
+import com.kalandyk.api.model.wrapers.Debts;
 import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
 import com.kalandyk.server.neo4j.entity.DebtEntity;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.ConfirmationRepository;
 
+import com.kalandyk.server.neo4j.repository.UserRepository;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,9 @@ public class ConfirmationService {
 
     @Autowired
     private ConfirmationRepository confirmationRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private Mapper mapper;
@@ -61,4 +64,19 @@ public class ConfirmationService {
     }
 
 
+    public Confirmations getUserConfirmations(UserCredentials credentials) {
+        UserEntity user = userRepository.findByLogin(credentials.getLogin());
+        if(user == null ) {//|| !user.getPassword().equals(credentials.getPassword())){
+            //TODO: check users credentials
+            return null;
+        }
+
+        Confirmations confirmations = new Confirmations();
+        for(ConfirmationEntity confirmationEntity : user.getConfirmations()){
+            confirmationEntity = confirmationRepository.findOne(confirmationEntity.getId());
+            Confirmation confirmation = mapper.map(confirmationEntity, Confirmation.class);
+            confirmations.getConfirmationList().add(confirmation);
+        }
+        return confirmations;
+    }
 }
