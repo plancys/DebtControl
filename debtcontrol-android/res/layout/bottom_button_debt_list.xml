@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/header"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1"
+    android:gravity="center_horizontal">
+
+
+    <RelativeLayout
+        android:id="@+id/menu_button_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <Button
+            android:id="@+id/menu_button_debt_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.75"
+            android:background="@drawable/dashboard_tile_drawable"
+            android:onClick="onMenuButtonClick"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:textSize="12dip"
+            android:layout_alignParentTop="true"
+            android:gravity="top|center"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/bottom_button_debt_list"
+            />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            android:id="@+id/imageView"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/debt_list" />
+    </RelativeLayout>
+</LinearLayout>

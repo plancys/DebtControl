@@ -1,10 +1,8 @@
 package com.kalandyk.android.adapters;
 
-import android.content.Context;
 import android.widget.ArrayAdapter;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.persistent.DebtDataContainer;
-import com.kalandyk.api.model.Confirmation;
 
 import java.util.List;
 
@@ -30,10 +28,10 @@ public abstract class AbstractArrayAdapter<T> extends ArrayAdapter<T> {
     public void refreshDataInList(){
         switch (getAdapterDataType()){
             case CONFIRMATIONS:
-                refreshConfirmations();
+                refreshItems((List<T>) getCachedData().getConfirmations());
                 break;
             case DEBTS:
-                refreshDebts();
+                refreshItems((List<T>) getCachedData().getDebts());
                 break;
             default:
                 //TODO: raise some exceptions
@@ -41,20 +39,14 @@ public abstract class AbstractArrayAdapter<T> extends ArrayAdapter<T> {
         this.notifyDataSetChanged();
     }
 
-    protected void refreshDebts(){
-        DebtDataContainer data = activity.getCashedData();
+    private void refreshItems(List<T> list){
         this.clear();
-        for(int i=0; i < data.getDebts().size(); i++){
-            insert((T) data.getDebts().get(i), i);
+        for(int i=0; i < list.size(); i++){
+            insert((T) list.get(i), i);
         }
     }
 
-
-    protected void refreshConfirmations(){
-        DebtDataContainer data = activity.getCashedData();
-        this.clear();
-        for(int i=0; i < data.getConfirmations().size(); i++){
-            insert((T) data.getConfirmations().get(i), i);
-        }
+    private DebtDataContainer getCachedData(){
+        return activity.getCashedData();
     }
 }

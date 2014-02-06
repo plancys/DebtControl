@@ -95,40 +95,22 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         switch (button.getId()) {
 
             case R.id.menu_button_add:
-                onAddDebtButtonClick();
+                DebtAddingFragment addDebtDialogFragment = new DebtAddingFragment(this);
+                replaceFragment(addDebtDialogFragment);
                 break;
 
             case R.id.menu_button_add_group_expense:
-                onAddGroupExpenseButtonClick();
+                replaceFragment(new AddGroupExpenseFragment());
                 break;
 
             case R.id.menu_button_confirmations:
-                onConfirmationButtonClick();
+                replaceFragment(new ConfirmationFragment());
                 break;
 
-            case R.id.menu_button_history:
-                onHistoryButtonClick();
+            case R.id.menu_button_debt_list:
+                replaceFragment(new DebtsListFragment());
                 break;
         }
-    }
-
-    private void onHistoryButtonClick() {
-        replaceFragment(new HistoryFragment());
-    }
-
-    private void onAddGroupExpenseButtonClick() {
-        replaceFragment(new AddGroupExpenseFragment());
-    }
-
-    public void onAddDebtButtonClick() {
-        //TODO: implement this in better way
-        DebtAddingFragment addDebtDialogFragment = new DebtAddingFragment(this);
-
-        replaceFragment(addDebtDialogFragment);
-    }
-
-    private void onConfirmationButtonClick() {
-        replaceFragment(new ConfirmationFragment());
     }
 
     @Override
