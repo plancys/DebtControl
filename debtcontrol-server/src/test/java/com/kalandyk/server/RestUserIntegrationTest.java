@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by kamil on 1/8/14.
  */
-//@Ignore
+
 public class RestUserIntegrationTest {
 
     private RestTemplate restTemplate;
@@ -45,6 +45,7 @@ public class RestUserIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void getUserByUsernameTest() {
         final String url = baseUrl + "users/getUserByName/admin1";
         User user = restTemplate.getForObject(url, User.class);
@@ -52,6 +53,7 @@ public class RestUserIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void addNewUserTest(){
         final String url = baseUrl + "users/createUser";
         User newUser = new User();
@@ -62,6 +64,7 @@ public class RestUserIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void createNewUserFriendsNetworkTest(){
 
         final String url = baseUrl + "users/createUser";
@@ -136,6 +139,7 @@ public class RestUserIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void addUser(){
         final String url = baseUrl + "users/createUser";
 
@@ -149,6 +153,7 @@ public class RestUserIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void login(){
         UserCredentials userCredentials = new UserCredentials();
         userCredentials.setLogin("Johny");
@@ -160,6 +165,7 @@ public class RestUserIntegrationTest {
 
 
     @Test
+    @Ignore
     public void createTwoUserForTest(){
         final String url = baseUrl + "users/createUser";
         User test1 = new User();
@@ -169,10 +175,6 @@ public class RestUserIntegrationTest {
         User test2 = new User();
         test2.setLogin("test2");
         test2 = restTemplate.postForObject(url, test2, User.class);
-
-
-
-
     }
 
 }

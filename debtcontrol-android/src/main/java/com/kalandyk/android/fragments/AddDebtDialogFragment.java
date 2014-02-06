@@ -98,7 +98,7 @@ public class AddDebtDialogFragment extends AbstractFragment {
         friendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //((AbstractDebtActivity)AddDebtDialogFragment.this.getActivity()).replaceFragment(new FriendsFragment());
+                //((AbstractDebtActivity)AddDebtDialogFragment.this.getDebtActivity()).replaceFragment(new FriendsFragment());
             }
         });
 

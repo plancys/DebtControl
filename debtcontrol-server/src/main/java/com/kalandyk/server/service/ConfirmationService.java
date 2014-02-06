@@ -1,8 +1,10 @@
 package com.kalandyk.server.service;
 
 import com.kalandyk.api.model.*;
+import com.kalandyk.api.model.wrapers.ConfirmationDecision;
 import com.kalandyk.api.model.wrapers.Confirmations;
 import com.kalandyk.api.model.wrapers.Debts;
+import com.kalandyk.exception.IllegalDebtOperationException;
 import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
 import com.kalandyk.server.neo4j.entity.DebtEntity;
 import com.kalandyk.server.neo4j.entity.UserEntity;
@@ -24,6 +26,9 @@ public class ConfirmationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private DebtService debtService;
 
     @Autowired
     private Mapper mapper;
@@ -48,6 +53,23 @@ public class ConfirmationService {
         return confirmation != null;
     }
 
+    public Boolean sendDecision(Confirmation confirmation, boolean decision) throws IllegalDebtOperationException {
+        ConfirmationType confirmationType = confirmation.getConfirmationType();
+        //TODO: add abstract builder or sth
+        switch (confirmationType){
+            case REQUEST_DEBT_ADDING:
+                debtService.acceptAddingDebtRequest(confirmation.getReceiver(), confirmation.getConnectedDebt());
+                confirmationRepository.delete(mapper.map(confirmation, ConfirmationEntity.class));
+                break;
+            case REQUEST_DEBT_REPAYING:
+                debtService.acceptRepayDebtRequest(confirmation.getReceiver(), confirmation.getConnectedDebt());
+                confirmationRepository.delete(mapper.map(confirmation, ConfirmationEntity.class));
+                break;
+        }
+
+        return true;
+    }
+
     public boolean acceptConfirmationAnswer(Confirmation confirmation){
         return false;
     }
@@ -56,13 +78,13 @@ public class ConfirmationService {
         return false;
     }
 
+
     private UserEntity getConfirmationReceiver(DebtEntity connectedDebt, UserEntity creatorEntity) {
         if (creatorEntity.equals(connectedDebt.getDebtor())) {
             return connectedDebt.getCreditor();
         }
         return connectedDebt.getDebtor();
     }
-
 
     public Confirmations getUserConfirmations(UserCredentials credentials) {
         UserEntity user = userRepository.findByLogin(credentials.getLogin());
@@ -74,9 +96,18 @@ public class ConfirmationService {
         Confirmations confirmations = new Confirmations();
         for(ConfirmationEntity confirmationEntity : user.getConfirmations()){
             confirmationEntity = confirmationRepository.findOne(confirmationEntity.getId());
+            eraseFriendsFromEntity(confirmationEntity);
             Confirmation confirmation = mapper.map(confirmationEntity, Confirmation.class);
             confirmations.getConfirmationList().add(confirmation);
         }
         return confirmations;
+    }
+
+    private void eraseFriendsFromEntity(ConfirmationEntity confirmationEntity) {
+        //TODO: find a better way to do that
+        if(confirmationEntity != null){
+            confirmationEntity.getReceiver().setFriends(null);
+            confirmationEntity.getRequestApplicant().setFriends(null);
+        }
     }
 }

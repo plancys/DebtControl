@@ -9,17 +9,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.kalandyk.R;
+import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Confirmation;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.User;
 import com.kalandyk.android.listeners.ConfirmationDecisionListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by kamil on 11/26/13.
  */
-public class ConfirmationsArrayAdapter extends ArrayAdapter<Confirmation> {
+public class ConfirmationsArrayAdapter extends AbstractArrayAdapter<Confirmation> {
 
     private LayoutInflater layoutInflater;
 
@@ -33,7 +35,7 @@ public class ConfirmationsArrayAdapter extends ArrayAdapter<Confirmation> {
 
     private ConfirmationDecisionListener confirmationDecisionListener;
 
-    public ConfirmationsArrayAdapter(Activity activity, List<Confirmation> objects) {
+    public ConfirmationsArrayAdapter(AbstractDebtActivity activity, List<Confirmation> objects) {
         super(activity, R.layout.list_row_confirmations, objects);
         layoutInflater = activity.getLayoutInflater();
         this.activity = activity;
@@ -88,7 +90,7 @@ public class ConfirmationsArrayAdapter extends ArrayAdapter<Confirmation> {
     private void generateMessagesFromConfirmation(Confirmation item) {
         String message = "";
         Debt connectedDebt = item.getConnectedDebt();
-        User otherSide = connectedDebt.getCreator();
+        User otherSide = item.getRequestApplicant();
 
         switch (item.getConfirmationType()){
             case REQUEST_DEBT_ADDING:
@@ -114,4 +116,12 @@ public class ConfirmationsArrayAdapter extends ArrayAdapter<Confirmation> {
 
     }
 
+    public void removeObject(Confirmation confirmation) {
+        remove(confirmation);
+    }
+
+    @Override
+    protected DataType getAdapterDataType() {
+        return DataType.CONFIRMATIONS;
+    }
 }

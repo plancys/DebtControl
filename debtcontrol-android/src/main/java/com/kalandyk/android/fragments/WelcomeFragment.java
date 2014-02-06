@@ -1,7 +1,6 @@
 package com.kalandyk.android.fragments;
 
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +13,12 @@ import android.widget.Toast;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.persistent.DebtDataContainer;
-import com.kalandyk.android.utils.DebtUrls;
+import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.android.utils.PasswordDecoder;
 import com.kalandyk.api.model.User;
 import com.kalandyk.api.model.UserCredentials;
 
 import com.kalandyk.api.model.wrapers.Friends;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by kamil on 1/19/14.
@@ -90,14 +88,12 @@ public class WelcomeFragment extends AbstractFragment {
         activity.replaceFragmentWithStackClearing(new DebtsListFragment());
     }
 
-    private class DownloadFilesTask extends AsyncTask<UserCredentials, Void, User> {
+    private class DownloadFilesTask extends AbstractDebtTask<UserCredentials, Void, User> {
         @Override
         protected User doInBackground(UserCredentials... credentials) {
             Log.d(AbstractDebtActivity.TAG, "Started TASK");
             User user = null;
             try {
-                RestTemplate restTemplate = getAbstractDebtActivity().getRestTemplate();
-                DebtUrls urls = new DebtUrls(getAbstractDebtActivity());
                 user = restTemplate.postForObject(urls.getLoginUrl(), credentials[0], User.class);
                 Friends friends = restTemplate.getForObject(urls.getUserFriendsUrl(user.getLogin()), Friends.class);
                 cachedData.setFriends(friends.getFriends());
@@ -112,6 +108,11 @@ public class WelcomeFragment extends AbstractFragment {
         protected void onPostExecute(User result) {
             Log.d(AbstractDebtActivity.TAG, "onPostExcecute");
             WelcomeFragment.this.finished(result);
+        }
+
+        @Override
+        protected AbstractDebtActivity getDebtActivity() {
+            return getAbstractDebtActivity();
         }
     }
 }

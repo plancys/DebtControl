@@ -3,7 +3,6 @@ package com.kalandyk.android.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,13 +11,8 @@ import android.widget.Button;
 import com.kalandyk.R;
 import com.kalandyk.android.fragments.*;
 import com.kalandyk.android.persistent.DebtDataContainer;
-import com.kalandyk.android.utils.DebtUrls;
+import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.android.utils.SharedPreferencesBuilder;
-import com.kalandyk.api.model.Confirmation;
-import com.kalandyk.api.model.User;
-import com.kalandyk.api.model.UserCredentials;
-import com.kalandyk.api.model.wrapers.Confirmations;
-import com.kalandyk.api.model.wrapers.Debts;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -182,7 +176,7 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
     }
 
 
-    private class LoadDataFromServerTask extends AsyncTask<DebtDataContainer, Void, DebtDataContainer>{
+    private class LoadDataFromServerTask extends AbstractDebtTask<DebtDataContainer, Void, DebtDataContainer> {
 
         @Override
         protected void onPostExecute(DebtDataContainer result) {
@@ -198,15 +192,11 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         protected DebtDataContainer doInBackground(DebtDataContainer... debtDataContainers) {
             try {
                 DebtDataContainer cachedData = debtDataContainers[0];
-                RestTemplate restTemplate = getRestTemplate();
-                DebtUrls urls = new DebtUrls(AbstractDebtActivity.this);
-                UserCredentials credentials = getUserCredentials(cachedData);
-                if(credentials == null){
+                if(getUserCredentials() == null){
                     return null;
                 }
-
-                loadDebts(restTemplate, urls, credentials);
-                loadConfirmations(restTemplate, urls, credentials);
+                loadDebtsToCacheTask();
+                loadConfirmationsToCacheTask();
                 return cachedData;
             }catch (Exception e){
                 Log.e(TAG, e.getMessage(), e);
@@ -214,30 +204,9 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
             }
         }
 
-        private void loadConfirmations(RestTemplate restTemplate, DebtUrls urls, UserCredentials credentials) {
-            Confirmations confirmations = restTemplate.postForObject(urls.getUserConfirmationsUrl(), credentials, Confirmations.class);
-            if(confirmations != null){
-                cashedData.setConfirmations(confirmations.getConfirmationList());
-            }
-        }
-
-        private void loadDebts(RestTemplate restTemplate, DebtUrls urls, UserCredentials credentials) {
-            Debts debts = restTemplate.postForObject(urls.getUserDebtUrl(), credentials, Debts.class);
-            if(debts != null){
-                Log.d(TAG, debts.toString());
-                cashedData.setDebts(debts.getDebts());
-            }
-        }
-
-        private UserCredentials getUserCredentials(DebtDataContainer cachedData) {
-            User loggedUser = cachedData.getLoggedUser();
-            if(loggedUser == null){
-                return null;
-            }
-            UserCredentials credentials = new UserCredentials();
-            credentials.setLogin(loggedUser.getLogin());
-            credentials.setPassword(loggedUser.getPassword());
-            return credentials;
+        @Override
+        protected AbstractDebtActivity getDebtActivity() {
+            return AbstractDebtActivity.this;
         }
     }
 }

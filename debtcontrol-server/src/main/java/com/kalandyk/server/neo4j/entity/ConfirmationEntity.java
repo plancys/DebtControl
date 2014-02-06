@@ -3,6 +3,7 @@ package com.kalandyk.server.neo4j.entity;
 import com.kalandyk.api.model.ConfirmationType;
 
 import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -17,12 +18,15 @@ public class ConfirmationEntity extends AbstractEntity {
     public static final String CONFIRMATION_RECEIVER_RELATION = "CONFIRM_PERSON";
 
     @RelatedTo(type = CONFIRMATION_RELATED_DEBT_RELATION, elementClass = DebtEntity.class, direction = Direction.OUTGOING)
+    @Fetch
     private DebtEntity connectedDebt;
 
     @RelatedTo(type = CONFIRMATION_APPLICANT_RELATION, elementClass = UserEntity.class, direction = Direction.OUTGOING)
+    @Fetch
     private UserEntity requestApplicant;
 
     @RelatedTo(type = CONFIRMATION_RECEIVER_RELATION, elementClass = UserEntity.class, direction = Direction.OUTGOING)
+    @Fetch
     private UserEntity receiver;
 
     private ConfirmationType confirmationType;

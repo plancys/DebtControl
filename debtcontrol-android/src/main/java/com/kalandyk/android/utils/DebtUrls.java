@@ -38,5 +38,9 @@ public class DebtUrls {
         return baseUrl + activity.getString(R.string.url_get_confirmations);
     }
 
+    public String getSendConfirmationDecisionUrl(){
+        return baseUrl + activity.getString(R.string.url_confirmation_send_decision);
+    }
+
 
 }

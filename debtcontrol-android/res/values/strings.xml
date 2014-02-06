@@ -9,6 +9,7 @@
     <string name="url_get_user_friends">users/getUsersFriends/%1$s</string>
     <string name="url_login">users/login</string>
     <string name="url_get_confirmations">confirmations/getUserConfirmations</string>
+    <string name="url_confirmation_send_decision">confirmations/sendConfirmationDecision</string>
 
 
     <string name="app_name">DebtControl</string>

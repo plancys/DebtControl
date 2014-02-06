@@ -11,6 +11,8 @@ public class Confirmation {
 
     private User requestApplicant;
 
+    private User receiver;
+
     private ConfirmationType confirmationType;
 
     public Confirmation() {
@@ -55,4 +57,11 @@ public class Confirmation {
         this.connectedDebt = connectedDebt;
     }
 
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
 }
