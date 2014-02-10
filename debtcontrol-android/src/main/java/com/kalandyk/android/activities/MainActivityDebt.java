@@ -2,6 +2,7 @@ package com.kalandyk.android.activities;
 
 import android.app.Fragment;
 
+import com.kalandyk.android.fragments.AbstractFragment;
 import com.kalandyk.android.fragments.WelcomeFragment;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.api.model.Debt;
@@ -19,13 +20,13 @@ public class MainActivityDebt extends AbstractDebtActivity {
     private List<Debt> debts;
 
     @Override
-    protected Fragment getContentFragment() {
+    protected AbstractFragment getContentFragment() {
 
         if(getCashedData().getLoggedUser() == null){
             return new WelcomeFragment();
         }
 
-         Fragment fragment = new DebtsListFragment() {
+         AbstractFragment fragment = new DebtsListFragment() {
             @Override
             protected void showDetailsFragment(Debt debt) {
                 MainActivityDebt.this.replaceFragment(new DetailsFragment(debt));

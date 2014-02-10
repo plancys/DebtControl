@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.adapters.ConfirmationsArrayAdapter;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.task.AbstractDebtTask;
@@ -78,6 +79,11 @@ public class ConfirmationFragment extends AbstractFragment {
             }
         });
         return confirmationsArrayAdapter;
+    }
+
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+       return adapter;
     }
 
     private class SendConfirmationDecisionTask extends AbstractDebtTask<ConfirmationDecision, Void, Confirmation> {

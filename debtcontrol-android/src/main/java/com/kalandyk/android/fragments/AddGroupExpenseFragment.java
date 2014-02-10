@@ -7,15 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kalandyk.R;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 
 /**
  * Created by kamil on 12/1/13.
  */
-public class AddGroupExpenseFragment extends Fragment {
+public class AddGroupExpenseFragment extends AbstractFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View debtListItemView = inflater.inflate(R.layout.fragment_group_expense, container, false);
         return debtListItemView;
+    }
+
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+        return null;
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class DebtDataContainer {
 
-    private Activity activity;
+    private AbstractDebtActivity activity;
 
     private SharedPreferencesBuilder sharedPreferencesBuilder;
 
@@ -67,6 +67,7 @@ public class DebtDataContainer {
 
     public void setConfirmations(List<Confirmation> confirmations) {
         this.confirmations = confirmations;
+        //activity.setNotificationCounter();
     }
 
     public List<User> getFriends() {
@@ -77,39 +78,4 @@ public class DebtDataContainer {
         this.friends = friends;
         sharedPreferencesBuilder.saveFriends(friends);
     }
-
-    public Debt enrichDebt(Debt debt){
-        boolean foundedInCache = false;
-        for(Debt debtFromCache : debts){
-            if(debtFromCache.getId() == debt.getId()){
-                foundedInCache = true;
-                return debtFromCache;
-            }
-        }
-        if(!foundedInCache){
-            Log.e(AbstractDebtActivity.TAG, "Debt not found");
-            //TODO: temporary action
-            return debts.get(0);
-        }
-        return null;
-    }
-
-    public User enrichUser(User user){
-        boolean foundedInCache = false;
-        for(User userFromCache : friends){
-            if(userFromCache.getId() == user.getId()){
-                foundedInCache = true;
-                return userFromCache;
-            }
-        }
-        if(!foundedInCache){
-            Log.e(AbstractDebtActivity.TAG, "Debt not found");
-            //TODO: correct this
-            return friends.get(0);
-        }
-        return null;
-    }
-
-
-
 }

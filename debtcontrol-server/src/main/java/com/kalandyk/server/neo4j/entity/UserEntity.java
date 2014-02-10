@@ -36,15 +36,16 @@ public class UserEntity extends AbstractEntity {
     private String password;
 
     @RelatedTo(type = USER_FRIENDSHIP_RELATION, elementClass = UserEntity.class, direction = Direction.BOTH)
-    //@Fetch
     private Set<UserEntity> friends;
 
     @RelatedTo(type = USER_FRIENDSHIP_REQUEST, elementClass = UserEntity.class, direction = Direction.INCOMING)
-    //@Fetch
     private Set<UserEntity> friendshipInvitation;
 
-    @RelatedTo(type = USERS_DEBTS, elementClass = DebtEntity.class, direction = Direction.OUTGOING)
-    private Set<DebtEntity> debtList;
+    @RelatedTo(type = DebtEntity.DEBT_DEBTOR_RELATION, elementClass = DebtEntity.class, direction = Direction.INCOMING)
+    private Set<DebtEntity> weOwesSbDebts;
+
+    @RelatedTo(type = DebtEntity.DEBT_CREDITOR_RELATION, elementClass = DebtEntity.class, direction = Direction.INCOMING)
+    private Set<DebtEntity> sbOwesToUsDebts;
 
     @RelatedTo(type = ConfirmationEntity.CONFIRMATION_RECEIVER_RELATION, elementClass = ConfirmationEntity.class, direction = Direction.INCOMING)
     private Set<ConfirmationEntity> confirmations;
@@ -126,17 +127,6 @@ public class UserEntity extends AbstractEntity {
         this.friendshipInvitation = friendshipInvitation;
     }
 
-    public Set<DebtEntity> getDebtList() {
-        if (debtList == null) {
-            debtList = new HashSet<DebtEntity>();
-        }
-        return debtList;
-    }
-
-    public void setDebtList(Set<DebtEntity> debtList) {
-        this.debtList = debtList;
-    }
-
     public Set<ConfirmationEntity> getConfirmations() {
         if(confirmations == null){
             confirmations = new HashSet<ConfirmationEntity>();
@@ -146,5 +136,27 @@ public class UserEntity extends AbstractEntity {
 
     public void setConfirmations(Set<ConfirmationEntity> confirmations) {
         this.confirmations = confirmations;
+    }
+
+    public Set<DebtEntity> getWeOwesSbDebts() {
+        if(weOwesSbDebts == null){
+            weOwesSbDebts = new HashSet<DebtEntity>();
+        }
+        return weOwesSbDebts;
+    }
+
+    public void setWeOwesSbDebts(Set<DebtEntity> weOwesSbDebts) {
+        this.weOwesSbDebts = weOwesSbDebts;
+    }
+
+    public Set<DebtEntity> getSbOwesToUsDebts() {
+        if(sbOwesToUsDebts == null){
+            sbOwesToUsDebts = new HashSet<DebtEntity>();
+        }
+        return sbOwesToUsDebts;
+    }
+
+    public void setSbOwesToUsDebts(Set<DebtEntity> sbOwesToUsDebts) {
+        this.sbOwesToUsDebts = sbOwesToUsDebts;
     }
 }

@@ -25,42 +25,18 @@ import java.util.Date;
 @Transactional
 public class DebtController {
 
-
     @Autowired
     private DebtService debtService;
 
-    @RequestMapping(value = "test", method = RequestMethod.GET)
-    @ResponseBody
-    public Debt saveTest() {
-        Debt debt = new Debt();
-        debt.setCreationDate(new Date());
-        User creator = new User();
-        creator.setId(3l);
-        //debt.setDebtor(creator);
-        debt.setCreator(creator);
-
-
-        debt.setAmount(100l);
-        User debtor = new User();
-        debtor.setId(3l);
-        debt.setDebtor(debtor);
-        User creditor = new User();
-        creditor.setId(4l);
-        debt.setDescription("Flaszka wodki");
-        debt.setCreditor(creditor);
-        return debtService.createDebt(debt.getCreator(), debt);
-    }
-
     @RequestMapping(value = "createDebt", method = RequestMethod.POST)
     @ResponseBody
-    public Debt createUser(@RequestBody Debt debt) {
+    public Debt createDebt(@RequestBody Debt debt) {
         return debtService.createDebt(debt.getCreator(), debt);
     }
 
     @RequestMapping(value = "getUserDebts", method = RequestMethod.POST)
     @ResponseBody
-    public Debts createUser(@RequestBody UserCredentials credentials) {
+    public Debts getUserDebts(@RequestBody UserCredentials credentials) {
         return debtService.getUserDebts(credentials);
     }
-
 }

@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.kalandyk.R;
 import com.kalandyk.android.activities.drawer.actions.DrawerAction;
+import com.kalandyk.android.fragments.AbstractFragment;
 import com.kalandyk.android.fragments.DebtsListFragment;
 import com.kalandyk.android.fragments.WelcomeFragment;
 import com.kalandyk.android.utils.SharedPreferencesBuilder;
@@ -106,9 +107,9 @@ public abstract class BaseAbstractActivity extends FragmentActivity {
         }
     }
 
-    protected abstract void replaceFragment(Fragment fragment);
+    protected abstract void replaceFragment(AbstractFragment fragment);
 
-    protected abstract void replaceFragmentWithStackClearing(Fragment fragment);
+    protected abstract void replaceFragmentWithStackClearing(AbstractFragment fragment);
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override

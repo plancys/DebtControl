@@ -2,8 +2,13 @@ package com.kalandyk.android.fragments;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -26,6 +31,8 @@ public abstract class AbstractFragment extends Fragment {
         }
         return abstractDebtActivity;
     }
+
+    public abstract AbstractArrayAdapter getFragmentArrayAdapter();
 
 //    protected ProgressDialog getProgressDialog(String message){
 //        if(progressDialog == null) {

@@ -29,6 +29,7 @@
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
         android:text="You owe 10 PLN"
+        android:layout_toLeftOf="@+id/tv_debt_action_date"
         android:textColor="#040404"
         android:textSize="15dip"
         android:textStyle="bold"
@@ -151,6 +152,7 @@
                 style="@style/ButtonInListStyleGrey"
                 android:layout_width="fill_parent"
                 android:layout_height="48dp"
+                android:layout_marginTop="10dp"
                 android:text="Cancel debt pay off request"/>
 
             <Button

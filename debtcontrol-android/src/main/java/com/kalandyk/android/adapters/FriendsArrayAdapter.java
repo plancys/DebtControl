@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import com.kalandyk.R;
+import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Confirmation;
 import com.kalandyk.api.model.User;
 
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Created by kamil on 1/26/14.
  */
-public class FriendsArrayAdapter extends ArrayAdapter<User> {
+public class FriendsArrayAdapter extends AbstractArrayAdapter<User> {
 
 
     private LayoutInflater layoutInflater;
@@ -26,7 +27,7 @@ public class FriendsArrayAdapter extends ArrayAdapter<User> {
 
 
 
-    public FriendsArrayAdapter(Activity context, List<User> friends) {
+    public FriendsArrayAdapter(AbstractDebtActivity context, List<User> friends) {
         super(context, R.layout.list_row_debts, friends);
         this.activity = activity;
         layoutInflater = context.getLayoutInflater();
@@ -65,4 +66,8 @@ public class FriendsArrayAdapter extends ArrayAdapter<User> {
 
     }
 
+    @Override
+    protected DataType getAdapterDataType() {
+        return null;
+    }
 }

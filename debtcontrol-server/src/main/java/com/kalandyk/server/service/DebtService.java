@@ -88,11 +88,11 @@ public class DebtService {
     private void addRelationToDebtFromUsers(DebtEntity entityToSave) {
         UserEntity creditor = entityToSave.getCreditor();
         creditor = userRepository.findOne(creditor.getId());
-        creditor.getDebtList().add(entityToSave);
+        creditor.getSbOwesToUsDebts().add(entityToSave);
 
         UserEntity debtor = entityToSave.getDebtor();
         debtor = userRepository.findOne(debtor.getId());
-        debtor.getDebtList().add(entityToSave);
+        debtor.getWeOwesSbDebts().add(entityToSave);
 
         debtor = userRepository.save(debtor);
         creditor = userRepository.save(creditor);
@@ -114,7 +114,7 @@ public class DebtService {
 //        if (!connectedDebt.getDebtor().equals(requester)) {
 //            throw new IllegalDebtOperationException();
 //        }
-//        if (!connectedDebt.getDebtState().equals(DebtState.CONFIRMED_NOT_REPAID_DEBT)) {
+//        if (!connectedDebt.getDebtWithConfirmationState().equals(DebtWithConfirmationState.CONFIRMED_NOT_REPAID_DEBT)) {
 //            throw new IllegalDebtOperationException();
 //        }
         connectedDebt.setDebtState(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
@@ -134,7 +134,7 @@ public class DebtService {
 //        if (!connectedDebt.getDebtor().equals(approver)) {
 //            throw new IllegalDebtOperationException();
 //        }
-//        if (!connectedDebt.getDebtState().equals(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT)) {
+//        if (!connectedDebt.getDebtWithConfirmationState().equals(DebtWithConfirmationState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT)) {
 //            throw new IllegalDebtOperationException();
 //        }
 
@@ -150,13 +150,6 @@ public class DebtService {
         confirmation.setConnectedDebt(connectedDebt);
         confirmation.setRequestApplicant(requester);
         return confirmation;
-    }
-
-    private void setPeopleConnectedToDebt(Debt debt, DebtEntity toSave) {
-        UserEntity creditor = userRepository.findOne(debt.getCreditor().getId());
-        UserEntity debtor = userRepository.findOne(debt.getDebtor().getId());
-        toSave.setDebtor(debtor);
-        toSave.setCreditor(creditor);
     }
 
     public boolean debtExist(Debt debt) {
@@ -175,11 +168,21 @@ public class DebtService {
         }
 
         Debts debts = new Debts();
-        for(DebtEntity debt : user.getDebtList()){
+        for(DebtEntity debt : user.getWeOwesSbDebts()){
             debt = debtRepository.findOne(debt.getId());
             Debt debtToAdd = mapper.map(debt, Debt.class);
+            debtToAdd.setDebtPosition(DebtPosition.DEBTOR);
             debts.getDebts().add(debtToAdd);
         }
+
+        for(DebtEntity debt : user.getSbOwesToUsDebts()){
+            debt = debtRepository.findOne(debt.getId());
+            Debt debtToAdd = mapper.map(debt, Debt.class);
+            debtToAdd.setDebtPosition(DebtPosition.CREDITOR);
+            debts.getDebts().add(debtToAdd);
+        }
+
+
         return debts;
     }
 

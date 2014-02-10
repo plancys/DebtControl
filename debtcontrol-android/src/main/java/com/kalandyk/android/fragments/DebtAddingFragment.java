@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.listeners.NewDebtListener;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.utils.DebtUrls;
@@ -201,6 +202,11 @@ public class DebtAddingFragment extends AbstractFragment {
 
     protected void friendChosen(User user) {
 
+    }
+
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+        return null;
     }
 
     private class SaveDebtTask extends AsyncTask<Debt, Void, Debt> {

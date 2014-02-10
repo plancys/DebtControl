@@ -1,9 +1,7 @@
 package com.kalandyk.server.service;
 
 import com.kalandyk.api.model.*;
-import com.kalandyk.api.model.wrapers.ConfirmationDecision;
 import com.kalandyk.api.model.wrapers.Confirmations;
-import com.kalandyk.api.model.wrapers.Debts;
 import com.kalandyk.exception.IllegalDebtOperationException;
 import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
 import com.kalandyk.server.neo4j.entity.DebtEntity;

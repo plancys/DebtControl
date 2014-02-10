@@ -23,7 +23,7 @@ public class User implements Serializable {
 
     private String password;
 
-    private Set<User> friends;
+    //private Set<User> friends;
 
     public User() {
         //TODO: temporary preventing from null pointer exception
@@ -70,20 +70,19 @@ public class User implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<User> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(Set<User> friends) {
-        this.friends = friends;
-    }
-
-    public void addFriend(User friend) {
-        if (friends == null) {
-            friends = new HashSet<User>();
-        }
-        friends.add(friend);
-    }
+//    public Set<User> getFriends() {
+//        return friends;
+//    }
+//
+///    public void setFriends(Set<User> friends) {
+//        this.friends = friends;
+//
+//    public void addFriend(User friend) {
+//        if (friends == null) {
+//            friends = new HashSet<User>();
+//        }
+//        friends.add(friend);
+//    }
 
     public String getName() {
         return name;

@@ -1,6 +1,5 @@
 package com.kalandyk.android.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,14 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.adapters.DebtsArrayAdapter;
+import com.kalandyk.android.listeners.DebtActionListener;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.api.model.Debt;
-import com.kalandyk.android.listeners.DebtActionListener;
-import com.kalandyk.android.services.DebtService;
 
 /**
  * Created by kamil on 12/1/13.
@@ -49,7 +47,7 @@ public class DebtsListFragment extends AbstractFragment {
     }
 
     private DebtsArrayAdapter initDebtsArrayAdapter() {
-        DebtsArrayAdapter debtsArrayAdapter = new DebtsArrayAdapter(getActivity(), cachedData.getDebts());
+        DebtsArrayAdapter debtsArrayAdapter = new DebtsArrayAdapter(getAbstractDebtActivity(), cachedData.getDebts());
 
 
         debtsArrayAdapter.setDebtActionListener(new DebtActionListener() {
@@ -88,5 +86,10 @@ public class DebtsListFragment extends AbstractFragment {
         }
         debtObject.setSelected(true);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+        return adapter;
     }
 }

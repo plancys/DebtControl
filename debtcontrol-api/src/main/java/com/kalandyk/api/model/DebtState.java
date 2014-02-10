@@ -13,6 +13,23 @@ public enum DebtState {
     CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT(2),
     /* */
     CONFIRMED_REPAID_DEBT(3),
+//
+//    // Debt without confirmation
+//    UNPAID_DEBT(4),
+//    PAYED_OFF_DEBT(5),
+//
+//    ARCHIVED(7),
+//    DELETED(8);
+//
+//    private int code;
+//
+//    private DebtState(int code){
+//        this.code = code;
+//    }
+//
+//    public int getCode(){
+//        return code;
+//    }
 
     // Debt without confirmation
     UNPAID_DEBT(4),

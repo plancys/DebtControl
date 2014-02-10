@@ -1,6 +1,7 @@
 package com.kalandyk.android.activities;
 
 import android.app.Fragment;
+import com.kalandyk.android.fragments.AbstractFragment;
 
 /**
  * Created by kamil on 1/19/14.
@@ -8,7 +9,7 @@ import android.app.Fragment;
 public class RegisterActivityDebt extends AbstractDebtActivity {
 
     @Override
-    protected Fragment getContentFragment() {
+    protected AbstractFragment getContentFragment() {
         return null;
     }
 }

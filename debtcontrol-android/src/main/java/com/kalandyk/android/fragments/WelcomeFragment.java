@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.android.utils.PasswordDecoder;
@@ -86,6 +87,11 @@ public class WelcomeFragment extends AbstractFragment {
         Log.d(AbstractDebtActivity.TAG, "User = " + user.toString());
         cachedData.setLoggedUser(user);
         activity.replaceFragmentWithStackClearing(new DebtsListFragment());
+    }
+
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+        return null;
     }
 
     private class DownloadFilesTask extends AbstractDebtTask<UserCredentials, Void, User> {

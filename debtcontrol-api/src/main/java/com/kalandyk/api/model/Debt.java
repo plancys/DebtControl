@@ -1,5 +1,6 @@
 package com.kalandyk.api.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +9,7 @@ public class Debt {
 
     private Long id;
     private String description;
+    private DebtPosition debtPosition;
     private Long amount;
     //Dates
     private Date creationDate;
@@ -129,5 +131,13 @@ public class Debt {
 
     public void setConnectedPerson(User connectedPerson) {
         this.connectedPerson = connectedPerson;
+    }
+
+    public DebtPosition getDebtPosition() {
+        return debtPosition;
+    }
+
+    public void setDebtPosition(DebtPosition debtPosition) {
+        this.debtPosition = debtPosition;
     }
 }

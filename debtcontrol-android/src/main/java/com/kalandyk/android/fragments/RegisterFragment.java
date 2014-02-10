@@ -7,11 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kalandyk.R;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 
 /**
  * Created by kamil on 1/19/14.
  */
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends AbstractFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -19,4 +20,8 @@ public class RegisterFragment extends Fragment {
         return debtListItemView;
     }
 
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+        return null;
+    }
 }

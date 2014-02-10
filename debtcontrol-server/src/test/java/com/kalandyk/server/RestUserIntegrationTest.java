@@ -1,8 +1,6 @@
 package com.kalandyk.server;
 
-import com.kalandyk.api.model.FriendshipRequest;
-import com.kalandyk.api.model.User;
-import com.kalandyk.api.model.UserCredentials;
+import com.kalandyk.api.model.*;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -175,6 +173,32 @@ public class RestUserIntegrationTest {
         User test2 = new User();
         test2.setLogin("test2");
         test2 = restTemplate.postForObject(url, test2, User.class);
+    }
+    
+    @Test
+    @Ignore
+    public void addDebt(){
+        UserCredentials userCredentials = new UserCredentials();
+        userCredentials.setLogin("test1");
+        userCredentials.setPassword("");
+        User user1 = restTemplate.postForObject(baseUrl+"users/login", userCredentials, User.class);
+
+        userCredentials = new UserCredentials();
+        userCredentials.setLogin("test2");
+        userCredentials.setPassword("");
+        User user2 = restTemplate.postForObject(baseUrl+"users/login", userCredentials, User.class);
+
+        Debt debt = new Debt();
+        debt.setDebtType(DebtType.DEBT_WITH_CONFIRMATION);
+        debt.setCreator(user1);
+        debt.setCreditor(user2);
+        debt.setDebtor(user1);
+        debt.setDescription("sdddsds");
+        debt.setAmount(212l);
+
+        debt = restTemplate.postForObject(baseUrl + "debts/createDebt", debt, Debt.class);
+
+
     }
 
 }

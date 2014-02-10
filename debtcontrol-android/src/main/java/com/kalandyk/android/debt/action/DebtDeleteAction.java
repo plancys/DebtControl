@@ -1,6 +1,5 @@
 package com.kalandyk.android.debt.action;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.kalandyk.R;
@@ -14,7 +13,7 @@ import com.kalandyk.api.model.Debt;
 //Action possible when debt is not confirmed or it is Debt without confirmation
 public class DebtDeleteAction extends DebtAction {
 
-    public DebtDeleteAction(Activity activity) {
+    public DebtDeleteAction(AbstractDebtActivity activity) {
         super(activity);
     }
 
@@ -26,6 +25,12 @@ public class DebtDeleteAction extends DebtAction {
     @Override
     public void executeAction(Debt debt) {
         Log.d(AbstractDebtActivity.TAG, "[DebtAction] Triggered debt delete");
-        debtService.deleteDebt(debt);
+        activity.getProgressDialog(null).show();
+        deleteDebtTask(debt);
+    }
+
+    @Override
+    protected void taskFinished(Debt debt) {
+
     }
 }

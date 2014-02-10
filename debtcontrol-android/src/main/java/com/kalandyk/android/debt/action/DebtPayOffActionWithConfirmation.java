@@ -1,6 +1,5 @@
 package com.kalandyk.android.debt.action;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.kalandyk.R;
@@ -12,7 +11,7 @@ import com.kalandyk.api.model.Debt;
  */
 public class DebtPayOffActionWithConfirmation extends DebtAction {
 
-    public DebtPayOffActionWithConfirmation(Activity activity) {
+    public DebtPayOffActionWithConfirmation(AbstractDebtActivity activity) {
         super(activity);
     }
 
@@ -25,7 +24,13 @@ public class DebtPayOffActionWithConfirmation extends DebtAction {
     public void executeAction(Debt debt) {
         Log.d(AbstractDebtActivity.TAG, "[DebtAction] Triggered debt pay off action");
         //TODO: Delegate this action to service or sth like that
-        debtService.requestDebtPayOff(debt);
+        //debtService.requestDebtPayOff(debt);
+        activity.getProgressDialog(null).show();
+        requestDebtRepayingTask(debt);
+    }
+
+    @Override
+    protected void taskFinished(Debt debt) {
 
     }
 }

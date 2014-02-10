@@ -11,25 +11,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kalandyk.R;
+import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtType;
 import com.kalandyk.android.debt.action.DebtAction;
 import com.kalandyk.android.debt.logic.DebtStateObject;
 import com.kalandyk.android.listeners.DebtActionListener;
+import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtPosition;
+import com.kalandyk.api.model.DebtType;
 
 import java.util.List;
 
 /**
  * Created by kamil on 11/26/13.
  */
-public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
+public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
 
     private DebtActionListener debtActionListener;
 
     private LayoutInflater layoutInflater;
 
     private List<Debt> data;
-    private Activity activity;
+    private AbstractDebtActivity activity;
     private TextView mainInfoTextView;
 
     private TextView descriptionTextView;
@@ -39,46 +43,37 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
     private Button executeActionButton_1;
     private Button executeActionButton_2;
 
-    public DebtsArrayAdapter(Activity context, List<Debt> objects) {
+    public DebtsArrayAdapter(AbstractDebtActivity context, List<Debt> objects) {
         super(context, R.layout.list_row_debts, objects);
         this.data = objects;
         this.activity = context;
         layoutInflater = context.getLayoutInflater();
     }
 
-
     public void setDebtActionListener(DebtActionListener debtActionListener) {
         this.debtActionListener = debtActionListener;
     }
 
-
-    public void setData(List<Debt> data) {
-        clear();
-        if (data == null) {
-            return;
-        }
-
-        for (Debt debt : data) {
-            add(debt);
-        }
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-
         //TODO: add action when convertView is not empty
-        view = layoutInflater.inflate(R.layout.list_row_debts, parent, false);
+        View view = layoutInflater.inflate(R.layout.list_row_debts, parent, false);
 
 
         initUIItems(view);
         view.invalidate();
 
         final Debt item = getItem(position);
-        DebtStateObject debtStateObject = new DebtStateObject(activity, item.getDebtType(), item.getDebtState());
+        DebtStateObject debtStateObject = new DebtStateObject(activity, item);
 
-        mainInfoTextView.setText("You owe " + item.getAmount() + " PLN");
-        descriptionTextView.setText(item.getDescription());
+        String message = null;
+        if(item.getDebtPosition().equals(DebtPosition.DEBTOR)){
+            message = activity.getString(R.string.debt_you_owe, item.getCreditor().getLogin(), item.getAmount());
+        } else {
+            message = activity.getString(R.string.debt_you_lend, item.getDebtor().getLogin(), item.getAmount());
+        }
+        mainInfoTextView.setText(message);
+        descriptionTextView.setText(activity.getString(R.string.debt_description, item.getDescription()));
         dateTextView.setText(item.getCreationDate().toString());
 
 
@@ -101,6 +96,9 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
         });
 
         List<DebtAction> possibleDebtActions = debtStateObject.getPossibleDebtActions();
+        if(possibleDebtActions == null || possibleDebtActions.size() == 0){
+            return view;
+        }
         final DebtAction debtAction_1 = possibleDebtActions.get(0);
         executeActionButton_1.setText(debtAction_1.getDebtActionString());
         executeActionButton_1.setOnClickListener(new View.OnClickListener() {
@@ -218,5 +216,10 @@ public class DebtsArrayAdapter extends ArrayAdapter<Debt> {
 
     public List<Debt> getObjectList() {
         return data;
+    }
+
+    @Override
+    protected DataType getAdapterDataType() {
+        return DataType.DEBTS;
     }
 }

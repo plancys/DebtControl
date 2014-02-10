@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.adapters.FriendsArrayAdapter;
 import com.kalandyk.android.listeners.AddingPersonToDebtListener;
 import com.kalandyk.android.persistent.DebtDataContainer;
@@ -40,12 +41,17 @@ public class FriendsFragment extends AbstractFragment {
     }
 
     private FriendsArrayAdapter initFriendsAdapter() {
-        return new FriendsArrayAdapter(getActivity(), debtDataContainer.getFriends()) {
+        return new FriendsArrayAdapter(getAbstractDebtActivity(), debtDataContainer.getFriends()) {
             @Override
             protected void friendChosen(User user) {
                 debt.setConnectedPerson(user);
                 activity.replaceFragment(new DebtAddingFragment(activity, debt));
             }
         };
+    }
+
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+        return friendsArrayAdapter;
     }
 }

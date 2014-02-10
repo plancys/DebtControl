@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.kalandyk.R;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.adapters.DetailsArrayAdapter;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtEvent;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Created by kamil on 12/22/13.
  */
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends AbstractFragment {
 
     private Debt debt;
     private DetailsArrayAdapter detailsArrayAdapter;
@@ -54,4 +55,8 @@ public class DetailsFragment extends Fragment {
     }
 
 
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+        return null;
+    }
 }
