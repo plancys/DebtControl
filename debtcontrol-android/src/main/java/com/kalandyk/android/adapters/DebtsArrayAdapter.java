@@ -18,6 +18,7 @@ import com.kalandyk.android.debt.logic.DebtStateObject;
 import com.kalandyk.android.listeners.DebtActionListener;
 import com.kalandyk.api.model.DebtPosition;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -102,7 +103,9 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
         }
         mainInfoTextView.setText(message);
         descriptionTextView.setText(activity.getString(R.string.debt_description, currentDebt.getDescription()));
-        dateTextView.setText(currentDebt.getCreationDate().toString());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        dateTextView.setText(dateFormat.format(currentDebt.getCreationDate()));
     }
 
     protected void onClickDetailsButtonAction(Debt debt) {
