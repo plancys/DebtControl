@@ -23,7 +23,7 @@ public abstract class AbstractDebtTask<Params, Progress, Result> extends AsyncTa
     public AbstractDebtTask(){
         urls = new DebtUrls(getDebtActivity());
         restTemplate = getDebtActivity().getRestTemplate();
-        cachedData = getDebtActivity().getCashedData();
+        cachedData = getDebtActivity().getCachedData();
     }
     protected abstract AbstractDebtActivity getDebtActivity();
 

@@ -15,9 +15,9 @@ import com.kalandyk.android.adapters.AbstractArrayAdapter;
 public class MyAccountFragment extends AbstractFragment {
     private TextView loginTextView;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+    @Override
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_my_account, container, false);
         loginTextView = (TextView) view.findViewById(R.id.tv_my_account_login);
         return view;

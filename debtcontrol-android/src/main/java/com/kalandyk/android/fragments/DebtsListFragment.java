@@ -27,8 +27,8 @@ public class DebtsListFragment extends AbstractFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        cachedData = getAbstractDebtActivity().getCashedData();
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
+        cachedData = getAbstractDebtActivity().getCachedData();
         View debtListItemView = inflater.inflate(R.layout.fragment_debt_list, container, false);
 
         adapter = initDebtsArrayAdapter();

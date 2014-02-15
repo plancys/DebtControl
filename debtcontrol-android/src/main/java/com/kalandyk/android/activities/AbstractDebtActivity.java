@@ -20,15 +20,9 @@ import com.kalandyk.android.utils.SharedPreferencesBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.awt.*;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -39,7 +33,7 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
     public static final String TAG = "com.kalandyk.debtcontrol";
 
     //wrapper class for data cached in phone
-    private DebtDataContainer cashedData;
+    private DebtDataContainer cachedData;
 
     protected AbstractFragment currentFragment;
 
@@ -59,7 +53,7 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         setContentView(R.layout.activity_main_view);
         initNavigationDrawer();
         showProgressDialog();
-        new LoadDataFromServerTask().execute(getCashedData());
+        new LoadDataFromServerTask().execute(getCachedData());
         confirmationAmountTextView = (TextView) findViewById(R.id.tv_notification_number);
 
 
@@ -188,15 +182,15 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
                 (getSchedulerTask(), 0, 1, TimeUnit.MINUTES);
     }
 
-    public DebtDataContainer getCashedData() {
-        if (cashedData == null) {
-            cashedData = new DebtDataContainer(this);
+    public DebtDataContainer getCachedData() {
+        if (cachedData == null) {
+            cachedData = new DebtDataContainer(this);
         }
-        return cashedData;
+        return cachedData;
     }
 
-    public void setCashedData(DebtDataContainer cashedData) {
-        this.cashedData = cashedData;
+    public void setCachedData(DebtDataContainer cachedData) {
+        this.cachedData = cachedData;
     }
 
     public SharedPreferencesBuilder getSharedPreferencesBuilder() {
@@ -232,18 +226,27 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
     }
 
     public void setNotificationCounter() {
-        int confirmationsAmount = cashedData.getConfirmations().size();
-        confirmationAmountTextView = (TextView) this.findViewById(R.id.tv_notification_number);
-        LinearLayout notificationLayout = (LinearLayout) findViewById(R.id.ll_notification_layout);
-        if (notificationLayout == null) {
+        if(cachedData == null){
             return;
         }
-        if (confirmationsAmount > 0) {
-            notificationLayout.setVisibility(View.VISIBLE);
-            confirmationAmountTextView.setText(String.valueOf(confirmationsAmount));
-        } else {
-            notificationLayout.setVisibility(View.GONE);
-        }
+        final int confirmationsAmount = cachedData.getConfirmations().size();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                confirmationAmountTextView = (TextView) AbstractDebtActivity.this.findViewById(R.id.tv_notification_number);
+                LinearLayout notificationLayout = (LinearLayout) findViewById(R.id.ll_notification_layout);
+                if (notificationLayout == null) {
+                    return;
+                }
+                if (confirmationsAmount > 0) {
+                    notificationLayout.setVisibility(View.VISIBLE);
+                    confirmationAmountTextView.setText(String.valueOf(confirmationsAmount));
+                } else {
+                    notificationLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
     }
 
 

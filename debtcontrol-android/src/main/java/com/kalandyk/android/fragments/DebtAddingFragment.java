@@ -40,7 +40,6 @@ public class DebtAddingFragment extends AbstractFragment {
 
     private AbstractDebtActivity activity;
 
-    private DebtDataContainer cachedData;
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
 
@@ -53,10 +52,10 @@ public class DebtAddingFragment extends AbstractFragment {
         this.debt = debt;
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
         Log.d(AbstractDebtActivity.TAG, "onCreateView -> ADDING FRIEND");
-        this.cachedData = activity.getCashedData();
         View view = inflater.inflate(R.layout.fragment_add_debt, container, false);
 
         initGuiObjectReferences(view);

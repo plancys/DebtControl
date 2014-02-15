@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.adapters.AbstractArrayAdapter;
+import com.kalandyk.android.persistent.DebtDataContainer;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -22,8 +25,12 @@ import java.util.List;
  * Created by kamil on 1/25/14.
  */
 public abstract class AbstractFragment extends Fragment {
+
     private AbstractDebtActivity abstractDebtActivity;
-    private ProgressDialog progressDialog;
+    private TextView confirmationAmountTextView;
+    private LinearLayout notificationLayout;
+    protected DebtDataContainer cachedData;
+
 
     protected AbstractDebtActivity getAbstractDebtActivity() {
         if (abstractDebtActivity == null) {
@@ -34,22 +41,45 @@ public abstract class AbstractFragment extends Fragment {
 
     public abstract AbstractArrayAdapter getFragmentArrayAdapter();
 
-//    protected ProgressDialog getProgressDialog(String message){
-//        if(progressDialog == null) {
-//            progressDialog = new ProgressDialog(getAbstractDebtActivity());
-//            progressDialog.setTitle(getAbstractDebtActivity().getString(R.string.progress_dialog_please_wait));
-//            progressDialog.setMessage(message != null ? message : getAbstractDebtActivity().getString(R.string.progress_dialog_default_message));
-//        }
-//        return progressDialog;
-//    }
+    protected void initConfirmationButton(){
+        getAbstractDebtActivity().setNotificationCounter();
+    }
 
-//    protected RestTemplate getRestTemplate() {
-//        RestTemplate restTemplate = new RestTemplate();
-//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-//        messageConverters.add(new FormHttpMessageConverter());
-//        messageConverters.add(new StringHttpMessageConverter());
-//        messageConverters.add(new MappingJacksonHttpMessageConverter());
-//        restTemplate.setMessageConverters(messageConverters);
-//        return restTemplate;
-//    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        cachedData = getAbstractDebtActivity().getCachedData();
+        View view = initFragment(inflater, container);
+        view = initConfirmationNotifier(view);
+        return view;
+
+    }
+
+    private View initConfirmationNotifier(final View view) {
+        if( cachedData == null){
+            return view;
+        }
+        final int confirmationsAmount = cachedData.getConfirmations().size();
+        getAbstractDebtActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                confirmationAmountTextView = (TextView) view.findViewById(R.id.tv_notification_number);
+                notificationLayout = (LinearLayout) view.findViewById(R.id.ll_notification_layout);
+                if (notificationLayout == null) {
+                    return;
+                }
+                if (confirmationsAmount > 0) {
+                    notificationLayout.setVisibility(View.VISIBLE);
+                    confirmationAmountTextView.setText(String.valueOf(confirmationsAmount));
+                } else {
+                    notificationLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+        return view;
+    }
+
+    public abstract View initFragment(LayoutInflater inflater, ViewGroup container);
+
+
 }

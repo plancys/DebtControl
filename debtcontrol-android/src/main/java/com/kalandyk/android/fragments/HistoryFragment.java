@@ -15,7 +15,7 @@ import com.kalandyk.android.adapters.AbstractArrayAdapter;
 public class HistoryFragment extends AbstractFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
         View debtListItemView = inflater.inflate(R.layout.fragment_history, container, false);
         return debtListItemView;
     }

@@ -31,14 +31,10 @@ public class DetailsFragment extends AbstractFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
         View debtListItemView = inflater.inflate(R.layout.fragment_details_list, container, false);
-
         detailsArrayAdapter = initDebtsArrayAdapter();
-
         initListView(debtListItemView);
-
         return debtListItemView;
     }
 

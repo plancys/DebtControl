@@ -36,11 +36,10 @@ public class WelcomeFragment extends AbstractFragment {
     private DebtDataContainer cachedData;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
         View debtListItemView = inflater.inflate(R.layout.fragment_welcome, container, false);
-        cachedData = getAbstractDebtActivity().getCashedData();
+        cachedData = getAbstractDebtActivity().getCachedData();
         initUIItems(debtListItemView);
-
         return debtListItemView;
     }
 

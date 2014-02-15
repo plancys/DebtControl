@@ -15,13 +15,8 @@ import com.kalandyk.android.adapters.ConfirmationsArrayAdapter;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.api.model.Confirmation;
-import com.kalandyk.api.model.Debt;
-import com.kalandyk.api.model.User;
 import com.kalandyk.android.listeners.ConfirmationDecisionListener;
 import com.kalandyk.api.model.wrapers.ConfirmationDecision;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by kamil on 12/18/13.
@@ -29,15 +24,13 @@ import java.util.List;
 public class ConfirmationFragment extends AbstractFragment {
 
     private ConfirmationsArrayAdapter adapter;
-    private DebtDataContainer cachedData;
     private ProgressDialog progressDialog;
 
     public ConfirmationFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        cachedData = getAbstractDebtActivity().getCashedData();
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
         View confirmationListItemView = inflater.inflate(R.layout.fragment_confirmation_list, container, false);
         adapter = initDebtsArrayAdapter();
         initListView(confirmationListItemView);

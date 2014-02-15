@@ -15,7 +15,7 @@ import com.kalandyk.android.adapters.AbstractArrayAdapter;
 public class RegisterFragment extends AbstractFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
         View debtListItemView = inflater.inflate(R.layout.fragment_register, container, false);
         return debtListItemView;
     }

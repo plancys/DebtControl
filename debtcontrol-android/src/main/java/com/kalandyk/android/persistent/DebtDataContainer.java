@@ -67,7 +67,7 @@ public class DebtDataContainer {
 
     public void setConfirmations(List<Confirmation> confirmations) {
         this.confirmations = confirmations;
-        //activity.setNotificationCounter();
+        activity.setNotificationCounter();
     }
 
     public List<User> getFriends() {

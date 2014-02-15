@@ -51,6 +51,6 @@ public abstract class AbstractArrayAdapter<T> extends ArrayAdapter<T> {
     }
 
     private DebtDataContainer getCachedData(){
-        return activity.getCashedData();
+        return activity.getCachedData();
     }
 }

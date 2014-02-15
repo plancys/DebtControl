@@ -9,7 +9,6 @@ import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.adapters.FriendsArrayAdapter;
-import com.kalandyk.android.listeners.AddingPersonToDebtListener;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.User;
@@ -30,9 +29,10 @@ public class FriendsFragment extends AbstractFragment {
         this.debt = debt;
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        debtDataContainer = getAbstractDebtActivity().getCashedData();
+    public View initFragment(LayoutInflater inflater, ViewGroup container) {
+        debtDataContainer = getAbstractDebtActivity().getCachedData();
         View friendsView = inflater.inflate(R.layout.fragment_friend_list, container, false);
         friendsArrayAdapter = initFriendsAdapter();
         ListView friendsListView = (ListView) friendsView.findViewById(R.id.list_view_friends);
