@@ -22,7 +22,7 @@ public class DebtPayOffActionWithConfirmation extends DebtAction {
     }
 
     @Override
-    public String getDebtActionString() {
+    public String getDebtActionButtonText() {
         return activity.getString(R.string.debt_pay_off);
     }
 

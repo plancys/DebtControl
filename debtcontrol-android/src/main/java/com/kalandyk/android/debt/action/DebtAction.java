@@ -19,7 +19,7 @@ public abstract class DebtAction {
         progressDialog = activity.getProgressDialog("Sending data to server");
     }
 
-    public abstract String getDebtActionString();
+    public abstract String getDebtActionButtonText();
 
     public abstract void executeAction(Debt debt);
 
@@ -36,6 +36,8 @@ public abstract class DebtAction {
     protected void cancelDebtRepayingRequestTask(Debt debt) {
 
     }
+
+    //protected abstract Debt changeDebtState(Debt debt);
 
 
     private class DebtActionTask extends AbstractDebtTask<Debt, Void, Debt>{

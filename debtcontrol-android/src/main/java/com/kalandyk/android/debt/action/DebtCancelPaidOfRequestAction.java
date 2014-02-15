@@ -18,7 +18,7 @@ public class DebtCancelPaidOfRequestAction extends DebtAction {
     }
 
     @Override
-    public String getDebtActionString() {
+    public String getDebtActionButtonText() {
         return activity.getString(R.string.debt_cancel_pay_off_request);
     }
 

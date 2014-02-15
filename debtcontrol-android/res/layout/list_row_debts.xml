@@ -131,38 +131,17 @@
                 android:text="pay off"/>
         </LinearLayout>
 
+        <!-- Debt action buttons go here    -->
         <LinearLayout
+                android:id="@+id/ll_debt_actions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginRight="15dp"
             android:layout_weight="0.45"
             android:orientation="vertical"
             android:padding="10dp"
-            >
+            />
 
-            <Button
-                android:id="@+id/button_details"
-                style="@style/ButtonInListStyleGrey"
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:text="Details"/>
-
-            <Button
-                android:id="@+id/button_excecute_debt_action_1"
-                style="@style/ButtonInListStyleGrey"
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="10dp"
-                android:text="Cancel debt pay off request"/>
-
-            <Button
-                android:id="@+id/button_excecute_debt_action_2"
-                style="@style/ButtonInListStyleGrey"
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:text="I paid off debt"
-                android:visibility="gone"/>
-
-        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

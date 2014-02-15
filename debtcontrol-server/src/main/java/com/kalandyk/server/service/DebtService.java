@@ -127,20 +127,15 @@ public class DebtService {
 
     }
 
-    public boolean acceptRepayDebtRequest(User user, Debt debt) throws IllegalDebtOperationException {
-        UserEntity approver = mapper.map(user, UserEntity.class);
+    public boolean makeDecisionRegardingRepayDebtRequest(Debt debt, boolean decision) throws IllegalDebtOperationException {
         DebtEntity connectedDebt = mapper.map(debt, DebtEntity.class);
 
-//        if (!connectedDebt.getDebtor().equals(approver)) {
-//            throw new IllegalDebtOperationException();
-//        }
-//        if (!connectedDebt.getDebtWithConfirmationState().equals(DebtWithConfirmationState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT)) {
-//            throw new IllegalDebtOperationException();
-//        }
-
-        connectedDebt.setDebtState(DebtState.CONFIRMED_REPAID_DEBT);
+        if(decision){
+            connectedDebt.setDebtState(DebtState.CONFIRMED_REPAID_DEBT);
+        } else {
+            connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+        }
         debtRepository.save(connectedDebt);
-
         return true;
     }
 
@@ -186,8 +181,12 @@ public class DebtService {
         return debts;
     }
 
-    public void acceptAddingDebtRequest(User receiver, Debt connectedDebt) {
-        connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+    public void makeDecisionRegardingAddingDebtRequest(Debt connectedDebt, boolean decision) {
+        if(decision){
+            connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+        } else {
+            connectedDebt.setDebtState(DebtState.DELETED);
+        }
         debtRepository.save(mapper.map(connectedDebt, DebtEntity.class));
     }
 

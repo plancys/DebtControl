@@ -1,25 +1,22 @@
 package com.kalandyk.android.adapters;
 
-import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.widget.DebtActionButton;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtType;
 import com.kalandyk.android.debt.action.DebtAction;
 import com.kalandyk.android.debt.logic.DebtStateObject;
 import com.kalandyk.android.listeners.DebtActionListener;
-import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtPosition;
-import com.kalandyk.api.model.DebtType;
 
 import java.util.List;
 
@@ -39,9 +36,7 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
     private TextView descriptionTextView;
     private TextView dateTextView;
     private LinearLayout debtSurfaceLinearLayout;
-    private Button detailsButton;
-    private Button executeActionButton_1;
-    private Button executeActionButton_2;
+    private LinearLayout debtActionsLayout;
 
     public DebtsArrayAdapter(AbstractDebtActivity context, List<Debt> objects) {
         super(context, R.layout.list_row_debts, objects);
@@ -58,16 +53,49 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
     public View getView(int position, View convertView, ViewGroup parent) {
         //TODO: add action when convertView is not empty
         View view = layoutInflater.inflate(R.layout.list_row_debts, parent, false);
-
-
         initUIItems(view);
         view.invalidate();
 
         final Debt currentDebt = getItem(position);
-        DebtStateObject debtStateObject = new DebtStateObject(activity, currentDebt);
 
+        DebtStateObject debtStateObject = new DebtStateObject(activity, currentDebt);
+        setDebtMessages(currentDebt);
+        setDebtState(view, currentDebt);
+        setVisibilityOfDebtContextMenu(currentDebt);
+        List<DebtAction> possibleDebtActions = debtStateObject.getPossibleDebtActions();
+
+        initDebtActionButtons(currentDebt, possibleDebtActions);
+        return view;
+    }
+
+    private void initDebtActionButtons(final Debt currentDebt, List<DebtAction> possibleDebtActions) {
+        for (int i = 0; i < possibleDebtActions.size(); i++) {
+            final DebtAction debtAction = possibleDebtActions.get(i);
+            DebtActionButton button = new DebtActionButton(getContext(), debtAction.getDebtActionButtonText());
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (debtActionListener != null) {
+                        debtAction.executeAction(currentDebt);
+                        debtActionListener.onChangeDebtState(currentDebt);
+                    }
+                }
+            });
+            debtActionsLayout.addView(button);
+        }
+    }
+
+    private void setVisibilityOfDebtContextMenu(Debt currentDebt) {
+        if (currentDebt.isSelected()) {
+            debtSurfaceLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            debtSurfaceLinearLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void setDebtMessages(Debt currentDebt) {
         String message = null;
-        if(currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)){
+        if (currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)) {
             message = activity.getString(R.string.debt_you_owe, currentDebt.getCreditor().getLogin(), currentDebt.getAmount());
         } else {
             message = activity.getString(R.string.debt_you_lend, currentDebt.getDebtor().getLogin(), currentDebt.getAmount());
@@ -75,59 +103,6 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
         mainInfoTextView.setText(message);
         descriptionTextView.setText(activity.getString(R.string.debt_description, currentDebt.getDescription()));
         dateTextView.setText(currentDebt.getCreationDate().toString());
-
-
-        setDebtState(view, currentDebt);
-
-        if (currentDebt.isSelected()) {
-            debtSurfaceLinearLayout.setVisibility(View.VISIBLE);
-        } else {
-            debtSurfaceLinearLayout.setVisibility(View.GONE);
-        }
-
-
-        detailsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (debtActionListener != null) {
-                    debtActionListener.onDetails(currentDebt);
-                }
-            }
-        });
-
-        List<DebtAction> possibleDebtActions = debtStateObject.getPossibleDebtActions();
-        if(possibleDebtActions == null || possibleDebtActions.size() == 0){
-            return view;
-        }
-        final DebtAction debtAction_1 = possibleDebtActions.get(0);
-        executeActionButton_1.setText(debtAction_1.getDebtActionString());
-        executeActionButton_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (debtActionListener != null) {
-                    debtAction_1.executeAction(currentDebt);
-                    debtActionListener.onChangeDebtState(currentDebt);
-                }
-            }
-        });
-
-        //TODO: refactor this :)
-        if(possibleDebtActions.size() > 1){
-            final DebtAction debtAction_2 = possibleDebtActions.get(1);
-            executeActionButton_2.setVisibility(View.VISIBLE);
-            executeActionButton_2.setText(debtAction_2.getDebtActionString());
-            executeActionButton_2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (debtActionListener != null) {
-                        debtAction_2.executeAction(currentDebt);
-                        debtActionListener.onChangeDebtState(currentDebt);
-                    }
-                }
-            });
-        }
-
-        return view;
     }
 
     protected void onClickDetailsButtonAction(Debt debt) {
@@ -204,9 +179,7 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
         descriptionTextView = (TextView) view.findViewById(R.id.tv_details_description);
         dateTextView = (TextView) view.findViewById(R.id.tv_debt_action_date);
         debtSurfaceLinearLayout = (LinearLayout) view.findViewById(R.id.context_menu);
-        detailsButton = (Button) view.findViewById(R.id.button_details);
-        executeActionButton_1 = (Button) view.findViewById(R.id.button_excecute_debt_action_1);
-        executeActionButton_2 = (Button) view.findViewById(R.id.button_excecute_debt_action_2);
+        debtActionsLayout = (LinearLayout) view.findViewById(R.id.ll_debt_actions);
 
     }
 

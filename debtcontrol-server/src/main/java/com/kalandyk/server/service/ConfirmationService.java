@@ -56,15 +56,14 @@ public class ConfirmationService {
         //TODO: add abstract builder or sth
         switch (confirmationType){
             case REQUEST_DEBT_ADDING:
-                debtService.acceptAddingDebtRequest(confirmation.getReceiver(), confirmation.getConnectedDebt());
+                debtService.makeDecisionRegardingAddingDebtRequest(confirmation.getConnectedDebt(), decision);
                 confirmationRepository.delete(mapper.map(confirmation, ConfirmationEntity.class));
                 break;
             case REQUEST_DEBT_REPAYING:
-                debtService.acceptRepayDebtRequest(confirmation.getReceiver(), confirmation.getConnectedDebt());
+                debtService.makeDecisionRegardingRepayDebtRequest(confirmation.getConnectedDebt(), decision);
                 confirmationRepository.delete(mapper.map(confirmation, ConfirmationEntity.class));
                 break;
         }
-
         return true;
     }
 
