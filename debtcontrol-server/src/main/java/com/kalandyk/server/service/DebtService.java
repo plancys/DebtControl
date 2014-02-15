@@ -190,4 +190,24 @@ public class DebtService {
         connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
         debtRepository.save(mapper.map(connectedDebt, DebtEntity.class));
     }
+
+    public Debt requestDebtRepaying(Debt debt) {
+        if(debt == null){
+            return null;
+        }
+        DebtEntity debtEntity = mapper.map(debt, DebtEntity.class);
+        debtEntity = debtRepository.findOne(debtEntity.getId());
+
+        if(!debtEntity.getDebtState().equals(DebtState.CONFIRMED_NOT_REPAID_DEBT)){
+            return null;
+        }
+
+        debtEntity.setDebtState(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
+        debtEntity = debtRepository.save(debtEntity);
+
+        debt = mapper.map(debtEntity, Debt.class);
+        confirmationService.createDebtRepayingConfirmation(debt);
+
+        return debt;
+    }
 }

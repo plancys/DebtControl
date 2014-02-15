@@ -1,5 +1,6 @@
 package com.kalandyk.android.adapters;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.persistent.DebtDataContainer;
@@ -36,18 +37,30 @@ public abstract class AbstractArrayAdapter<T> extends ArrayAdapter<T> {
             default:
                 //TODO: raise some exceptions
         }
-        this.notifyDataSetChanged();
+
     }
 
-    private void refreshItems(List<T> list){
-        try {
-            this.clear();
-            for (int i = 0; i < list.size(); i++) {
-                insert((T) list.get(i), i);
-            }
-        } catch (Exception e) {
-            activity.getAlertDialog(e.getMessage());
+    private void refreshItems(final List<T> list){
+        String message = String.format("Refreshing list. Before = %d, Now = %d", AbstractArrayAdapter.this.getCount(), list.size());
+        Log.d(AbstractDebtActivity.TAG, message);
+        if(activity == null){
+            return;
         }
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    AbstractArrayAdapter.this.clear();
+                    for (int i = 0; i < list.size(); i++) {
+                        insert((T) list.get(i), i);
+                    }
+                } catch (Exception e) {
+                    activity.getAlertDialog(e.getMessage());
+                }
+                AbstractArrayAdapter.this.notifyDataSetChanged();
+            }
+        });
+
     }
 
     private DebtDataContainer getCachedData(){

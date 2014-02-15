@@ -81,7 +81,7 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         return new Runnable() {
             public void run() {
                 Log.d(TAG, "----> Updating task executed");
-                refreshLists();
+                //TODO: refreshLists(); For now it isn't working, only clears list
 
             }
         };

@@ -1,6 +1,7 @@
 package com.kalandyk.android.debt.action;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.api.model.Debt;
@@ -11,9 +12,11 @@ import com.kalandyk.api.model.Debt;
 public abstract class DebtAction {
 
     protected AbstractDebtActivity activity;
+    protected ProgressDialog progressDialog;
 
     public DebtAction(AbstractDebtActivity activity) {
         this.activity = activity;
+        progressDialog = activity.getProgressDialog("Sending data to server");
     }
 
     public abstract String getDebtActionString();

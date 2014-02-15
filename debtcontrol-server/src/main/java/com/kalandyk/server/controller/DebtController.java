@@ -35,8 +35,16 @@ public class DebtController {
     }
 
     @RequestMapping(value = "getUserDebts", method = RequestMethod.POST)
-    @ResponseBody
-    public Debts getUserDebts(@RequestBody UserCredentials credentials) {
+     @ResponseBody
+     public Debts getUserDebts(@RequestBody UserCredentials credentials) {
         return debtService.getUserDebts(credentials);
     }
+
+    @RequestMapping(value = "requestDebtRepaying", method = RequestMethod.POST)
+    @ResponseBody
+    public Debt requestDebtRepaying(@RequestBody Debt debt) {
+        return debtService.requestDebtRepaying(debt);
+    }
+
+
 }

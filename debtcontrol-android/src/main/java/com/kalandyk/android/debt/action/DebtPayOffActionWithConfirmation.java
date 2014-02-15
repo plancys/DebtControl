@@ -2,8 +2,14 @@ package com.kalandyk.android.debt.action;
 
 import android.util.Log;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.adapters.AbstractArrayAdapter;
+import com.kalandyk.android.fragments.AbstractFragment;
+import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.api.model.Debt;
 
 /**
@@ -25,12 +31,37 @@ public class DebtPayOffActionWithConfirmation extends DebtAction {
         Log.d(AbstractDebtActivity.TAG, "[DebtAction] Triggered debt pay off action");
         //TODO: Delegate this action to service or sth like that
         //debtService.requestDebtPayOff(debt);
-        activity.getProgressDialog(null).show();
-        requestDebtRepayingTask(debt);
+        progressDialog.show();
+        //requestDebtRepayingTask(debt);
+        new RequestRepayDebtTask().execute(debt);
     }
 
     @Override
     protected void taskFinished(Debt debt) {
+        progressDialog.dismiss();
+    }
 
+    private class RequestRepayDebtTask extends AbstractDebtTask<Debt, Void, Debt> {
+
+        @Override
+        protected AbstractDebtActivity getDebtActivity() {
+            return activity;
+        }
+
+        @Override
+        protected Debt doInBackground(Debt... debts) {
+            Debt debt = debts[0];
+            try {
+                debt = restTemplate.postForObject(urls.getRequestDebtRepayingUrl(), debt, Debt.class);
+            }catch (Exception e){
+                Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
+            }
+            return debt;
+        }
+
+        @Override
+        protected void onPostExecute(Debt result) {
+            taskFinished(result);
+        }
     }
 }

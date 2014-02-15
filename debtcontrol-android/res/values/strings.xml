@@ -7,6 +7,7 @@
     <string name="url_add_user"></string>
     <string name="url_add_debt">debts/createDebt</string>
     <string name="url_get_user_debts">debts/getUserDebts</string>
+    <string name="url_debt_request_repaying">debts/requestDebtRepaying</string>
     <string name="url_get_user_friends">users/getUsersFriends/%1$s</string>
     <string name="url_login">users/login</string>
     <string name="url_get_confirmations">confirmations/getUserConfirmations</string>
@@ -63,7 +64,7 @@
     <!-- Confirmations -->
     <string name="confirmation_you_owes">User %1$s says that you borrow %2$s %3$s from him</string>
     <string name="confirmation_he_owes">User %1$s says that he borrow %2$s %3$s from you</string>
-    <string name="confirmation_he_paid">User %1$s says that he/she paid of debt (%2$s %3$s, %4$s)</string>
+    <string name="confirmation_he_paid">User %1$s says that he/she paid of debt (%2$s, %3$s %4$s)</string>
     <string name="not_implemented">Not implemented yet. Be patient.</string>
 
     <!-- Debt details -->

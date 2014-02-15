@@ -43,4 +43,7 @@ public class DebtUrls {
     }
 
 
+    public String getRequestDebtRepayingUrl() {
+        return baseUrl + activity.getString(R.string.url_debt_request_repaying);
+    }
 }

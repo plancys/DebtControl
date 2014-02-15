@@ -29,7 +29,7 @@ public class ConfirmationController {
 
     @RequestMapping(value = "getUserConfirmations", method = RequestMethod.POST)
     @ResponseBody
-    public Confirmations getConfirmation(@RequestBody UserCredentials credentials) {
+    public Confirmations getConfirmations(@RequestBody UserCredentials credentials) {
         return confirmationService.getUserConfirmations(credentials);
     }
 

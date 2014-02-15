@@ -108,4 +108,13 @@ public class ConfirmationService {
             confirmationEntity.getRequestApplicant().setFriends(null);
         }
     }
+
+    public void createDebtRepayingConfirmation(Debt debt) {
+        Confirmation confirmation = new Confirmation();
+        confirmation.setConnectedDebt(debt);
+        confirmation.setConfirmationType(ConfirmationType.REQUEST_DEBT_REPAYING);
+        confirmation.setReceiver(debt.getCreditor());
+        confirmation.setRequestApplicant(debt.getDebtor());
+        ConfirmationEntity savedConfirmation = confirmationRepository.save(mapper.map(confirmation, ConfirmationEntity.class));
+    }
 }
