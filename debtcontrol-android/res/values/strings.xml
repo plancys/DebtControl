@@ -54,6 +54,8 @@
     <!-- Debts main message -->
     <string name="debt_you_owe">You owe %1$s %2$d PLN</string>
     <string name="debt_you_lend">You lent %1$s %2$d PLN</string>
+    <string name="debt_without_confirm_owe">You owe somebody %1$d PLN</string>
+    <string name="debt_without_confirm_lend">Somebody owes you %1$d PLN</string>
     <string name="debt_description">Description: %1$s</string>
 
     <!-- Debts Actions -->

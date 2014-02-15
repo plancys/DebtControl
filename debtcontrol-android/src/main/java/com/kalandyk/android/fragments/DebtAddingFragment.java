@@ -3,7 +3,6 @@ package com.kalandyk.android.fragments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.*;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.adapters.AbstractArrayAdapter;
-import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.utils.DebtUrls;
 import com.kalandyk.api.model.*;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +21,9 @@ import java.util.Date;
  * Created by kamil on 1/26/14.
  */
 public class DebtAddingFragment extends AbstractFragment {
+
+    private final static int DEBT_WITH_CONFIRMATION_SPINNER_ITEM = 0;
+    private final static int DEBT_WITHOUT_CONFIRMATION_SPINNER_ITEM = 1;
 
     private Debt debt;
 
@@ -42,6 +43,8 @@ public class DebtAddingFragment extends AbstractFragment {
 
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
+
+    private LinearLayout personConnectedLayout;
 
     public DebtAddingFragment(AbstractDebtActivity activity) {
         this.activity = activity;
@@ -63,11 +66,27 @@ public class DebtAddingFragment extends AbstractFragment {
         initButtonsActions();
         initAmountSpinnerAction();
 
+        setDebtTypeChangeListener();
+
         if (debt != null) {
             loadGuiFromDebtObject();
         }
 
         return view;
+    }
+
+    private void setDebtTypeChangeListener() {
+        debtTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int selectedItem,long arg3) {
+               personConnectedLayout.setVisibility(selectedItem == DEBT_WITH_CONFIRMATION_SPINNER_ITEM ? View.VISIBLE : View.GONE );
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                //optionally do something here
+            }
+        });
     }
 
     private void initAmountSpinnerAction() {
@@ -95,7 +114,7 @@ public class DebtAddingFragment extends AbstractFragment {
         addDebtButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveNewDebt(debt);
+                saveNewDebt();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -106,10 +125,14 @@ public class DebtAddingFragment extends AbstractFragment {
         });
     }
 
-    private void saveNewDebt(Debt debt) {
+    private void saveNewDebt() {
         progressDialog.show();
         buildDebtFromGui();
-        new SaveDebtTask().execute(debt);
+        if( debtTypeSpinner.getSelectedItemPosition() == DEBT_WITH_CONFIRMATION_SPINNER_ITEM){
+            new SaveDebtTask().execute(debt);
+        } else {
+            debtAddedCallback(debt);
+        }
     }
 
     private void initSpinnersActions() {
@@ -129,9 +152,7 @@ public class DebtAddingFragment extends AbstractFragment {
     private void initGuiObjectReferences(View view) {
         debtTypeSpinner = (Spinner) view.findViewById(R.id.debt_type_spinner);
         debtRoleSpinner = (Spinner) view.findViewById(R.id.debt_role_spinner);
-        //debtUserConnectedSpinner = (Spinner) view.findViewById(R.id.debt_users_spinner);
         amountSeekBar = (SeekBar) view.findViewById(R.id.sb_amount_add_debt);
-        view.findViewById(R.id.et_person_conn_add_debt);
         description = (EditText) view.findViewById(R.id.et_description_add_debt);
         amountEditText = (EditText) view.findViewById(R.id.et_amount_add_debt);
         personConnected = (EditText) view.findViewById(R.id.et_person_conn_add_debt);
@@ -141,24 +162,21 @@ public class DebtAddingFragment extends AbstractFragment {
         addPersonConnectedButton = (Button) view.findViewById(R.id.bt_add_debt_friends);
         progressDialog = getAbstractDebtActivity().getProgressDialog(activity.getString(R.string.progress_dialog_saving_debt));
         alertDialog = getAbstractDebtActivity().getAlertDialog("");
+        personConnectedLayout = (LinearLayout) view.findViewById(R.id.ll_person_connected);
 
     }
 
     private void loadGuiFromDebtObject() {
-
-        User user = new User();
         User connectedPerson = debt.getConnectedPerson();
         if (connectedPerson != null) {
             personConnected.setText(connectedPerson.getLogin());
         }
 
         description.setText(debt.getDescription());
-
         amountEditText.setText(String.valueOf(debt.getAmount()));
-
         //TODO: it is awful
-        debtTypeSpinner.setSelection(debt.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION) ? 0 : 1);
-
+        debtTypeSpinner.setSelection(debt.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION)
+                ? DEBT_WITH_CONFIRMATION_SPINNER_ITEM : DEBT_WITHOUT_CONFIRMATION_SPINNER_ITEM);
         debtTypeSpinner.setSelection(debt.getDebtState().equals(DebtState.NOT_CONFIRMED_DEBT) ? 0 : 1);
     }
 
@@ -181,18 +199,22 @@ public class DebtAddingFragment extends AbstractFragment {
             debt.setAmount(0l);
         }
 
-        debt.setDebtType(debtTypeSpinner.getSelectedItemPosition() == 0 ? DebtType.DEBT_WITH_CONFIRMATION : DebtType.DEBT_WITHOUT_CONFIRMATION);
+        debt.setDebtType(debtTypeSpinner.getSelectedItemPosition() == DEBT_WITH_CONFIRMATION_SPINNER_ITEM
+                ? DebtType.DEBT_WITH_CONFIRMATION : DebtType.DEBT_WITHOUT_CONFIRMATION);
 
-        debt.setDebtState(debtTypeSpinner.getSelectedItemPosition() == 0 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.UNPAID_DEBT);
+        debt.setDebtState(debtTypeSpinner.getSelectedItemPosition() == 0
+                ? DebtState.NOT_CONFIRMED_DEBT : DebtState.UNPAID_DEBT);
 
         User loggedUser = cachedData.getLoggedUser();
         if(debtRoleSpinner.getSelectedItemPosition() == 0 ){
             //debtor
             debt.setDebtor(loggedUser);
             debt.setCreditor(debt.getConnectedPerson());
+            debt.setDebtPosition(DebtPosition.DEBTOR);
         } else {
             debt.setCreditor(loggedUser);
             debt.setDebtor(debt.getConnectedPerson());
+            debt.setDebtPosition(DebtPosition.CREDITOR);
         }
         debt.setCreator(loggedUser);
     }
@@ -242,13 +264,17 @@ public class DebtAddingFragment extends AbstractFragment {
         @Override
         protected void onPostExecute(Debt result) {
             Log.d(AbstractDebtActivity.TAG, "onPostExcecute");
-            if(result != null){
-                cachedData.getDebts().add(result);
-            }
-            progressDialog.dismiss();
-            dismiss();
+            debtAddedCallback(result);
         }
 
+    }
+
+    private void debtAddedCallback(Debt result) {
+        if(result != null){
+            cachedData.getDebts().add(result);
+        }
+        progressDialog.dismiss();
+        dismiss();
     }
 
     private void handleAddingDebtError(final Exception e) {

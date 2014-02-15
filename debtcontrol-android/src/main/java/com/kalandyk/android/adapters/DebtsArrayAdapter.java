@@ -96,16 +96,36 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
 
     private void setDebtMessages(Debt currentDebt) {
         String message = null;
-        if (currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)) {
-            message = activity.getString(R.string.debt_you_owe, currentDebt.getCreditor().getLogin(), currentDebt.getAmount());
+        if(currentDebt.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION)){
+            message = getDebtMessageForDebtWithConfirmation(currentDebt);
         } else {
-            message = activity.getString(R.string.debt_you_lend, currentDebt.getDebtor().getLogin(), currentDebt.getAmount());
+            message = getDebtMessageForDebtWithoutConfirmation(currentDebt);
         }
         mainInfoTextView.setText(message);
         descriptionTextView.setText(activity.getString(R.string.debt_description, currentDebt.getDescription()));
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         dateTextView.setText(dateFormat.format(currentDebt.getCreationDate()));
+    }
+
+    private String getDebtMessageForDebtWithoutConfirmation(Debt currentDebt) {
+        String message = null;
+        if (currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)) {
+            message = activity.getString(R.string.debt_without_confirm_owe, currentDebt.getAmount());
+        } else {
+            message = activity.getString(R.string.debt_without_confirm_lend, currentDebt.getAmount());
+        }
+        return message;
+    }
+
+    private String getDebtMessageForDebtWithConfirmation(Debt currentDebt) {
+        String message = null;
+        if (currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)) {
+            message = activity.getString(R.string.debt_you_owe, currentDebt.getCreditor().getLogin(), currentDebt.getAmount());
+        } else {
+            message = activity.getString(R.string.debt_you_lend, currentDebt.getDebtor().getLogin(), currentDebt.getAmount());
+        }
+        return message;
     }
 
     protected void onClickDetailsButtonAction(Debt debt) {
