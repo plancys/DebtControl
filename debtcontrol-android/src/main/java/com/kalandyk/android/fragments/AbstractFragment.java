@@ -41,9 +41,7 @@ public abstract class AbstractFragment extends Fragment {
 
     public abstract AbstractArrayAdapter getFragmentArrayAdapter();
 
-    protected void initConfirmationButton(){
-        getAbstractDebtActivity().setNotificationCounter();
-    }
+    public abstract View initFragment(LayoutInflater inflater, ViewGroup container);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,21 +63,30 @@ public abstract class AbstractFragment extends Fragment {
             public void run() {
                 confirmationAmountTextView = (TextView) view.findViewById(R.id.tv_notification_number);
                 notificationLayout = (LinearLayout) view.findViewById(R.id.ll_notification_layout);
-                if (notificationLayout == null) {
-                    return;
-                }
-                if (confirmationsAmount > 0) {
-                    notificationLayout.setVisibility(View.VISIBLE);
-                    confirmationAmountTextView.setText(String.valueOf(confirmationsAmount));
-                } else {
-                    notificationLayout.setVisibility(View.GONE);
-                }
+                setConfirmationValue(confirmationsAmount);
             }
         });
         return view;
     }
 
-    public abstract View initFragment(LayoutInflater inflater, ViewGroup container);
+    private void setConfirmationValue(int confirmationsAmount) {
+        if (notificationLayout == null) {
+            return;
+        }
+        if (confirmationsAmount > 0) {
+            notificationLayout.setVisibility(View.VISIBLE);
+            confirmationAmountTextView.setText(String.valueOf(confirmationsAmount));
+        } else {
+            notificationLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public void setConfirmationCounter(int value){
+        if(notificationLayout == null || confirmationAmountTextView == null){
+            return;
+        }
+        setConfirmationValue(value);
+    }
 
 
 }

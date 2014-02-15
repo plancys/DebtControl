@@ -57,17 +57,16 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         confirmationAmountTextView = (TextView) findViewById(R.id.tv_notification_number);
 
 
-
         initScheduler();
 
 
     }
 
-    public AlertDialog getAlertDialog(String message){
+    public AlertDialog getAlertDialog(String message) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this)
-        .setTitle("Error")
-        .setCancelable(true)
-        .setMessage(message);
+                .setTitle("Error")
+                .setCancelable(true)
+                .setMessage(message);
         AlertDialog alertDialog = alertDialogBuilder.create();
         return alertDialog;
     }
@@ -90,7 +89,7 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
     private void refreshLists() {
         AbstractArrayAdapter fragmentArrayAdapter = currentFragment.getFragmentArrayAdapter();
-        if(fragmentArrayAdapter != null){
+        if (fragmentArrayAdapter != null) {
             fragmentArrayAdapter.refreshDataInList();
         }
     }
@@ -102,7 +101,6 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
     public void replaceFragment(AbstractFragment fragment) {
         replaceFragment(fragment, false);
-        setNotificationCounter();
     }
 
     public void replaceFragmentWithStackClearing(AbstractFragment fragment) {
@@ -167,14 +165,14 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy(), shutdown scheduler() ");
         scheduler.shutdown();
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         boolean shutdown = scheduler.isShutdown();
         Log.d(TAG, "onResume(), scheduler isShutdown = " + shutdown);
@@ -210,8 +208,8 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         RestTemplate restTemplate = new RestTemplate();
         //List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         //messageConverters.add(new FormHttpMessageConverter());
-       // messageConverters.add(new StringHttpMessageConverter());
-       // messageConverters.add(new MappingJacksonHttpMessageConverter());
+        // messageConverters.add(new StringHttpMessageConverter());
+        // messageConverters.add(new MappingJacksonHttpMessageConverter());
 //        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         //restTemplate.setMessageConverters(messageConverters);
         //restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
@@ -225,28 +223,10 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         return restTemplate;
     }
 
-    public void setNotificationCounter() {
-        if(cachedData == null){
-            return;
+    public void setNotificationCounter(int value) {
+        if (currentFragment != null) {
+            currentFragment.setConfirmationCounter(value);
         }
-        final int confirmationsAmount = cachedData.getConfirmations().size();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                confirmationAmountTextView = (TextView) AbstractDebtActivity.this.findViewById(R.id.tv_notification_number);
-                LinearLayout notificationLayout = (LinearLayout) findViewById(R.id.ll_notification_layout);
-                if (notificationLayout == null) {
-                    return;
-                }
-                if (confirmationsAmount > 0) {
-                    notificationLayout.setVisibility(View.VISIBLE);
-                    confirmationAmountTextView.setText(String.valueOf(confirmationsAmount));
-                } else {
-                    notificationLayout.setVisibility(View.GONE);
-                }
-            }
-        });
-
     }
 
 
