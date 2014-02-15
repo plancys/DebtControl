@@ -3,9 +3,7 @@ package com.kalandyk.api.model;
 /**
  * Created by kamil on 12/28/13.
  */
-public class Confirmation {
-
-    private Long id;
+public class Confirmation extends AbstractModel {
 
     private Debt connectedDebt;
 
@@ -23,14 +21,6 @@ public class Confirmation {
         this.confirmationType = confirmationType;
         this.connectedDebt = connectedDebt;
         this.requestApplicant = requestApplicant;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public ConfirmationType getConfirmationType() {

@@ -63,23 +63,23 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
         initUIItems(view);
         view.invalidate();
 
-        final Debt item = getItem(position);
-        DebtStateObject debtStateObject = new DebtStateObject(activity, item);
+        final Debt currentDebt = getItem(position);
+        DebtStateObject debtStateObject = new DebtStateObject(activity, currentDebt);
 
         String message = null;
-        if(item.getDebtPosition().equals(DebtPosition.DEBTOR)){
-            message = activity.getString(R.string.debt_you_owe, item.getCreditor().getLogin(), item.getAmount());
+        if(currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)){
+            message = activity.getString(R.string.debt_you_owe, currentDebt.getCreditor().getLogin(), currentDebt.getAmount());
         } else {
-            message = activity.getString(R.string.debt_you_lend, item.getDebtor().getLogin(), item.getAmount());
+            message = activity.getString(R.string.debt_you_lend, currentDebt.getDebtor().getLogin(), currentDebt.getAmount());
         }
         mainInfoTextView.setText(message);
-        descriptionTextView.setText(activity.getString(R.string.debt_description, item.getDescription()));
-        dateTextView.setText(item.getCreationDate().toString());
+        descriptionTextView.setText(activity.getString(R.string.debt_description, currentDebt.getDescription()));
+        dateTextView.setText(currentDebt.getCreationDate().toString());
 
 
-        setDebtState(view, item);
+        setDebtState(view, currentDebt);
 
-        if (item.isSelected()) {
+        if (currentDebt.isSelected()) {
             debtSurfaceLinearLayout.setVisibility(View.VISIBLE);
         } else {
             debtSurfaceLinearLayout.setVisibility(View.GONE);
@@ -90,7 +90,7 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
             @Override
             public void onClick(View view) {
                 if (debtActionListener != null) {
-                    debtActionListener.onDetails(item);
+                    debtActionListener.onDetails(currentDebt);
                 }
             }
         });
@@ -105,8 +105,8 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
             @Override
             public void onClick(View view) {
                 if (debtActionListener != null) {
-                    debtAction_1.executeAction(item);
-                    debtActionListener.onChangeDebtState(item);
+                    debtAction_1.executeAction(currentDebt);
+                    debtActionListener.onChangeDebtState(currentDebt);
                 }
             }
         });
@@ -120,8 +120,8 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
                 @Override
                 public void onClick(View view) {
                     if (debtActionListener != null) {
-                        debtAction_2.executeAction(item);
-                        debtActionListener.onChangeDebtState(item);
+                        debtAction_2.executeAction(currentDebt);
+                        debtActionListener.onChangeDebtState(currentDebt);
                     }
                 }
             });

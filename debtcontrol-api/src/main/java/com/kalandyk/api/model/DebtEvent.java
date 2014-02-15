@@ -5,9 +5,7 @@ import java.util.Date;
 /**
  * Created by kamil on 12/29/13.
  */
-public class DebtEvent {
-
-    private Long id;
+public class DebtEvent extends AbstractModel{
 
     private DebtEventType eventType;
 
@@ -46,13 +44,5 @@ public class DebtEvent {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

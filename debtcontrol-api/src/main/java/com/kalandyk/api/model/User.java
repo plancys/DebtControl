@@ -7,9 +7,7 @@ import java.util.Set;
 /**
  * Created by kamil on 12/2/13.
  */
-public class User implements Serializable {
-
-    private Long id;
+public class User extends AbstractModel {
 
     private String email;
 
@@ -28,14 +26,6 @@ public class User implements Serializable {
     public User() {
         //TODO: temporary preventing from null pointer exception
         this.login = "ExamplePerson";
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -103,7 +93,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
                 ", name='" + name + '\'' +

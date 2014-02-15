@@ -1,5 +1,6 @@
 package com.kalandyk.android.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,11 +12,9 @@ import android.widget.*;
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.adapters.AbstractArrayAdapter;
-import com.kalandyk.android.listeners.NewDebtListener;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.utils.DebtUrls;
 import com.kalandyk.api.model.*;
-import com.kalandyk.api.model.wrapers.Friends;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
@@ -43,6 +42,7 @@ public class DebtAddingFragment extends AbstractFragment {
 
     private DebtDataContainer cachedData;
     private ProgressDialog progressDialog;
+    private AlertDialog alertDialog;
 
     public DebtAddingFragment(AbstractDebtActivity activity) {
         this.activity = activity;
@@ -141,6 +141,8 @@ public class DebtAddingFragment extends AbstractFragment {
         addDebtButton = (Button) view.findViewById(R.id.bt_add_debt);
         addPersonConnectedButton = (Button) view.findViewById(R.id.bt_add_debt_friends);
         progressDialog = getAbstractDebtActivity().getProgressDialog(activity.getString(R.string.progress_dialog_saving_debt));
+        alertDialog = getAbstractDebtActivity().getAlertDialog("");
+
     }
 
     private void loadGuiFromDebtObject() {
@@ -216,16 +218,28 @@ public class DebtAddingFragment extends AbstractFragment {
             Log.d(AbstractDebtActivity.TAG, "Started TASK");
             Debt addedDebt = null;
             try {
-                RestTemplate restTemplate = activity.getRestTemplate();
-                DebtUrls urls = new DebtUrls(activity);
-                addedDebt = restTemplate.postForObject(urls.getAddDebtUrl(), debt, Debt.class);
+                addedDebt = saveDebtTask(addedDebt);
 
             } catch (Exception e) {
-                Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
+                handleAddingDebtError(e);
             }
             return addedDebt;
 
         }
+
+        private Debt saveDebtTask(Debt addedDebt) {
+            RestTemplate restTemplate = activity.getRestTemplate();
+            DebtUrls urls = new DebtUrls(activity);
+            addedDebt = restTemplate.postForObject(urls.getAddDebtUrl(), debt, Debt.class);
+            if(cachedData.getLoggedUser().equals(addedDebt.getDebtor())){
+                addedDebt.setDebtPosition(DebtPosition.DEBTOR);
+            } else {
+                addedDebt.setDebtPosition(DebtPosition.CREDITOR);
+            }
+
+            return addedDebt;
+        }
+
         @Override
         protected void onPostExecute(Debt result) {
             Log.d(AbstractDebtActivity.TAG, "onPostExcecute");
@@ -235,6 +249,19 @@ public class DebtAddingFragment extends AbstractFragment {
             progressDialog.dismiss();
             dismiss();
         }
+
+    }
+
+    private void handleAddingDebtError(final Exception e) {
+       progressDialog.dismiss();
+       getAbstractDebtActivity().runOnUiThread(new Runnable() {
+           @Override
+           public void run() {
+               Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
+               alertDialog.setMessage(e.getMessage());
+               alertDialog.show();
+           }
+       });
 
     }
 }

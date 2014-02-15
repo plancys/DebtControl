@@ -25,7 +25,8 @@ import static org.junit.Assert.assertTrue;
 public class RestUserIntegrationTest {
 
     private RestTemplate restTemplate;
-    private final String baseUrl = "http://192.168.0.22:8080";
+    //private final String baseUrl = "http://192.168.0.22:8080";
+    private final String baseUrl = "http://185.25.150.219:8080/debtcontrol-server/";
 
     private final String usernameJohny = "Johny";
     private final String usernameRichard = "Richard";
@@ -163,7 +164,7 @@ public class RestUserIntegrationTest {
 
 
     @Test
-    @Ignore
+    //@Ignore
     public void createTwoUserForTest(){
         final String url = baseUrl + "users/createUser";
         User test1 = new User();

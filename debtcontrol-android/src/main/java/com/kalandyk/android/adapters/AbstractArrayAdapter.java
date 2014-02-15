@@ -40,9 +40,13 @@ public abstract class AbstractArrayAdapter<T> extends ArrayAdapter<T> {
     }
 
     private void refreshItems(List<T> list){
-        this.clear();
-        for(int i=0; i < list.size(); i++){
-            insert((T) list.get(i), i);
+        try {
+            this.clear();
+            for (int i = 0; i < list.size(); i++) {
+                insert((T) list.get(i), i);
+            }
+        } catch (Exception e) {
+            activity.getAlertDialog(e.getMessage());
         }
     }
 

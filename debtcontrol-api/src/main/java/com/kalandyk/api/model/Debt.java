@@ -5,9 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Debt {
+public class Debt extends AbstractModel {
 
-    private Long id;
     private String description;
     private DebtPosition debtPosition;
     private Long amount;
@@ -27,14 +26,6 @@ public class Debt {
 
     public Debt() {
         events = new HashSet<DebtEvent>();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public DebtState getDebtState() {

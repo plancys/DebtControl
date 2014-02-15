@@ -1,5 +1,6 @@
 package com.kalandyk.android.activities;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -27,6 +28,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.awt.*;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -65,6 +67,15 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         initScheduler();
 
 
+    }
+
+    public AlertDialog getAlertDialog(String message){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this)
+        .setTitle("Error")
+        .setCancelable(true)
+        .setMessage(message);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        return alertDialog;
     }
 
     private void initScheduler() {
