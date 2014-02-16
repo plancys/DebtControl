@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.api.model.Debt;
 
 /**
@@ -26,11 +27,38 @@ public class DebtCancelPaidOfRequestAction extends DebtAction {
     public void executeAction(Debt debt) {
         Log.d(AbstractDebtActivity.TAG, "[DebtAction] Triggered debt cancel paid off request");
         activity.getProgressDialog(null).show();
-        cancelDebtRepayingRequestTask(debt);
+        new CancelRequestRepayDebtTask().execute(debt);
     }
 
     @Override
     protected void taskFinished(Debt debt) {
+        if(debtActionListener != null){
+            debtActionListener.onChangeDebtState(debt);
+        }
+        progressDialog.dismiss();
+    }
 
+    private class CancelRequestRepayDebtTask extends AbstractDebtTask<Debt, Void, Debt> {
+
+        @Override
+        protected AbstractDebtActivity getDebtActivity() {
+            return activity;
+        }
+
+        @Override
+        protected Debt doInBackground(Debt... debts) {
+            Debt debt = debts[0];
+            try {
+                debt = restTemplate.postForObject(urls.getCancelRepayingRequestUrl(), debt, Debt.class);
+            }catch (Exception e){
+                Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
+            }
+            return debt;
+        }
+
+        @Override
+        protected void onPostExecute(Debt result) {
+            taskFinished(result);
+        }
     }
 }

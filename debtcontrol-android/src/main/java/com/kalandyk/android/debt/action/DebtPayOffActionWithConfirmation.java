@@ -38,6 +38,9 @@ public class DebtPayOffActionWithConfirmation extends DebtAction {
 
     @Override
     protected void taskFinished(Debt debt) {
+        if(debtActionListener != null){
+            debtActionListener.onChangeDebtState(debt);
+        }
         progressDialog.dismiss();
     }
 

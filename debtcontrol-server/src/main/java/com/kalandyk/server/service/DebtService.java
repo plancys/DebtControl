@@ -13,11 +13,18 @@ import com.kalandyk.server.neo4j.repository.DebtEventRepository;
 import com.kalandyk.server.neo4j.repository.UserRepository;
 
 import org.dozer.Mapper;
+import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.traversal.*;
+import org.neo4j.graphdb.traversal.Traverser;
+import org.neo4j.kernel.impl.traversal.TraversalDescriptionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kamil on 1/12/14.
@@ -26,6 +33,9 @@ import java.util.List;
 @Service
 @Transactional
 public class DebtService {
+
+    @Autowired
+    private Neo4jTemplate neo4jTemplate;
 
     @Autowired
     private DebtRepository debtRepository;
@@ -208,5 +218,31 @@ public class DebtService {
         confirmationService.createDebtRepayingConfirmation(debt);
 
         return debt;
+    }
+
+    public Debt cancelDebtRepayingRequest(Debt debt) {
+        if(!debt.getDebtState().equals(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT)){
+            //TODO: raise some exception
+        }
+        debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+        DebtEntity savedDebt = mapper.map(debt, DebtEntity.class);
+        savedDebt = debtRepository.save(savedDebt);
+        removeConnectedConfirmation(savedDebt);
+        return mapper.map(savedDebt, Debt.class);
+    }
+
+    private void removeConnectedConfirmation(DebtEntity savedDebt) {
+        UserEntity creditor = userRepository.findOne(savedDebt.getCreditor().getId());
+        ConfirmationEntity confirmationToRemove = null;
+        for(ConfirmationEntity confirmation : creditor.getConfirmations()){
+            confirmation = confirmationRepository.findOne(confirmation.getId());
+            if(confirmation.getConnectedDebt().equals(savedDebt)){
+                confirmationToRemove = confirmation;
+                break;
+            }
+        }
+        if(confirmationToRemove != null){
+            confirmationRepository.delete(confirmationToRemove);
+        }
     }
 }

@@ -38,6 +38,4 @@ public class ConfirmationController {
     public Boolean sendConfirmationDecision(@RequestBody ConfirmationDecision confirmationDecision) throws IllegalDebtOperationException {
         return confirmationService.sendDecision(confirmationDecision.getConfirmation(), confirmationDecision.getDecision());
     }
-
-
 }

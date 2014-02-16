@@ -3,6 +3,8 @@ package com.kalandyk.android.utils;
 import android.app.Activity;
 import com.kalandyk.R;
 
+import java.net.URI;
+
 /**
  * Created by kamil on 1/19/14.
  */
@@ -10,7 +12,6 @@ public class DebtUrls {
 
     private Activity activity;
     private String baseUrl;
-    private String userFriends;
 
 
     public DebtUrls(Activity activity){
@@ -45,5 +46,9 @@ public class DebtUrls {
 
     public String getRequestDebtRepayingUrl() {
         return baseUrl + activity.getString(R.string.url_debt_request_repaying);
+    }
+
+    public String getCancelRepayingRequestUrl() {
+        return baseUrl + activity.getString(R.string.url_cancel_debt_request_repaying);
     }
 }

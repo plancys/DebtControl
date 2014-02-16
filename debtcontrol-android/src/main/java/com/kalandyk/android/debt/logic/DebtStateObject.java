@@ -1,15 +1,12 @@
 package com.kalandyk.android.debt.logic;
 
+import com.kalandyk.android.debt.action.*;
 import com.kalandyk.api.model.DebtState;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtPosition;
 import com.kalandyk.api.model.DebtType;
-import com.kalandyk.android.debt.action.DebtAction;
-import com.kalandyk.android.debt.action.DebtCancelPaidOfRequestAction;
-import com.kalandyk.android.debt.action.DebtDeleteAction;
-import com.kalandyk.android.debt.action.DebtPayOffActionWithConfirmation;
-import com.kalandyk.android.debt.action.DebtPayOffActionWithoutConfirmation;
+import com.kalandyk.android.debt.action.DebtArchiveAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +47,12 @@ public class DebtStateObject {
         DebtState debtState = debt.getDebtState();
         switch (debtState){
             case UNPAID_DEBT:
-                debtActions.add(new DebtDeleteAction(activity));
+                debtActions.add(new DebtArchiveAction(activity));
                 debtActions.add(new DebtPayOffActionWithoutConfirmation(activity));
                 break;
             case PAYED_OFF_DEBT:
                 //TODO: figure out whether this is useful or not
-                debtActions.add(new DebtDeleteAction(activity));
+                debtActions.add(new DebtArchiveAction(activity));
                 break;
         }
     }
@@ -64,7 +61,7 @@ public class DebtStateObject {
         DebtState debtState = debt.getDebtState();
         switch (debtState){
             case NOT_CONFIRMED_DEBT:
-                debtActions.add(new DebtDeleteAction(activity));
+                debtActions.add(new DebtArchiveAction(activity));
                 break;
             case CONFIRMED_NOT_REPAID_DEBT:
                 debtActions.add(new DebtPayOffActionWithConfirmation(activity));
@@ -74,7 +71,7 @@ public class DebtStateObject {
                 break;
             case CONFIRMED_REPAID_DEBT:
                 //TODO: This may be useless
-                debtActions.add(new DebtDeleteAction(activity));
+                debtActions.add(new DebtArchiveAction(activity));
                 break;
         }
     }

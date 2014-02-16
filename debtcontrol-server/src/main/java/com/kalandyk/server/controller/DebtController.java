@@ -46,5 +46,9 @@ public class DebtController {
         return debtService.requestDebtRepaying(debt);
     }
 
-
+    @RequestMapping(value = "cancelDebtRepayingRequest", method = RequestMethod.POST)
+    @ResponseBody
+    public Debt cancelDebtRepayingRequest(@RequestBody Debt debt) {
+        return debtService.cancelDebtRepayingRequest(debt);
+    }
 }

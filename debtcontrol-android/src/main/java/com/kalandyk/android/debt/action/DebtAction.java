@@ -3,6 +3,7 @@ package com.kalandyk.android.debt.action;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.listeners.DebtActionListener;
 import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.api.model.Debt;
 
@@ -13,10 +14,17 @@ public abstract class DebtAction {
 
     protected AbstractDebtActivity activity;
     protected ProgressDialog progressDialog;
+    protected DebtActionListener debtActionListener;
 
     public DebtAction(AbstractDebtActivity activity) {
         this.activity = activity;
         progressDialog = activity.getProgressDialog("Sending data to server");
+    }
+
+    public DebtAction(DebtAction copy) {
+        this.activity = copy.activity;
+        this.progressDialog = copy.progressDialog;
+        //progressDialog = activity.getProgressDialog("Sending data to server");
     }
 
     public abstract String getDebtActionButtonText();
@@ -55,6 +63,10 @@ public abstract class DebtAction {
         protected Debt doInBackground(Debt... debts) {
             return null;
         }
+    }
+
+    public void setDebtActionListener(DebtActionListener debtActionListener) {
+        this.debtActionListener = debtActionListener;
     }
 
 }

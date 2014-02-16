@@ -1,6 +1,7 @@
 package com.kalandyk.android.adapters;
 
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,20 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
     private void initDebtActionButtons(final Debt currentDebt, List<DebtAction> possibleDebtActions) {
         for (int i = 0; i < possibleDebtActions.size(); i++) {
             final DebtAction debtAction = possibleDebtActions.get(i);
+            debtAction.setDebtActionListener(new DebtActionListener() {
+                @Override
+                public void onDetails(Debt debt) {
+                    return;
+                }
+
+                @Override
+                public void onChangeDebtState(Debt debt) {
+                    //TODO: investigate whether other fields need to be changed
+                    Log.d(AbstractDebtActivity.TAG, DebtsArrayAdapter.class.getName() + ": Debt state has changed.");
+                    currentDebt.setDebtState(debt.getDebtState());
+                    notifyDataSetChanged();
+                }
+            });
             DebtActionButton button = new DebtActionButton(getContext(), debtAction.getDebtActionButtonText());
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
