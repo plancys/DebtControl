@@ -78,8 +78,8 @@ public class DebtAddingFragment extends AbstractFragment {
     private void setDebtTypeChangeListener() {
         debtTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int selectedItem,long arg3) {
-               personConnectedLayout.setVisibility(selectedItem == DEBT_WITH_CONFIRMATION_SPINNER_ITEM ? View.VISIBLE : View.GONE );
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int selectedItem, long arg3) {
+                personConnectedLayout.setVisibility(selectedItem == DEBT_WITH_CONFIRMATION_SPINNER_ITEM ? View.VISIBLE : View.GONE);
             }
 
             @Override
@@ -95,10 +95,14 @@ public class DebtAddingFragment extends AbstractFragment {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 amountEditText.setText(String.valueOf(200 * i / 100));
             }
+
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
     }
 
@@ -128,7 +132,7 @@ public class DebtAddingFragment extends AbstractFragment {
     private void saveNewDebt() {
         progressDialog.show();
         buildDebtFromGui();
-        if( debtTypeSpinner.getSelectedItemPosition() == DEBT_WITH_CONFIRMATION_SPINNER_ITEM){
+        if (debtTypeSpinner.getSelectedItemPosition() == DEBT_WITH_CONFIRMATION_SPINNER_ITEM) {
             new SaveDebtTask().execute(debt);
         } else {
             debtAddedCallback(debt);
@@ -206,7 +210,7 @@ public class DebtAddingFragment extends AbstractFragment {
                 ? DebtState.NOT_CONFIRMED_DEBT : DebtState.UNPAID_DEBT);
 
         User loggedUser = cachedData.getLoggedUser();
-        if(debtRoleSpinner.getSelectedItemPosition() == 0 ){
+        if (debtRoleSpinner.getSelectedItemPosition() == 0) {
             //debtor
             debt.setDebtor(loggedUser);
             debt.setCreditor(debt.getConnectedPerson());
@@ -252,7 +256,7 @@ public class DebtAddingFragment extends AbstractFragment {
             RestTemplate restTemplate = activity.getRestTemplate();
             DebtUrls urls = new DebtUrls(activity);
             addedDebt = restTemplate.postForObject(urls.getAddDebtUrl(), debt, Debt.class);
-            if(cachedData.getLoggedUser().equals(addedDebt.getDebtor())){
+            if (cachedData.getLoggedUser().equals(addedDebt.getDebtor())) {
                 addedDebt.setDebtPosition(DebtPosition.DEBTOR);
             } else {
                 addedDebt.setDebtPosition(DebtPosition.CREDITOR);
@@ -270,23 +274,32 @@ public class DebtAddingFragment extends AbstractFragment {
     }
 
     private void debtAddedCallback(Debt result) {
-        if(result != null){
-            cachedData.getDebts().add(result);
-        }
         progressDialog.dismiss();
+        if (result != null) {
+            saveDebtToCache(result);
+        }
         dismiss();
     }
 
+    private void saveDebtToCache(Debt result) {
+        if (result.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION)) {
+            cachedData.addOnlineDebt(result);
+        } else {
+            result.setId(getAbstractDebtActivity().generateOfflineDebtId());
+            cachedData.addOfflineDebt(result);
+        }
+    }
+
     private void handleAddingDebtError(final Exception e) {
-       progressDialog.dismiss();
-       getAbstractDebtActivity().runOnUiThread(new Runnable() {
-           @Override
-           public void run() {
-               Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
-               alertDialog.setMessage(e.getMessage());
-               alertDialog.show();
-           }
-       });
+        progressDialog.dismiss();
+        getAbstractDebtActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
+                alertDialog.setMessage(e.getMessage());
+                alertDialog.show();
+            }
+        });
 
     }
 }

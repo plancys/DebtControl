@@ -15,7 +15,11 @@ public class DebtActionButton extends Button{
 
     public DebtActionButton(Context context, String text) {
         super(context, null, R.style.ButtonInListStyleGrey);
-        //button.setLayoutParams(detailsButton.getLayoutParams());
+        initApperance(text);
+
+    }
+
+    private void initApperance(String text) {
         setBackgroundResource(R.drawable.button_grey);
         setText(text);
         setTextSize(12);
@@ -26,6 +30,5 @@ public class DebtActionButton extends Button{
         params.setMargins(0, 10, 0, 0);
         //params.width = ViewPager.LayoutParams.FILL_PARENT
         setLayoutParams(params);
-
     }
 }

@@ -11,6 +11,14 @@ public class Friends {
 
     private List<User> friends;
 
+    public Friends() {
+
+    }
+
+    public Friends(List<User> friends) {
+        this.friends = friends;
+    }
+
     public List<User> getFriends() {
         return friends;
     }

@@ -1,15 +1,12 @@
 package com.kalandyk.android.persistent;
 
-import android.app.Activity;
-
-import android.util.Log;
 import com.kalandyk.android.activities.AbstractDebtActivity;
-import com.kalandyk.android.activities.MainActivityDebt;
 import com.kalandyk.android.utils.SharedPreferencesBuilder;
 import com.kalandyk.api.model.Confirmation;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +20,15 @@ public class DebtDataContainer {
 
     private User loggedUser;
 
-    private List<Debt> debts;
+    //debts with confirmation
+    private List<Debt> offlineDebts;
+    //debts without confirmation
+    private List<Debt> onlineDebts;
 
     private List<Confirmation> confirmations;
 
     private List<User> friends;
+    private List<Debt> debts;
 
     public DebtDataContainer(AbstractDebtActivity activity) {
         this.activity = activity;
@@ -38,7 +39,8 @@ public class DebtDataContainer {
     private void initializeData() {
         setLoggedUser(sharedPreferencesBuilder.loadCurrentUser());
         setFriends(sharedPreferencesBuilder.loadFriends());
-        setDebts(sharedPreferencesBuilder.loadDebts());
+        setOnlineDebts(sharedPreferencesBuilder.loadOnlineDebts());
+        setOfflineDebts(sharedPreferencesBuilder.loadOfflineDebts());
         setConfirmations(sharedPreferencesBuilder.loadConfirmations());
     }
 
@@ -53,12 +55,15 @@ public class DebtDataContainer {
         sharedPreferencesBuilder.saveCurrentUser(loggedUser);
     }
 
-    public List<Debt> getDebts() {
-        return debts;
+    public List<Debt> getOnlineDebts() {
+        if(onlineDebts == null){
+            onlineDebts = new ArrayList<Debt>();
+        }
+        return onlineDebts;
     }
 
-    public void setDebts(List<Debt> debts) {
-        this.debts = debts;
+    public void setOnlineDebts(List<Debt> onlineDebts) {
+        this.onlineDebts = onlineDebts;
     }
 
     public List<Confirmation> getConfirmations() {
@@ -77,5 +82,36 @@ public class DebtDataContainer {
     public void setFriends(List<User> friends) {
         this.friends = friends;
         sharedPreferencesBuilder.saveFriends(friends);
+    }
+
+    public List<Debt> getOfflineDebts() {
+        if(offlineDebts == null){
+            offlineDebts = new ArrayList<Debt>();
+        }
+        return offlineDebts;
+    }
+
+    public void setOfflineDebts(List<Debt> offlineDebts) {
+        this.offlineDebts = offlineDebts;
+    }
+
+    public List<Debt> getDebts() {
+        if(debts == null){
+            debts = new ArrayList<Debt>();
+        }
+        debts.clear();
+        debts.addAll(getOnlineDebts());
+        debts.addAll(getOfflineDebts());
+        return debts;
+    }
+
+    public void addOnlineDebt(Debt result) {
+        getOnlineDebts().add(result);
+        sharedPreferencesBuilder.saveOnlineDebts(getOnlineDebts());
+    }
+
+    public void addOfflineDebt(Debt result) {
+        getOfflineDebts().add(result);
+        sharedPreferencesBuilder.saveOfflineDebts(getOfflineDebts());
     }
 }

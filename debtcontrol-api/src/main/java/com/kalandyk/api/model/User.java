@@ -24,8 +24,6 @@ public class User extends AbstractModel {
     //private Set<User> friends;
 
     public User() {
-        //TODO: temporary preventing from null pointer exception
-        this.login = "ExamplePerson";
     }
 
     public String getEmail() {

@@ -56,10 +56,7 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         new LoadDataFromServerTask().execute(getCachedData());
         confirmationAmountTextView = (TextView) findViewById(R.id.tv_notification_number);
 
-
         initScheduler();
-
-
     }
 
     public AlertDialog getAlertDialog(String message) {
@@ -227,6 +224,10 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         if (currentFragment != null) {
             currentFragment.setConfirmationCounter(value);
         }
+    }
+
+    public Long generateOfflineDebtId(){
+        return sharedPreferencesBuilder.generateOfflineDebtId();
     }
 
 

@@ -12,6 +12,14 @@ public class Debts {
 
     private List<Debt> debts;
 
+    public Debts(){
+
+    }
+
+    public Debts(List<Debt> debts){
+        this.debts = debts;
+    }
+
     public List<Debt> getDebts() {
         if(debts == null ) {
             debts = new ArrayList<Debt>();

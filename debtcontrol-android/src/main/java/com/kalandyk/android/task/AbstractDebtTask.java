@@ -50,7 +50,7 @@ public abstract class AbstractDebtTask<Params, Progress, Result> extends AsyncTa
         Debts debts = restTemplate.postForObject(urls.getUserDebtUrl(), getUserCredentials(), Debts.class);
         if(debts != null){
             Log.d(getDebtActivity().TAG, "DEBTS LOADED");
-            cachedData.setDebts(debts.getDebts());
+            cachedData.setOnlineDebts(debts.getDebts());
         }
     }
 }
