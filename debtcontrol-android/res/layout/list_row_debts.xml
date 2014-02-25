@@ -107,7 +107,7 @@
                 style="@style/statusTextStyleActive"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="not confirmed debt pay of"/>
+                android:text="not confirmed debt repaying"/>
 
             <TextView
                 android:id="@+id/tv_state_with_confirm_cdpo_4"

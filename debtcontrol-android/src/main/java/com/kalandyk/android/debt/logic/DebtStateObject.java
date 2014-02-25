@@ -31,16 +31,28 @@ public class DebtStateObject {
 
     public List<DebtAction> getPossibleDebtActions() {
         List<DebtAction> debtActions = new ArrayList<DebtAction>();
+        DebtType debtType = debt.getDebtType();
+
         if(debt.getDebtPosition().equals(DebtPosition.CREDITOR)){
-            return debtActions;
+            if(debt.getDebtType().equals(DebtType.DEBT_WITHOUT_CONFIRMATION)){
+                prepareUnconfirmedDebtActions(debtActions);
+            } else {
+
+            }
+        } else {
+            prepareDebtActionsForDebtor(debtActions);
         }
+        debtActions.add(new DebtDetailsAction(activity));
+        return debtActions;
+    }
+
+    private void prepareDebtActionsForDebtor(List<DebtAction> debtActions) {
         DebtType debtType = debt.getDebtType();
         if (debtType.equals(DebtType.DEBT_WITHOUT_CONFIRMATION)) {
             prepareUnconfirmedDebtActions(debtActions);
         } else if (debtType.equals(DebtType.DEBT_WITH_CONFIRMATION)) {
            prepareConfirmedDebtActions(debtActions);
         }
-        return debtActions;
     }
 
     private void prepareUnconfirmedDebtActions(List<DebtAction> debtActions) {
@@ -75,6 +87,4 @@ public class DebtStateObject {
                 break;
         }
     }
-
-
 }

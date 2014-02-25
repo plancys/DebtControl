@@ -6,6 +6,7 @@ import com.kalandyk.server.neo4j.repository.UserRepository;
 
 import org.dozer.Mapper;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
@@ -130,8 +131,9 @@ public class UserService {
         EXIST_USER
     }
 
-    private void addRelationToRootNode(Node node) {
-        getRootNode().createRelationshipTo(node, RelationFromRootToUsers.EXIST_USER);
+    private Relationship addRelationToRootNode(Node node) {
+        Relationship relationshipTo = getRootNode().createRelationshipTo(node, RelationFromRootToUsers.EXIST_USER);
+        return relationshipTo;
     }
 
     private Node getRootNode() {

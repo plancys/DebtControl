@@ -93,6 +93,7 @@
     <string name="progress_dialog_saving_debt">Saving debt</string>
     <string name="progress_dialog_fetching_data">Fetching data from server.</string>
     <string name="bottom_button_debt_list">DEBT LIST</string>
+    <string name="refresh">Refresh</string>
 
 
 </resources>

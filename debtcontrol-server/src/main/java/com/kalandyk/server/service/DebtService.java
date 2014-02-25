@@ -8,23 +8,16 @@ import com.kalandyk.server.neo4j.entity.DebtEntity;
 import com.kalandyk.server.neo4j.entity.DebtHistoryEntity;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.ConfirmationRepository;
-import com.kalandyk.server.neo4j.repository.DebtRepository;
 import com.kalandyk.server.neo4j.repository.DebtEventRepository;
+import com.kalandyk.server.neo4j.repository.DebtRepository;
 import com.kalandyk.server.neo4j.repository.UserRepository;
-
 import org.dozer.Mapper;
-import org.neo4j.graphdb.*;
-import org.neo4j.graphdb.traversal.*;
-import org.neo4j.graphdb.traversal.Traverser;
-import org.neo4j.kernel.impl.traversal.TraversalDescriptionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by kamil on 1/12/14.

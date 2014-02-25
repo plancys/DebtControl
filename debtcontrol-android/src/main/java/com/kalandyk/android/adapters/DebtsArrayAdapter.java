@@ -1,5 +1,6 @@
 package com.kalandyk.android.adapters;
 
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -117,6 +118,10 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
             message = getDebtMessageForDebtWithoutConfirmation(currentDebt);
         }
         mainInfoTextView.setText(message);
+        if(currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)){
+            mainInfoTextView.setTextColor(Color.RED);
+        }
+
         descriptionTextView.setText(activity.getString(R.string.debt_description, currentDebt.getDescription()));
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");

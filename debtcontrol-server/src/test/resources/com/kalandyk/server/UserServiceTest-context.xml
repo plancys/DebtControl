@@ -14,7 +14,6 @@
 		http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-
     <mvc:annotation-driven/>
     <context:spring-configured/>
 
@@ -25,16 +24,6 @@
 
     <context:annotation-config/>
     <!--<neo4j:config storeDirectory="neo4j-db"/>-->
-    <neo4j:config graphDatabaseService="graphDatabaseService" />
-    <bean id="graphDatabaseService" class="org.springframework.data.neo4j.rest.SpringRestGraphDatabase">
-        <constructor-arg value="http://localhost:7474/db/data/" index="0"/>
-        <!--<constructor-arg value="http://debtcontroll.sb01.stations.graphenedb.com:24789/db/data/" index="0"/>-->
-         <!--for running against a server requiring authentication-->
-            <!--<constructor-arg value="DebtControll" index="1"/>-->
-            <!--<constructor-arg value="zyMqc2ZFePKIZiFw4Pxz" index="2"/>-->
-
-    </bean>
-    <!--<neo4j:repositories base-package="com.kalandyk.server.neo4j" />-->
     <neo4j:repositories base-package="com.kalandyk.server.neo4j"/>
 
     <!-- Dozer Bean for mapping entities to API models-->
