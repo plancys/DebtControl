@@ -12,4 +12,9 @@ public class RegisterActivityDebt extends AbstractDebtActivity {
     protected AbstractFragment getContentFragment() {
         return null;
     }
+
+    @Override
+    protected void refreshDataAction() {
+        //TODO: implement this
+    }
 }

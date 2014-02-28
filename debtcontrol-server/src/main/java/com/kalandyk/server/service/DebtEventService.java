@@ -35,23 +35,23 @@ public class DebtEventService {
     private DebtHistoryRepository debtHistoryRepository;
 
     public List<DebtEvent> createEvent(User debtCreator, Debt debt, DebtEventType debtEventType){
-
-        DebtHistoryEntity debtHistoryEntity = mapper.map(debt, DebtEntity.class).getHistory();
-        debtHistoryEntity.updateTimestamp();
-        DebtEventEntity event = new DebtEventEntity();
-        event.setCreationTime(new Date());
-        UserEntity eventCreator = mapper.map(debtCreator, UserEntity.class);
-        eventCreator.updateTimestamp();
-        event.setEventCreator(eventCreator);
-        event.setEventType(DebtEventType.DEBT_ADDITION_REQUEST);
-        event = debtEventRepository.save(event);
-        debtHistoryEntity.addEvent(event);
-        debtHistoryEntity = debtHistoryRepository.save(debtHistoryEntity);
-        //TODO: debt events mapping
-        //debt.setEvents(de);
-
-        List<DebtEvent> events = getConvertedDebtEvents(debtHistoryEntity);
-        return events;
+        //TODO: implement this
+//        //DebtHistoryEntity debtHistoryEntity = mapper.map(debt, DebtEntity.class).getHistory();
+//        //debtHistoryEntity.updateTimestamp();
+//        DebtEventEntity event = new DebtEventEntity();
+//        event.setCreationTime(new Date());
+//        UserEntity eventCreator = mapper.map(debtCreator, UserEntity.class);
+//        eventCreator.updateTimestamp();
+//        event.setEventCreator(eventCreator);
+//        event.setEventType(DebtEventType.DEBT_ADDITION_REQUEST);
+//        event = debtEventRepository.save(event);
+//       // debtHistoryEntity.addEvent(event);
+//        //debtHistoryEntity = debtHistoryRepository.save(debtHistoryEntity);
+//        //TODO: debt events mapping
+//        //debt.setEvents(de);
+//
+//        //List<DebtEvent> events = getConvertedDebtEvents(debtHistoryEntity);
+        return new ArrayList<DebtEvent>();
     }
 
     private List<DebtEvent> getConvertedDebtEvents(DebtHistoryEntity debtHistoryEntity) {

@@ -85,7 +85,7 @@ public class DebtService {
             return;
         }
         List<DebtEvent> event = debtEventService.createEvent(debtCreator, debt, DebtEventType.DEBT_ADDITION_REQUEST);
-        DebtHistoryEntity history = entityToSave.getHistory();
+        //DebtHistoryEntity history = entityToSave.getHistory();
     }
 
     private void addRelationToDebtFromUsers(DebtEntity entityToSave) {

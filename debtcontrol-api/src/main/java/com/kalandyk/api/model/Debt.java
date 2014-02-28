@@ -22,10 +22,10 @@ public class Debt extends AbstractModel {
 
     private boolean isSelected;
 
-    private Set<DebtEvent> events;
+    //private Set<DebtEvent> events;
 
     public Debt() {
-        events = new HashSet<DebtEvent>();
+       // events = new HashSet<DebtEvent>();
     }
 
     public DebtState getDebtState() {
@@ -94,9 +94,9 @@ public class Debt extends AbstractModel {
         this.isSelected = isSelected;
     }
 
-    public void addEvent(DebtEvent debtEvent) {
-        events.add(debtEvent);
-    }
+//    public void addEvent(DebtEvent debtEvent) {
+//        events.add(debtEvent);
+//    }
 
     //TODO: add property and setting it in proper places
     public User getCreator() {
@@ -104,13 +104,13 @@ public class Debt extends AbstractModel {
         return creator;
     }
 
-    public Set<DebtEvent> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<DebtEvent> events) {
-        this.events = events;
-    }
+//    public Set<DebtEvent> getEvents() {
+//        return events;
+//    }
+//
+//    public void setEvents(Set<DebtEvent> events) {
+//        this.events = events;
+//    }
 
     public void setCreator(User creator) {
         this.creator = creator;

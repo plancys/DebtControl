@@ -73,7 +73,7 @@ public class DebtStateObject {
         DebtState debtState = debt.getDebtState();
         switch (debtState){
             case NOT_CONFIRMED_DEBT:
-                debtActions.add(new DebtArchiveAction(activity));
+                //debtActions.add(new DebtArchiveAction(activity));
                 break;
             case CONFIRMED_NOT_REPAID_DEBT:
                 debtActions.add(new DebtPayOffActionWithConfirmation(activity));

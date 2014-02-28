@@ -45,7 +45,8 @@ public class DetailsFragment extends AbstractFragment {
 
     private DetailsArrayAdapter initDebtsArrayAdapter() {
         List<DebtEvent> events = new ArrayList<DebtEvent>();
-        events.addAll(debt.getEvents());
+       //TODO: implement this
+        //events.addAll(debt.getEvents());
         detailsArrayAdapter = new DetailsArrayAdapter(getActivity(), events);
         return detailsArrayAdapter;
     }

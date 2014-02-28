@@ -188,6 +188,7 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
             setStateInactiveStyle(textView);
         }
         int index = item.getDebtState().getCode();
+
         setStateActiveStyle(debtStates[index]);
     }
 

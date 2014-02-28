@@ -2,8 +2,8 @@
 <resources>
 
     <!--       U R L ' s         -->
-    <string name="url_base">http://192.168.0.22:8080/</string>
-    <!--<string name="url_base">http://185.25.150.219:8080/debtcontrol-server/</string>-->
+    <!--<string name="url_base">http://192.168.0.22:8080/</string>-->
+    <string name="url_base">http://185.25.150.219:8080/debtcontrol-server/</string>
     <string name="url_add_user"></string>
     <string name="url_add_debt">debts/createDebt</string>
     <string name="url_get_user_debts">debts/getUserDebts</string>

@@ -36,9 +36,10 @@ public class DebtEntity extends AbstractEntity {
     @Fetch
     private UserEntity creditor;
 
-    @RelatedTo(type = DEBT_HAS_HISTORY, elementClass = DebtHistoryEntity.class, direction = Direction.OUTGOING)
-    //@Fetch
-    private DebtHistoryEntity history;
+    //TODO: temporary disabled
+//    @RelatedTo(type = DEBT_HAS_HISTORY, elementClass = DebtHistoryEntity.class, direction = Direction.OUTGOING)
+//    //@Fetch
+//    private DebtHistoryEntity history;
 
     private DebtState debtState;
 
@@ -104,23 +105,23 @@ public class DebtEntity extends AbstractEntity {
         this.debtType = debtType;
     }
 
-    public DebtHistoryEntity getHistory() {
-        if (history == null) {
-            history = new DebtHistoryEntity();
-        }
-        return history;
-    }
-
-    public void setHistory(DebtHistoryEntity history) {
-        this.history = history;
-    }
-
-    public void addDebtEvent(DebtEventEntity event){
-        if (history == null) {
-            history = new DebtHistoryEntity();
-        }
-        history.addEvent(event);
-    }
+//    public DebtHistoryEntity getHistory() {
+//        if (history == null) {
+//            history = new DebtHistoryEntity();
+//        }
+//        return history;
+//    }
+//
+//    public void setHistory(DebtHistoryEntity history) {
+//        this.history = history;
+//    }
+//
+//    public void addDebtEvent(DebtEventEntity event){
+//        if (history == null) {
+//            history = new DebtHistoryEntity();
+//        }
+//        history.addEvent(event);
+//    }
 
 
 }

@@ -26,8 +26,8 @@ public class RestUserIntegrationTest {
 
     private RestTemplate restTemplate;
     //private final String baseUrl = "http://192.168.0.22:8080";
-//    private final String baseUrl = "http://185.25.150.219:8080/debtcontrol-server/";
-    private final String baseUrl = "http://localhost:8080";
+    private final String baseUrl = "http://185.25.150.219:8080/debtcontrol-server/";
+   // private final String baseUrl = "http://localhost:8080";
 
     private final String usernameJohny = "Johny";
     private final String usernameRichard = "Richard";
@@ -168,13 +168,13 @@ public class RestUserIntegrationTest {
      @Ignore
     public void createTwoUserForTest(){
         final String url = baseUrl + "users/createUser";
-        User test1 = new User();
-        test1.setLogin("test3");
-        test1 = restTemplate.postForObject(url, test1, User.class);
-        assertNotNull(test1);
+//        User test1 = new User();
+//        test1.setLogin("test1");
+//        test1 = restTemplate.postForObject(url, test1, User.class);
+//        assertNotNull(test1);
 
         User test2 = new User();
-        test2.setLogin("test4");
+        test2.setLogin("test2");
         test2 = restTemplate.postForObject(url, test2, User.class);
         assertNotNull(test2);
     }

@@ -4,6 +4,7 @@ import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.utils.SharedPreferencesBuilder;
 import com.kalandyk.api.model.Confirmation;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.DebtState;
 import com.kalandyk.api.model.User;
 
 import java.util.ArrayList;
@@ -39,7 +40,8 @@ public class DebtDataContainer {
     private void initializeData() {
         setLoggedUser(sharedPreferencesBuilder.loadCurrentUser());
         setFriends(sharedPreferencesBuilder.loadFriends());
-        setOnlineDebts(sharedPreferencesBuilder.loadOnlineDebts());
+        //TODO: add synchronization with server
+        //setOnlineDebts(sharedPreferencesBuilder.loadOnlineDebts());
         setOfflineDebts(sharedPreferencesBuilder.loadOfflineDebts());
         setConfirmations(sharedPreferencesBuilder.loadConfirmations());
     }
@@ -59,7 +61,20 @@ public class DebtDataContainer {
         if(onlineDebts == null){
             onlineDebts = new ArrayList<Debt>();
         }
+        removeDeletedDebts(onlineDebts);
         return onlineDebts;
+    }
+
+    private void removeDeletedDebts(List<Debt> onlineDebts) {
+        List<Debt> toDelete = new ArrayList<Debt>();
+        for(Debt debt : onlineDebts){
+            if(debt.getDebtState().equals(DebtState.DELETED))
+                toDelete.add(debt);
+        }
+
+        for(Debt debt : toDelete){
+            onlineDebts.remove(debt);
+        }
     }
 
     public void setOnlineDebts(List<Debt> onlineDebts) {
@@ -102,6 +117,7 @@ public class DebtDataContainer {
         debts.clear();
         debts.addAll(getOnlineDebts());
         debts.addAll(getOfflineDebts());
+        removeDeletedDebts(debts);
         return debts;
     }
 

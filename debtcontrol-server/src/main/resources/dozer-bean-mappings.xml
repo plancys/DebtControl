@@ -10,10 +10,10 @@
             <a>id</a>
             <b>id</b>
         </field>
-        <field>
-            <a>history.events</a>
-            <b>events</b>
-        </field>
+        <!--<field>-->
+            <!--<a>history.events</a>-->
+            <!--<b>events</b>-->
+        <!--</field>-->
     </mapping>
     <mapping>
         <class-a>com.kalandyk.api.model.User</class-a>
