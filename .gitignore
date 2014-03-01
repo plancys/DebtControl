@@ -5,3 +5,7 @@ target/
 debtcontrol-android/target
 debtcontrol-server/target
 .idea
+android
+*.iml
+.gitignore.swp
+*.DS_Store
