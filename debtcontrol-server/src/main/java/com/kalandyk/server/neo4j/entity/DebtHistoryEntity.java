@@ -20,10 +20,6 @@ public class DebtHistoryEntity extends AbstractEntity {
     @Fetch
     private Set<DebtEventEntity> events;
 
-    public DebtHistoryEntity() {
-        super();
-    }
-
     public Set<DebtEventEntity> getEvents() {
         return events;
     }

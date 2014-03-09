@@ -3,21 +3,15 @@ package com.kalandyk.server.service;
 import com.kalandyk.api.model.*;
 import com.kalandyk.api.model.wrapers.Debts;
 import com.kalandyk.exception.IllegalDebtOperationException;
-import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
-import com.kalandyk.server.neo4j.entity.DebtEntity;
-import com.kalandyk.server.neo4j.entity.DebtHistoryEntity;
-import com.kalandyk.server.neo4j.entity.UserEntity;
-import com.kalandyk.server.neo4j.repository.ConfirmationRepository;
-import com.kalandyk.server.neo4j.repository.DebtEventRepository;
-import com.kalandyk.server.neo4j.repository.DebtRepository;
-import com.kalandyk.server.neo4j.repository.UserRepository;
+import com.kalandyk.server.neo4j.entity.*;
+import com.kalandyk.server.neo4j.repository.*;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by kamil on 1/12/14.
@@ -46,7 +40,7 @@ public class DebtService {
     private DebtEventRepository debtEventRepository;
 
     @Autowired
-    private  DebtEventService debtEventService;
+    private DebtHistoryRepository debtHistoryRepository;
 
     @Autowired
     private Mapper mapper;
@@ -55,37 +49,45 @@ public class DebtService {
         if (debtExist(debt)) {
             return debt;
         }
-        if( !userExist(debtCreator) ){
+        if (!userExist(debtCreator)) {
             return null;
         }
         //Prepare
+        DebtEntity entityToSave = prepareNewDebtEntity(debt);
+        addRelationToDebtFromUsers(entityToSave);
+        confirmationService.createNewDebtConfirmation(debtCreator, mapper.map(entityToSave, Debt.class));
+        entityToSave = debtRepository.save(prepareEventForDebt(entityToSave, DebtEventType.DEBT_ADDITION_REQUEST));
+        return mapper.map(entityToSave, Debt.class);
+    }
+
+    private DebtEntity prepareEventForDebt(DebtEntity entityToSave, DebtEventType debtEventType) {
+        DebtHistoryEntity historyEntity = entityToSave.getHistory();
+        if(historyEntity == null){
+            historyEntity = new DebtHistoryEntity();
+            historyEntity = debtHistoryRepository.save(historyEntity);
+        }
+        DebtEventEntity addingEvent = prepareEvent(debtEventType);
+        historyEntity.addEvent(addingEvent);
+        historyEntity = debtHistoryRepository.save(historyEntity);
+        entityToSave.setHistory(historyEntity);
+        return entityToSave;
+    }
+
+    private DebtEventEntity prepareEvent(DebtEventType eventType) {
+        DebtEventEntity debtEvent = new DebtEventEntity();
+        debtEvent.setTime(new Date());
+        debtEvent.setEventType(eventType);
+        DebtEventEntity savedEvent = debtEventRepository.save(debtEvent);
+        return savedEvent;
+    }
+
+    private DebtEntity prepareNewDebtEntity(Debt debt) {
         DebtEntity entityToSave = mapper.map(debt, DebtEntity.class);
         entityToSave.updateTimestamp();
         entityToSave.setDebtState(DebtState.NOT_CONFIRMED_DEBT);
         //Save
         entityToSave = debtRepository.save(entityToSave);
-
-        addRelationToDebtFromUsers(entityToSave);
-
-
-        boolean confirmationCreated = confirmationService.createNewDebtConfirmation(debtCreator, mapper.map(entityToSave, Debt.class));
-
-        if( !confirmationCreated ){
-            //TODO: raise some exception or sth
-        }
-
-        addEvents(debtCreator, debt, entityToSave);
-
-        return mapper.map(entityToSave, Debt.class);
-    }
-
-    private void addEvents(User debtCreator, Debt debt, DebtEntity entityToSave) {
-        if(true){
-            //TODO: temporary disabled
-            return;
-        }
-        List<DebtEvent> event = debtEventService.createEvent(debtCreator, debt, DebtEventType.DEBT_ADDITION_REQUEST);
-        //DebtHistoryEntity history = entityToSave.getHistory();
+        return entityToSave;
     }
 
     private void addRelationToDebtFromUsers(DebtEntity entityToSave) {
@@ -103,51 +105,27 @@ public class DebtService {
 
 
     private boolean userExist(User debtCreator) {
-        if(debtCreator.getId() == null){
+        if (debtCreator.getId() == null) {
             return false;
         }
         UserEntity user = userRepository.findOne(debtCreator.getId());
         return user != null;
     }
 
-    public boolean requestRepayDebt(User user, Debt debt) throws IllegalDebtOperationException {
-        UserEntity requester = mapper.map(user, UserEntity.class);
-        DebtEntity connectedDebt = mapper.map(debt, DebtEntity.class);
-
-//        if (!connectedDebt.getDebtor().equals(requester)) {
-//            throw new IllegalDebtOperationException();
-//        }
-//        if (!connectedDebt.getDebtWithConfirmationState().equals(DebtWithConfirmationState.CONFIRMED_NOT_REPAID_DEBT)) {
-//            throw new IllegalDebtOperationException();
-//        }
-        connectedDebt.setDebtState(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
-        debtRepository.save(connectedDebt);
-
-        ConfirmationEntity confirmation = getConfirmationForDebtRepayingRequest(requester, connectedDebt);
-        confirmationRepository.save(confirmation);
-
-        return true;
-
-    }
-
     public boolean makeDecisionRegardingRepayDebtRequest(Debt debt, boolean decision) throws IllegalDebtOperationException {
         DebtEntity connectedDebt = mapper.map(debt, DebtEntity.class);
+        connectedDebt = debtRepository.save(connectedDebt);
 
-        if(decision){
+        if (decision) {
             connectedDebt.setDebtState(DebtState.CONFIRMED_REPAID_DEBT);
+            connectedDebt = prepareEventForDebt(connectedDebt, DebtEventType.DEBT_APPROVING_REPAYMENT_REQUEST);
+
         } else {
             connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+            connectedDebt = prepareEventForDebt(connectedDebt, DebtEventType.DEBT_REJECTING_REPAYMENT_REQUEST);
         }
         debtRepository.save(connectedDebt);
         return true;
-    }
-
-    private ConfirmationEntity getConfirmationForDebtRepayingRequest(UserEntity requester, DebtEntity connectedDebt) {
-        ConfirmationEntity confirmation = new ConfirmationEntity();
-        confirmation.setConfirmationType(ConfirmationType.REQUEST_DEBT_REPAYING);
-        confirmation.setConnectedDebt(connectedDebt);
-        confirmation.setRequestApplicant(requester);
-        return confirmation;
     }
 
     public boolean debtExist(Debt debt) {
@@ -160,20 +138,20 @@ public class DebtService {
 
     public Debts getUserDebts(UserCredentials credentials) {
         UserEntity user = userRepository.findByLogin(credentials.getLogin());
-        if(user == null ) {//|| !user.getPassword().equals(credentials.getPassword())){
+        if (user == null) {//|| !user.getPassword().equals(credentials.getPassword())){
             //TODO: check users credentials
             return null;
         }
 
         Debts debts = new Debts();
-        for(DebtEntity debt : user.getWeOwesSbDebts()){
+        for (DebtEntity debt : user.getWeOwesSbDebts()) {
             debt = debtRepository.findOne(debt.getId());
             Debt debtToAdd = mapper.map(debt, Debt.class);
             debtToAdd.setDebtPosition(DebtPosition.DEBTOR);
             debts.getDebts().add(debtToAdd);
         }
 
-        for(DebtEntity debt : user.getSbOwesToUsDebts()){
+        for (DebtEntity debt : user.getSbOwesToUsDebts()) {
             debt = debtRepository.findOne(debt.getId());
             Debt debtToAdd = mapper.map(debt, Debt.class);
             debtToAdd.setDebtPosition(DebtPosition.CREDITOR);
@@ -184,23 +162,29 @@ public class DebtService {
         return debts;
     }
 
-    public void makeDecisionRegardingAddingDebtRequest(Debt connectedDebt, boolean decision) {
-        if(decision){
+    public void makeDecisionRegardingAddingDebtRequest(Debt debt, boolean decision) {
+        DebtEntity connectedDebt = mapper.map(debt, DebtEntity.class);
+        connectedDebt = debtRepository.save(connectedDebt);
+
+        if (decision) {
             connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+            connectedDebt = prepareEventForDebt(connectedDebt, DebtEventType.DEBT_APPROVING_REPAYMENT_REQUEST);
         } else {
             connectedDebt.setDebtState(DebtState.DELETED);
+            connectedDebt = prepareEventForDebt(connectedDebt, DebtEventType.DEBT_APPROVING_REPAYMENT_REQUEST);
         }
-        debtRepository.save(mapper.map(connectedDebt, DebtEntity.class));
+
+        debtRepository.save(connectedDebt);
     }
 
     public Debt requestDebtRepaying(Debt debt) {
-        if(debt == null){
+        if (debt == null) {
             return null;
         }
         DebtEntity debtEntity = mapper.map(debt, DebtEntity.class);
         debtEntity = debtRepository.findOne(debtEntity.getId());
 
-        if(!debtEntity.getDebtState().equals(DebtState.CONFIRMED_NOT_REPAID_DEBT)){
+        if (!debtEntity.getDebtState().equals(DebtState.CONFIRMED_NOT_REPAID_DEBT)) {
             return null;
         }
 
@@ -214,7 +198,7 @@ public class DebtService {
     }
 
     public Debt cancelDebtRepayingRequest(Debt debt) {
-        if(!debt.getDebtState().equals(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT)){
+        if (!debt.getDebtState().equals(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT)) {
             //TODO: raise some exception
         }
         debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
@@ -227,14 +211,14 @@ public class DebtService {
     private void removeConnectedConfirmation(DebtEntity savedDebt) {
         UserEntity creditor = userRepository.findOne(savedDebt.getCreditor().getId());
         ConfirmationEntity confirmationToRemove = null;
-        for(ConfirmationEntity confirmation : creditor.getConfirmations()){
+        for (ConfirmationEntity confirmation : creditor.getConfirmations()) {
             confirmation = confirmationRepository.findOne(confirmation.getId());
-            if(confirmation.getConnectedDebt().equals(savedDebt)){
+            if (confirmation.getConnectedDebt().equals(savedDebt)) {
                 confirmationToRemove = confirmation;
                 break;
             }
         }
-        if(confirmationToRemove != null){
+        if (confirmationToRemove != null) {
             confirmationRepository.delete(confirmationToRemove);
         }
     }

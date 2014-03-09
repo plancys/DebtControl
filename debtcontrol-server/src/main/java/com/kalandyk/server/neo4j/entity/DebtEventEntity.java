@@ -14,14 +14,9 @@ import java.util.Date;
 
 @NodeEntity
 public class DebtEventEntity extends AbstractEntity {
-    public static final String EVENT_CREATOR_RELATION = "CREATOR";
 
     private DebtEventType eventType;
-
-    @RelatedTo(type = EVENT_CREATOR_RELATION, elementClass = UserEntity.class, direction = Direction.OUTGOING)
-    private UserEntity eventCreator;
-
-    private Date creationTime;
+    private Date time;
 
     public DebtEventEntity() {
         super();
@@ -35,19 +30,12 @@ public class DebtEventEntity extends AbstractEntity {
         this.eventType = eventType;
     }
 
-    public UserEntity getEventCreator() {
-        return eventCreator;
+    public Date getTime() {
+        return time;
     }
 
-    public void setEventCreator(UserEntity eventCreator) {
-        this.eventCreator = eventCreator;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
-    public Date getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(Date creationTime) {
-        this.creationTime = creationTime;
-    }
 }

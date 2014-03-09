@@ -84,9 +84,17 @@ public class UserController {
         return userService.cancelAddingToFriendRequest(request.getTarget(), request.getRequester());
     }
 
+    @RequestMapping(value = "getUserDebtSum", method = RequestMethod.GET)
+    @ResponseBody
+    public Long getUserDebt() {
+        return userRepository.getUsersDebt(userRepository.findByLogin("test1"));
+    }
+
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
     public User login(@RequestBody UserCredentials credentials) {
         return userService.authenticateUser(credentials.getLogin(), credentials.getPassword());
     }
+
+
 }
