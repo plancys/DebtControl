@@ -63,7 +63,7 @@ public class RegisterFragment extends AbstractFragment {
         User user = new User();
         user.setLogin(login.getText().toString());
         user.setEmail(email.getText().toString());
-        String decodedPassword = PasswordUtils.getHashFromPassword(password.toString());
+        String decodedPassword = PasswordUtils.getHashFromPassword(password.getText().toString());
         user.setPassword(decodedPassword);
         return user;
     }

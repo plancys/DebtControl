@@ -94,14 +94,14 @@ public class UserService {
         return usersFriends;
     }
 
-    public User authenticateUser(String login, String password) {
+    public User authenticateUser(String login, String password) throws DebtControlException {
         UserEntity user = userRepository.findByLogin(login);
         if (user == null) {
-            return null;
+            throw new DebtControlException(ExceptionType.AUTHENTICATION_ERROR, "User doesn't exist.");
         }
 
         if (user.getPassword() != null && !user.getPassword().equals(password)) {
-            return null;
+            throw new DebtControlException(ExceptionType.AUTHENTICATION_ERROR, "Incorrect login or password");
         }
 
         return mapper.map(user, User.class);
