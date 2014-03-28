@@ -1,215 +1,207 @@
 package com.kalandyk.server.service;
 
-import com.kalandyk.api.model.*;
-import com.kalandyk.api.model.wrapers.Debts;
-import com.kalandyk.exception.IllegalDebtOperationException;
+import com.kalandyk.api.model.DebtEventType;
+import com.kalandyk.api.model.DebtState;
+import com.kalandyk.exception.DebtControlException;
+import com.kalandyk.exception.ExceptionType;
 import com.kalandyk.server.neo4j.entity.*;
 import com.kalandyk.server.neo4j.repository.*;
-import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
-
-/**
- * Created by kamil on 1/12/14.
- */
+import java.util.List;
 
 @Service
 @Transactional
-public class DebtService {
+public class DebtService extends AbstractDebtService {
 
     @Autowired
     private Neo4jTemplate neo4jTemplate;
-
     @Autowired
     private DebtRepository debtRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private ConfirmationRepository confirmationRepository;
-
     @Autowired
     private ConfirmationService confirmationService;
-
     @Autowired
     private DebtEventRepository debtEventRepository;
-
     @Autowired
     private DebtHistoryRepository debtHistoryRepository;
 
-    @Autowired
-    private Mapper mapper;
+    public DebtEntity createDebt(UserEntity debtCreator, DebtEntity debt) throws DebtControlException {
+        debtCreator = fetchUser(debtCreator);
 
-    public Debt createDebt(User debtCreator, Debt debt) {
         if (debtExist(debt)) {
             return debt;
         }
-        if (!userExist(debtCreator)) {
-            return null;
+        if (debtCreator == null) {
+            throw new DebtControlException(ExceptionType.DEBT_CREATION_EXCEPTION,
+                    "Creator doesn't exist");
         }
-        //Prepare
-        DebtEntity entityToSave = prepareNewDebtEntity(debt);
-        addRelationToDebtFromUsers(entityToSave);
-        confirmationService.createNewDebtConfirmation(debtCreator, mapper.map(entityToSave, Debt.class));
-        entityToSave = debtRepository.save(prepareEventForDebt(entityToSave, DebtEventType.DEBT_ADDITION_REQUEST));
-        return mapper.map(entityToSave, Debt.class);
-    }
-
-    private DebtEntity prepareEventForDebt(DebtEntity entityToSave, DebtEventType debtEventType) {
-        DebtHistoryEntity historyEntity = entityToSave.getHistory();
-        if(historyEntity == null){
-            historyEntity = new DebtHistoryEntity();
-            historyEntity = debtHistoryRepository.save(historyEntity);
+        if (debt.getCreditor() == null || debt.getDebtor() == null) {
+            throw new DebtControlException(ExceptionType.DEBT_CREATION_EXCEPTION,
+                    "Lack of debtor/creditor in creating debt");
         }
-        DebtEventEntity addingEvent = prepareEvent(debtEventType);
-        historyEntity.addEvent(addingEvent);
-        historyEntity = debtHistoryRepository.save(historyEntity);
-        entityToSave.setHistory(historyEntity);
-        return entityToSave;
+        debt.updateTimestamp();
+        debt.setDebtState(DebtState.NOT_CONFIRMED_DEBT);
+        addRelationToDebtFromUsers(debt);
+        confirmationService.createNewDebtConfirmation(debtCreator, debt);
+        prepareEventForDebt(debt, DebtEventType.DEBT_ADDITION_REQUEST);
+        return debtRepository.save(debt);
     }
 
-    private DebtEventEntity prepareEvent(DebtEventType eventType) {
-        DebtEventEntity debtEvent = new DebtEventEntity();
-        debtEvent.setTime(new Date());
-        debtEvent.setEventType(eventType);
-        DebtEventEntity savedEvent = debtEventRepository.save(debtEvent);
-        return savedEvent;
-    }
-
-    private DebtEntity prepareNewDebtEntity(Debt debt) {
-        DebtEntity entityToSave = mapper.map(debt, DebtEntity.class);
-        entityToSave.updateTimestamp();
-        entityToSave.setDebtState(DebtState.NOT_CONFIRMED_DEBT);
-        //Save
-        entityToSave = debtRepository.save(entityToSave);
-        return entityToSave;
-    }
-
-    private void addRelationToDebtFromUsers(DebtEntity entityToSave) {
-        UserEntity creditor = entityToSave.getCreditor();
-        creditor = userRepository.findOne(creditor.getId());
-        creditor.getSbOwesToUsDebts().add(entityToSave);
-
-        UserEntity debtor = entityToSave.getDebtor();
-        debtor = userRepository.findOne(debtor.getId());
-        debtor.getWeOwesSbDebts().add(entityToSave);
-
-        debtor = userRepository.save(debtor);
-        creditor = userRepository.save(creditor);
-    }
-
-
-    private boolean userExist(User debtCreator) {
-        if (debtCreator.getId() == null) {
-            return false;
-        }
-        UserEntity user = userRepository.findOne(debtCreator.getId());
-        return user != null;
-    }
-
-    public boolean makeDecisionRegardingRepayDebtRequest(Debt debt, boolean decision) throws IllegalDebtOperationException {
-        DebtEntity connectedDebt = mapper.map(debt, DebtEntity.class);
-        connectedDebt = debtRepository.save(connectedDebt);
-
+    public DebtEntity makeDecisionRegardingRepayDebtRequest(DebtEntity debt, boolean decision) throws DebtControlException {
+        debt = refreshDebtAndCheckIfExist(debt);
         if (decision) {
-            connectedDebt.setDebtState(DebtState.CONFIRMED_REPAID_DEBT);
-            connectedDebt = prepareEventForDebt(connectedDebt, DebtEventType.DEBT_APPROVING_REPAYMENT_REQUEST);
+            debt.setDebtState(DebtState.CONFIRMED_REPAID_DEBT);
+            prepareEventForDebt(debt, DebtEventType.DEBT_APPROVING_REPAYMENT_REQUEST);
 
         } else {
-            connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
-            connectedDebt = prepareEventForDebt(connectedDebt, DebtEventType.DEBT_REJECTING_REPAYMENT_REQUEST);
+            debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+            prepareEventForDebt(debt, DebtEventType.DEBT_REJECTING_REPAYMENT_REQUEST);
         }
-        debtRepository.save(connectedDebt);
-        return true;
+        return saveDebt(debt);
     }
 
-    public boolean debtExist(Debt debt) {
+    public List<DebtEntity> getUserDebts(UserEntity user) throws DebtControlException {
+        user = fetchUser(user);
+        List<DebtEntity> debtEntities = new ArrayList<DebtEntity>();
+        for (DebtEntity debt : user.getWeOwesSbDebts()) {
+            refreshDebtAndCheckIfExist(debt);
+            debtEntities.add(debt);
+        }
+
+        for (DebtEntity debt : user.getSbOwesToUsDebts()) {
+            refreshDebtAndCheckIfExist(debt);
+            debtEntities.add(debt);
+        }
+        return debtEntities;
+    }
+
+    public DebtEntity makeDecisionRegardingAddingDebtRequest(DebtEntity debt, boolean decision) throws DebtControlException {
+        debt = refreshDebtAndCheckIfExist(debt);
+        if (!debt.getDebtState().equals(DebtState.NOT_CONFIRMED_DEBT)) {
+            throw new DebtControlException(ExceptionType.DEBT_EDITION_EXCEPTION,
+                    new StringBuilder()
+                            .append("Incorrect debt state changing operation.")
+                            .append("You can request adding debt only on NOT_CONFIRMED_DEBT state not on ")
+                            .append(debt.getDebtState()).toString());
+        }
+        if (decision) {
+            debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+            prepareEventForDebt(debt, DebtEventType.DEBT_ADDITION_APPROVING);
+        } else {
+            debt.setDebtState(DebtState.DELETED);
+            prepareEventForDebt(debt, DebtEventType.DEBT_APPROVING_REPAYMENT_REQUEST);
+        }
+        return saveDebt(debt);
+    }
+
+    public DebtEntity requestDebtRepaying(DebtEntity debt) throws DebtControlException {
+        debt = refreshDebtAndCheckIfExist(debt);
+        if (!debt.getDebtState().equals(DebtState.CONFIRMED_NOT_REPAID_DEBT)) {
+            throw new DebtControlException(ExceptionType.DEBT_EDITION_EXCEPTION,
+                    new StringBuilder()
+                            .append("Incorrect debt state changing operation.")
+                            .append("You can request debt repaying only on CONFIRMED_NOT_REPAID_DEBT state not on ")
+                            .append(debt.getDebtState()).toString());
+
+        }
+        debt.setDebtState(DebtState.CONFIRMED_DEBT_WITH_PENDING_REPAYMENT_APPROVAL);
+        prepareEventForDebt(debt, DebtEventType.DEBT_REPAYMENT_REQUEST);
+        confirmationService.createDebtRepayingConfirmation(debt);
+        return saveDebt(debt);
+    }
+
+    public DebtEntity cancelDebtRepayingRequest(DebtEntity debt) throws DebtControlException {
+        debt = refreshDebtAndCheckIfExist(debt);
+        if (!debt.getDebtState().equals(DebtState.CONFIRMED_DEBT_WITH_PENDING_REPAYMENT_APPROVAL)) {
+            throw new DebtControlException(ExceptionType.DEBT_EDITION_EXCEPTION,
+                    new StringBuilder()
+                            .append("Incorrect debt state changing operation.")
+                            .append("You can request cancel debt repaying ")
+                            .append("only on CONFIRMED_DEBT_WITH_PENDING_REPAYMENT_APPROVAL state ")
+                            .append("not on ").append(debt.getDebtState()).toString());
+        }
+        debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
+        prepareEventForDebt(debt, DebtEventType.DEBT_CANCELING_REPAYMENT_REQUEST);
+        debt = debtRepository.save(debt);
+        removeConnectedConfirmation(debt);
+        return debt;
+    }
+
+    private DebtEntity saveDebt(DebtEntity debt) throws DebtControlException {
+        try {
+            return debtRepository.save(debt);
+        } catch (Exception e) {
+            throw new DebtControlException(ExceptionType.DEBT_EDITION_EXCEPTION, e.getMessage());
+        }
+    }
+
+    private DebtEntity refreshDebtAndCheckIfExist(DebtEntity debt) throws DebtControlException {
+        debt = debtRepository.findOne(debt.getId());
+        if (debt == null) {
+            throw new DebtControlException(ExceptionType.DEBT_EDITION_EXCEPTION, "Editing not existing debt");
+        }
+        return debt;
+    }
+
+    private boolean debtExist(DebtEntity debt) {
         if (debt.getId() == null) {
             return false;
         }
         return debtRepository.findOne(debt.getId()) != null;
     }
 
-
-    public Debts getUserDebts(UserCredentials credentials) {
-        UserEntity user = userRepository.findByLogin(credentials.getLogin());
-        if (user == null) {//|| !user.getPassword().equals(credentials.getPassword())){
-            //TODO: check users credentials
-            return null;
+    private void prepareEventForDebt(DebtEntity debt, DebtEventType debtEventType) {
+        DebtHistoryEntity historyEntity = debt.getHistory();
+        if (historyEntity == null) {
+            historyEntity = new DebtHistoryEntity();
+            historyEntity = debtHistoryRepository.save(historyEntity);
         }
-
-        Debts debts = new Debts();
-        for (DebtEntity debt : user.getWeOwesSbDebts()) {
-            debt = debtRepository.findOne(debt.getId());
-            Debt debtToAdd = mapper.map(debt, Debt.class);
-            debtToAdd.setDebtPosition(DebtPosition.DEBTOR);
-            debts.getDebts().add(debtToAdd);
-        }
-
-        for (DebtEntity debt : user.getSbOwesToUsDebts()) {
-            debt = debtRepository.findOne(debt.getId());
-            Debt debtToAdd = mapper.map(debt, Debt.class);
-            debtToAdd.setDebtPosition(DebtPosition.CREDITOR);
-            debts.getDebts().add(debtToAdd);
-        }
-
-
-        return debts;
+        DebtEventEntity addingEvent = prepareEvent(debtEventType);
+        historyEntity.addEvent(addingEvent);
+        historyEntity = debtHistoryRepository.save(historyEntity);
+        debt.setHistory(historyEntity);
     }
 
-    public void makeDecisionRegardingAddingDebtRequest(Debt debt, boolean decision) {
-        DebtEntity connectedDebt = mapper.map(debt, DebtEntity.class);
-        connectedDebt = debtRepository.save(connectedDebt);
-
-        if (decision) {
-            connectedDebt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
-            connectedDebt = prepareEventForDebt(connectedDebt, DebtEventType.DEBT_APPROVING_REPAYMENT_REQUEST);
-        } else {
-            connectedDebt.setDebtState(DebtState.DELETED);
-            connectedDebt = prepareEventForDebt(connectedDebt, DebtEventType.DEBT_APPROVING_REPAYMENT_REQUEST);
-        }
-
-        debtRepository.save(connectedDebt);
+    private DebtEventEntity prepareEvent(DebtEventType eventType) {
+        DebtEventEntity debtEvent = new DebtEventEntity();
+        debtEvent.setTime(new Date());
+        debtEvent.setEventType(eventType);
+        return debtEventRepository.save(debtEvent);
     }
 
-    public Debt requestDebtRepaying(Debt debt) {
-        if (debt == null) {
-            return null;
+    private void addRelationToDebtFromUsers(DebtEntity debt) throws DebtControlException {
+        UserEntity creditor = fetchUser(debt.getCreditor());
+        creditor.getSbOwesToUsDebts().add(debt);
+        UserEntity debtor = fetchUser(debt.getDebtor());
+        debtor.getWeOwesSbDebts().add(debt);
+
+        try {
+            userRepository.save(debtor);
+            userRepository.save(creditor);
+        } catch (Exception e) {
+            throw new DebtControlException(ExceptionType.CONFIRMATION_CREATION_EXCEPTION,
+                    new StringBuilder()
+                            .append("Error with adding relation to users from debt.")
+                            .append("Details:").append(e.getMessage()).toString()
+            );
         }
-        DebtEntity debtEntity = mapper.map(debt, DebtEntity.class);
-        debtEntity = debtRepository.findOne(debtEntity.getId());
-
-        if (!debtEntity.getDebtState().equals(DebtState.CONFIRMED_NOT_REPAID_DEBT)) {
-            return null;
-        }
-
-        debtEntity.setDebtState(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT);
-        debtEntity = debtRepository.save(debtEntity);
-
-        debt = mapper.map(debtEntity, Debt.class);
-        confirmationService.createDebtRepayingConfirmation(debt);
-
-        return debt;
     }
 
-    public Debt cancelDebtRepayingRequest(Debt debt) {
-        if (!debt.getDebtState().equals(DebtState.CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT)) {
-            //TODO: raise some exception
-        }
-        debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
-        DebtEntity savedDebt = mapper.map(debt, DebtEntity.class);
-        savedDebt = debtRepository.save(savedDebt);
-        removeConnectedConfirmation(savedDebt);
-        return mapper.map(savedDebt, Debt.class);
+    private UserEntity fetchUser(UserEntity creditor) {
+        return userRepository.findOne(creditor.getId());
     }
 
     private void removeConnectedConfirmation(DebtEntity savedDebt) {
-        UserEntity creditor = userRepository.findOne(savedDebt.getCreditor().getId());
+        UserEntity creditor = fetchUser(savedDebt.getCreditor());
         ConfirmationEntity confirmationToRemove = null;
         for (ConfirmationEntity confirmation : creditor.getConfirmations()) {
             confirmation = confirmationRepository.findOne(confirmation.getId());

@@ -1,9 +1,6 @@
 package com.kalandyk.api.model;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Debt extends AbstractModel {
 
@@ -14,6 +11,7 @@ public class Debt extends AbstractModel {
     private Date creationDate;
     private DebtState debtState;
     private DebtType debtType;
+
     private User debtor;
     private User creditor;
 
@@ -25,7 +23,7 @@ public class Debt extends AbstractModel {
     //private Set<DebtEvent> events;
 
     public Debt() {
-       // events = new HashSet<DebtEvent>();
+        // events = new HashSet<DebtEvent>();
     }
 
     public DebtState getDebtState() {

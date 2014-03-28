@@ -1,9 +1,10 @@
 package com.kalandyk.server.service;
 
 import com.kalandyk.api.model.User;
+import com.kalandyk.exception.DebtControlException;
+import com.kalandyk.exception.ExceptionType;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.UserRepository;
-
 import org.dozer.Mapper;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -13,9 +14,7 @@ import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,76 +27,58 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private Neo4jTemplate neo4jTemplate;
-
     @Autowired
     private Mapper mapper;
 
-    public User createUser(User user) {
-        UserEntity toSave = new UserEntity(user);
-        UserEntity alreadyExist = userRepository.findByLogin(toSave.getLogin());
-        if(alreadyExist != null){
-            return mapper.map(alreadyExist, User.class);
+    public UserEntity createUser(UserEntity user) throws DebtControlException {
+        if (userRepository.findByLogin(user.getLogin()) != null) {
+            throw new DebtControlException(ExceptionType.DEBT_CREATION_EXCEPTION,
+                    "User with that login already exist (" + user.getLogin() + ")");
         }
-        UserEntity savedUser = userRepository.save(toSave);
-        Node savedNode = getNodeById(savedUser.getId());
-        addRelationToRootNode(savedNode);
-        return mapper.map(savedUser, User.class);
+        user = userRepository.save(user);
+        //addRelationToRootNode(user);
+        return user;
     }
 
-    public boolean acceptAddingToFriendRequest(User decisionUser, User requesterUser) {
-        UserEntity requester = userRepository.findOne(requesterUser.getId());
-        UserEntity decisionMaker = userRepository.findOne(decisionUser.getId());
+    public UserEntity makeDecisionRegardingFriendshipRequest(UserEntity approver, UserEntity requester, Boolean decision) throws DebtControlException {
+        requester = fetchUser(requester);
+        approver = fetchUser(approver);
 
-        Set<UserEntity> requests = decisionMaker.getFriendshipInvitation();
+        Set<UserEntity> requests = approver.getFriendshipInvitation();
         if (!requests.contains(requester)) {
-            return false;
+            throw new DebtControlException(ExceptionType.USER_EDITING_EXCEPTION,
+                    new StringBuilder()
+                            .append("Error with approving friendship request: ")
+                            .append("User ").append(approver.getLogin())
+                            .append(" doesn't have invitation from user ")
+                            .append(requester.getLogin()).toString());
         }
-        return addToFriends(requester, decisionMaker);
+
+        if (decision) {
+            approver.getFriends().add(requester);
+            requester.getFriends().add(approver);
+        }
+
+        approver.getFriendshipInvitation().remove(requester);
+        requester.getOutgoingFriendshipInvitation().remove(approver);
+        requester = saveUser(requester);
+        return saveUser(approver);
     }
 
-    public boolean cancelAddingToFriendRequest(User decisionUser, User requesterUser){
-        UserEntity requester = userRepository.findOne(requesterUser.getId());
-        UserEntity decisionMaker = userRepository.findOne(decisionUser.getId());
-
-        Set<UserEntity> requests = decisionMaker.getFriendshipInvitation();
-        requests.remove(requester);
-
-        decisionMaker = userRepository.save(decisionMaker);
-        return decisionMaker != null;
-    }
-
-    public boolean createAddingToFriendRequest(User decisionUser, User requesterUser){
-        UserEntity requester = userRepository.findOne(requesterUser.getId());
-        UserEntity decisionMaker = userRepository.findOne(decisionUser.getId());
-
-        Set<UserEntity> requests = decisionMaker.getFriendshipInvitation();
-        requests.add(requester);
-
-        decisionMaker = userRepository.save(decisionMaker);
-        return decisionMaker != null;
-    }
-
-    private boolean addToFriends(UserEntity requester, UserEntity decisionMaker) {
-
-        Set<UserEntity> approverFriends = decisionMaker.getFriends();
-        Set<UserEntity> requesterFriends = requester.getFriends();
-        requesterFriends.add(decisionMaker);
-        approverFriends.add(requester);
-
-        Set<UserEntity> requests = decisionMaker.getFriendshipInvitation();
-        boolean removed = requests.remove(requester);
-
-        decisionMaker = userRepository.save(decisionMaker);
-        requester = userRepository.save(requester);
-        return removed && decisionMaker != null && requester != null;
+    public UserEntity createAddingToFriendRequest(UserEntity targetPerson, UserEntity requester) throws DebtControlException {
+        targetPerson = fetchUser(targetPerson);
+        requester = fetchUser(requester);
+        requester.getOutgoingFriendshipInvitation().add(targetPerson);
+        targetPerson.getFriendshipInvitation().add(requester);
+        saveUser(targetPerson);
+        return saveUser(requester);
     }
 
     public User findUserByLogin(String username) {
         UserEntity byUsername = userRepository.findByLogin(username);
-        if(byUsername == null){
+        if (byUsername == null) {
             return null;
         }
         return mapper.map(byUsername, User.class);
@@ -106,7 +87,7 @@ public class UserService {
     public Set<User> findUserFriendsByLogin(String login) {
         Set<User> usersFriends = new HashSet<User>();
         UserEntity user = userRepository.findByLogin(login);
-        for(UserEntity friend : user.getFriends()){
+        for (UserEntity friend : user.getFriends()) {
             UserEntity friendFetched = userRepository.findOne(friend.getId());
             usersFriends.add(mapper.map(friendFetched, User.class));
         }
@@ -115,36 +96,55 @@ public class UserService {
 
     public User authenticateUser(String login, String password) {
         UserEntity user = userRepository.findByLogin(login);
-        if(user == null){
+        if (user == null) {
             return null;
         }
 
-        if( user.getPassword() != null && !user.getPassword().equals(password)){
+        if (user.getPassword() != null && !user.getPassword().equals(password)) {
             return null;
         }
 
         return mapper.map(user, User.class);
     }
 
-
-    enum RelationFromRootToUsers implements RelationshipType {
-        EXIST_USER
+    private UserEntity saveUser(UserEntity requester) throws DebtControlException {
+        try {
+            return userRepository.save(requester);
+        } catch (Exception e) {
+            throw new DebtControlException(ExceptionType.USER_EDITING_EXCEPTION,
+                    new StringBuilder()
+                            .append("Error with saving user.")
+                            .append("Details: ").append(e.getMessage())
+                            .toString());
+        }
     }
 
-    private Relationship addRelationToRootNode(Node node) {
+    private UserEntity fetchUser(UserEntity userEntity) throws DebtControlException {
+        UserEntity user = userRepository.findOne(userEntity.getId());
+        if (user == null) {
+            throw new DebtControlException(ExceptionType.USER_EDITING_EXCEPTION,
+                    new StringBuilder()
+                            .append("User doesn't exist:").append(userEntity)
+                            .toString());
+        }
+        return user;
+    }
+
+    private Relationship addRelationToRootNode(UserEntity user) {
+        Node node = getNodeById(user.getId());
         Relationship relationshipTo = getRootNode().createRelationshipTo(node, RelationFromRootToUsers.EXIST_USER);
         return relationshipTo;
     }
 
     private Node getRootNode() {
         return neo4jTemplate.getGraphDatabaseService().getNodeById(0l);
-
     }
 
     private Node getNodeById(long id) {
         return neo4jTemplate.getGraphDatabaseService().getNodeById(id);
-
     }
 
-
+    enum RelationFromRootToUsers implements RelationshipType {
+        EXIST_USER
+    }
 }

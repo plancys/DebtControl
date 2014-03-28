@@ -51,4 +51,8 @@ public class DebtUrls {
     public String getCancelRepayingRequestUrl() {
         return baseUrl + activity.getString(R.string.url_cancel_debt_request_repaying);
     }
+
+    public String getRegisterUrl(){
+        return baseUrl + activity.getString(R.string.url_register);
+    }
 }

@@ -78,7 +78,7 @@ public class DebtStateObject {
             case CONFIRMED_NOT_REPAID_DEBT:
                 debtActions.add(new DebtPayOffActionWithConfirmation(activity));
                 break;
-            case CONFIRMED_DEBT_WITH_NO_CONFIRMED_REPAYMENT:
+            case CONFIRMED_DEBT_WITH_PENDING_REPAYMENT_APPROVAL:
                 debtActions.add(new DebtCancelPaidOfRequestAction(activity));
                 break;
             case CONFIRMED_REPAID_DEBT:

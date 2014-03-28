@@ -67,7 +67,7 @@ public class DetailsArrayAdapter extends ArrayAdapter<DebtEvent> {
             case DEBT_ADDITION_REJECTING:
                 message = activity.getString(R.string.details_debt_addition_reject, item.getEventCreator().getLogin());
                 break;
-            case DEBT_REQUEST_REPAY:
+            case DEBT_REPAYMENT_REQUEST:
                 message = activity.getString(R.string.details_debt_request_repaying, item.getEventCreator().getLogin());
                 break;
             case DEBT_APPROVING_REPAYMENT_REQUEST:

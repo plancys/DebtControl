@@ -2,6 +2,7 @@ package com.kalandyk.api.model.wrapers;
 
 import com.kalandyk.api.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,9 @@ public class Friends {
     }
 
     public List<User> getFriends() {
+        if (friends == null) {
+            friends = new ArrayList<User>();
+        }
         return friends;
     }
 

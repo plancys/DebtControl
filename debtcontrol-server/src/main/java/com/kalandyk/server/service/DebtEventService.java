@@ -4,19 +4,15 @@ import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtEvent;
 import com.kalandyk.api.model.DebtEventType;
 import com.kalandyk.api.model.User;
-import com.kalandyk.server.neo4j.entity.DebtEntity;
 import com.kalandyk.server.neo4j.entity.DebtEventEntity;
 import com.kalandyk.server.neo4j.entity.DebtHistoryEntity;
-import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.DebtEventRepository;
 import com.kalandyk.server.neo4j.repository.DebtHistoryRepository;
-
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,14 +23,12 @@ public class DebtEventService {
 
     @Autowired
     private Mapper mapper;
-
     @Autowired
     private DebtEventRepository debtEventRepository;
-
     @Autowired
     private DebtHistoryRepository debtHistoryRepository;
 
-    public List<DebtEvent> createEvent(User debtCreator, Debt debt, DebtEventType debtEventType){
+    public List<DebtEvent> createEvent(User debtCreator, Debt debt, DebtEventType debtEventType) {
         //TODO: implement this
 //        //DebtHistoryEntity debtHistoryEntity = mapper.map(debt, DebtEntity.class).getHistory();
 //        //debtHistoryEntity.updateTimestamp();
@@ -56,7 +50,7 @@ public class DebtEventService {
 
     private List<DebtEvent> getConvertedDebtEvents(DebtHistoryEntity debtHistoryEntity) {
         List<DebtEvent> events = new ArrayList<DebtEvent>();
-        for(DebtEventEntity debtEvent : debtHistoryEntity.getEvents()){
+        for (DebtEventEntity debtEvent : debtHistoryEntity.getEvents()) {
             DebtEvent mapped = mapper.map(debtEvent, DebtEvent.class);
             events.add(mapped);
         }

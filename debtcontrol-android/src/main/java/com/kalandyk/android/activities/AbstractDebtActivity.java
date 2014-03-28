@@ -20,6 +20,7 @@ import com.kalandyk.android.utils.SharedPreferencesBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,18 +32,12 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
     public static final String TAG = "com.kalandyk.debtcontrol";
-
+    protected AbstractFragment currentFragment;
     //wrapper class for data cached in phone
     private DebtDataContainer cachedData;
-
-    protected AbstractFragment currentFragment;
-
     private Stack<Fragment> fragmentStack;
-
     private ProgressDialog progressDialog;
-
     private TextView confirmationAmountTextView;
-
     private ScheduledExecutorService scheduler;
 
     @Override
@@ -68,34 +63,6 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         return alertDialog;
     }
 
-    private void initScheduler() {
-        scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate
-                (getSchedulerTask(), 0, 1, TimeUnit.MINUTES);
-    }
-
-    private Runnable getSchedulerTask() {
-        return new Runnable() {
-            public void run() {
-                Log.d(TAG, "----> Updating task executed");
-                //TODO: refreshLists(); For now it isn't working, only clears list
-
-            }
-        };
-    }
-
-    private void refreshLists() {
-        AbstractArrayAdapter fragmentArrayAdapter = currentFragment.getFragmentArrayAdapter();
-        if (fragmentArrayAdapter != null) {
-            fragmentArrayAdapter.refreshDataInList();
-        }
-    }
-
-    private void showProgressDialog() {
-        progressDialog = getProgressDialog(getString(R.string.progress_dialog_fetching_data));
-        progressDialog.show();
-    }
-
     public void replaceFragment(AbstractFragment fragment) {
         replaceFragment(fragment, false);
     }
@@ -107,31 +74,6 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
         currentFragment = fragment;
     }
-
-    private void replaceFragment(AbstractFragment fragment, boolean fragmentTakenFromFragmentsStack) {
-        if (currentFragment != null && !fragmentTakenFromFragmentsStack) {
-
-            Iterator<Fragment> iterator = fragmentStack.iterator();
-            Fragment fragmentToRemove = null;
-            while (iterator.hasNext()) {
-                Fragment next = iterator.next();
-                if (next.getClass().equals(fragment.getClass())) {
-                    fragmentToRemove = next;
-                }
-            }
-            if (fragmentToRemove != null) {
-                fragmentStack.remove(fragmentToRemove);
-            }
-
-
-            fragmentStack.add(currentFragment);
-        }
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-        currentFragment = fragment;
-    }
-
-    protected abstract AbstractFragment getContentFragment();
 
     public void onMenuButtonClick(View view) {
         Button button = (Button) view;
@@ -203,19 +145,8 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
     public RestTemplate getRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        //List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        //messageConverters.add(new FormHttpMessageConverter());
-        // messageConverters.add(new StringHttpMessageConverter());
-        // messageConverters.add(new MappingJacksonHttpMessageConverter());
-//        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        //restTemplate.setMessageConverters(messageConverters);
-        //restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
-        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
-
-        //RestTemplate restTemplate = new RestTemplate();
-
+        System.setProperty("http.keepAlive", "false");
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         return restTemplate;
     }
@@ -226,10 +157,62 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         }
     }
 
-    public Long generateOfflineDebtId(){
+    public Long generateOfflineDebtId() {
         return sharedPreferencesBuilder.generateOfflineDebtId();
     }
 
+    protected abstract AbstractFragment getContentFragment();
+
+    private void initScheduler() {
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate
+                (getSchedulerTask(), 0, 1, TimeUnit.MINUTES);
+    }
+
+    private Runnable getSchedulerTask() {
+        return new Runnable() {
+            public void run() {
+                Log.d(TAG, "----> Updating task executed");
+                //TODO: refreshLists(); For now it isn't working, only clears list
+
+            }
+        };
+    }
+
+    private void refreshLists() {
+        AbstractArrayAdapter fragmentArrayAdapter = currentFragment.getFragmentArrayAdapter();
+        if (fragmentArrayAdapter != null) {
+            fragmentArrayAdapter.refreshDataInList();
+        }
+    }
+
+    private void showProgressDialog() {
+        progressDialog = getProgressDialog(getString(R.string.progress_dialog_fetching_data));
+        progressDialog.show();
+    }
+
+    private void replaceFragment(AbstractFragment fragment, boolean fragmentTakenFromFragmentsStack) {
+        if (currentFragment != null && !fragmentTakenFromFragmentsStack) {
+
+            Iterator<Fragment> iterator = fragmentStack.iterator();
+            Fragment fragmentToRemove = null;
+            while (iterator.hasNext()) {
+                Fragment next = iterator.next();
+                if (next.getClass().equals(fragment.getClass())) {
+                    fragmentToRemove = next;
+                }
+            }
+            if (fragmentToRemove != null) {
+                fragmentStack.remove(fragmentToRemove);
+            }
+
+
+            fragmentStack.add(currentFragment);
+        }
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        currentFragment = fragment;
+    }
 
     private class LoadDataFromServerTask extends AbstractDebtTask<DebtDataContainer, Void, DebtDataContainer> {
 

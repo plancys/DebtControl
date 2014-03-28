@@ -1,31 +1,25 @@
-package com.kalandyk.server;
+package com.kalandyk.server.service;
 
-import com.kalandyk.server.service.UserService;
-import org.junit.Ignore;
+import org.dozer.Mapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Created by kamil on 2/24/14.
- */
-@Ignore
-@TransactionConfiguration(defaultRollback = true)
-@ContextConfiguration
-@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserServiceTest {
+@ContextConfiguration({"/DebtControlTest-context.xml"})
+@Transactional
+public class UserServiceIntegrationTest {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private Mapper mapper;
 
     @Test
-    public void test(){
-        userService.createUser(null);
+    public void shouldCreateUser() {
     }
 
 }

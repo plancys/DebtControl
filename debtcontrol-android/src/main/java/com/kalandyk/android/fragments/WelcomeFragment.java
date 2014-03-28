@@ -19,6 +19,7 @@ import com.kalandyk.android.utils.PasswordDecoder;
 import com.kalandyk.api.model.User;
 import com.kalandyk.api.model.UserCredentials;
 
+import com.kalandyk.api.model.security.PasswordUtils;
 import com.kalandyk.api.model.wrapers.Friends;
 
 /**
@@ -53,14 +54,14 @@ public class WelcomeFragment extends AbstractFragment {
             public void onClick(View view) {
                 String login = loginEditText.getText().toString();
                 String plainPassword = passwordEditText.getText().toString();
-                String encodedPassword = PasswordDecoder.encodePassword(plainPassword);
-                WelcomeFragment.this.login(login, encodedPassword);
+                String decodedPassword = PasswordUtils.getHashFromPassword(plainPassword);
+                WelcomeFragment.this.login(login, decodedPassword);
             }
         });
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Go to registration
+                getAbstractDebtActivity().replaceFragment(new RegisterFragment());
             }
         });
         progressDialog = getAbstractDebtActivity().getProgressDialog("Application is logging to server");

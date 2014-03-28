@@ -4,26 +4,19 @@ import com.kalandyk.api.model.FriendshipRequest;
 import com.kalandyk.api.model.User;
 import com.kalandyk.api.model.UserCredentials;
 import com.kalandyk.api.model.wrapers.Friends;
+import com.kalandyk.exception.DebtControlException;
+import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.UserRepository;
 import com.kalandyk.server.service.UserService;
-
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-/**
- * Created by kamil on 1/5/14.
- */
 
 @Controller
 @RequestMapping("/users")
@@ -32,12 +25,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private Neo4jTemplate neo4jTemplate;
+    private Mapper mapper;
 
     @RequestMapping(value = "getUserByLogin/{login}", method = RequestMethod.GET)
     @ResponseBody
@@ -48,52 +39,63 @@ public class UserController {
     @RequestMapping(value = "getUsersFriends/{login}", method = RequestMethod.GET)
     @ResponseBody
     public Friends getUsersFriends(@PathVariable String login) {
-        Set<User> userFriendsByLogin = userService.findUserFriendsByLogin(login);
         //TODO: create some abstract method for this
-        List<User> friends = new ArrayList<User>();
-        for(User user: userFriendsByLogin){
-            friends.add(user);
-        }
         Friends friendsObj = new Friends();
-        friendsObj.setFriends(friends);
-
+        for (User user : userService.findUserFriendsByLogin(login)) {
+            friendsObj.getFriends().add(user);
+        }
         return friendsObj;
     }
 
     @RequestMapping(value = "createUser", method = RequestMethod.POST)
     @ResponseBody
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public User createUser(@RequestBody User user) throws DebtControlException {
+        UserEntity userEntity = mapToEntity(user);
+        userEntity = userService.createUser(userEntity);
+        return mapToDTO(userEntity);
     }
 
     @RequestMapping(value = "addFriend", method = RequestMethod.POST)
     @ResponseBody
-    public boolean createFriendshipRequest(@RequestBody FriendshipRequest request) {
-        return userService.createAddingToFriendRequest(request.getTarget(), request.getRequester());
+    //TODO: change in android from Boolean to User
+    public User createFriendshipRequest(@RequestBody FriendshipRequest request) throws DebtControlException {
+        UserEntity user = userService
+                .createAddingToFriendRequest(mapToEntity(request.getTarget()), mapToEntity(request.getRequester()));
+        return mapToDTO(user);
     }
 
     @RequestMapping(value = "acceptFriendshipRequest", method = RequestMethod.POST)
     @ResponseBody
-    public boolean acceptFriendshipRequest(@RequestBody FriendshipRequest request) {
-        return userService.acceptAddingToFriendRequest(request.getTarget(), request.getRequester());
+    //TODO: change in android from Boolean to User
+    public User acceptFriendshipRequest(@RequestBody FriendshipRequest request) throws DebtControlException {
+        UserEntity requester = mapToEntity(request.getRequester());
+        UserEntity approver = mapToEntity(request.getTarget());
+        approver = userService.makeDecisionRegardingFriendshipRequest(approver, requester, true);
+        return mapToDTO(approver);
     }
 
     @RequestMapping(value = "cancelFriendshipRequest", method = RequestMethod.POST)
     @ResponseBody
-    public boolean cancelFriendshipRequest(@RequestBody FriendshipRequest request) {
-        return userService.cancelAddingToFriendRequest(request.getTarget(), request.getRequester());
-    }
-
-    @RequestMapping(value = "getUserDebtSum", method = RequestMethod.GET)
-    @ResponseBody
-    public Long getUserDebt() {
-        return userRepository.getUsersDebt(userRepository.findByLogin("test1"));
+    //TODO: change in android from Boolean to User
+    public User cancelFriendshipRequest(@RequestBody FriendshipRequest request) throws DebtControlException {
+        UserEntity requester = mapToEntity(request.getRequester());
+        UserEntity approver = mapToEntity(request.getTarget());
+        approver = userService.makeDecisionRegardingFriendshipRequest(approver, requester, true);
+        return mapToDTO(approver);
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
     public User login(@RequestBody UserCredentials credentials) {
         return userService.authenticateUser(credentials.getLogin(), credentials.getPassword());
+    }
+
+    private UserEntity mapToEntity(User user) {
+        return mapper.map(user, UserEntity.class);
+    }
+
+    private User mapToDTO(UserEntity approver) {
+        return mapper.map(approver, User.class);
     }
 
 

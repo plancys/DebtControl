@@ -2,8 +2,8 @@
 <resources>
 
     <!--       U R L ' s         -->
-    <!--<string name="url_base">http://192.168.0.22:8080/</string>-->
-    <string name="url_base">http://185.25.150.219:8080/debtcontrol-server/</string>
+    <string name="url_base">http://192.168.0.22:8080/</string>
+    <!--<string name="url_base">http://185.25.150.219:8080/debtcontrol-server/</string>-->
     <string name="url_add_user"></string>
     <string name="url_add_debt">debts/createDebt</string>
     <string name="url_get_user_debts">debts/getUserDebts</string>
@@ -94,6 +94,13 @@
     <string name="progress_dialog_fetching_data">Fetching data from server.</string>
     <string name="bottom_button_debt_list">DEBT LIST</string>
     <string name="refresh">Refresh</string>
+    <string name="register_desc">Create account and be on touch with your finances.</string>
+    <string name="register_title">Registration</string>
+    <string name="email_label">Email:</string>
+    <string name="login_label">Login:</string>
+    <string name="password_label">Password:</string>
+    <string name="password_confirm_label">Confirm password:</string>
+    <string name="url_register">users/createUser</string>
 
 
 </resources>
