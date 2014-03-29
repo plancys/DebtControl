@@ -10,24 +10,16 @@ import com.kalandyk.api.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kamil on 1/19/14.
- */
 public class DebtDataContainer {
 
     private AbstractDebtActivity activity;
-
     private SharedPreferencesBuilder sharedPreferencesBuilder;
-
     private User loggedUser;
-
     //debts with confirmation
     private List<Debt> offlineDebts;
     //debts without confirmation
     private List<Debt> onlineDebts;
-
     private List<Confirmation> confirmations;
-
     private List<User> friends;
     private List<Debt> debts;
 
@@ -37,16 +29,8 @@ public class DebtDataContainer {
         initializeData();
     }
 
-    private void initializeData() {
-        setLoggedUser(sharedPreferencesBuilder.loadCurrentUser());
-        setFriends(sharedPreferencesBuilder.loadFriends());
-        //TODO: add synchronization with server
-        //setOnlineDebts(sharedPreferencesBuilder.loadOnlineDebts());
-        setOfflineDebts(sharedPreferencesBuilder.loadOfflineDebts());
-        setConfirmations(sharedPreferencesBuilder.loadConfirmations());
+    private DebtDataContainer() {
     }
-
-    private DebtDataContainer(){}
 
     public User getLoggedUser() {
         return loggedUser;
@@ -58,23 +42,11 @@ public class DebtDataContainer {
     }
 
     public List<Debt> getOnlineDebts() {
-        if(onlineDebts == null){
+        if (onlineDebts == null) {
             onlineDebts = new ArrayList<Debt>();
         }
         removeDeletedDebts(onlineDebts);
         return onlineDebts;
-    }
-
-    private void removeDeletedDebts(List<Debt> onlineDebts) {
-        List<Debt> toDelete = new ArrayList<Debt>();
-        for(Debt debt : onlineDebts){
-            if(debt.getDebtState().equals(DebtState.DELETED))
-                toDelete.add(debt);
-        }
-
-        for(Debt debt : toDelete){
-            onlineDebts.remove(debt);
-        }
     }
 
     public void setOnlineDebts(List<Debt> onlineDebts) {
@@ -82,15 +54,21 @@ public class DebtDataContainer {
     }
 
     public List<Confirmation> getConfirmations() {
+        if (confirmations == null) {
+            confirmations = new ArrayList<Confirmation>();
+        }
         return confirmations;
     }
 
     public void setConfirmations(List<Confirmation> confirmations) {
         this.confirmations = confirmations;
-       //TODO: activity.setNotificationCounter(getConfirmations().size());
+        //TODO: activity.setNotificationCounter(getConfirmations().size());
     }
 
     public List<User> getFriends() {
+        if (friends == null) {
+            friends = new ArrayList<User>();
+        }
         return friends;
     }
 
@@ -100,7 +78,7 @@ public class DebtDataContainer {
     }
 
     public List<Debt> getOfflineDebts() {
-        if(offlineDebts == null){
+        if (offlineDebts == null) {
             offlineDebts = new ArrayList<Debt>();
         }
         return offlineDebts;
@@ -111,7 +89,7 @@ public class DebtDataContainer {
     }
 
     public List<Debt> getDebts() {
-        if(debts == null){
+        if (debts == null) {
             debts = new ArrayList<Debt>();
         }
         debts.clear();
@@ -129,5 +107,26 @@ public class DebtDataContainer {
     public void addOfflineDebt(Debt result) {
         getOfflineDebts().add(result);
         sharedPreferencesBuilder.saveOfflineDebts(getOfflineDebts());
+    }
+
+    private void initializeData() {
+        setLoggedUser(sharedPreferencesBuilder.loadCurrentUser());
+        //setFriends(sharedPreferencesBuilder.loadFriends());
+        //TODO: add synchronization with server
+        //setOnlineDebts(sharedPreferencesBuilder.loadOnlineDebts());
+        //setOfflineDebts(sharedPreferencesBuilder.loadOfflineDebts());
+        //setConfirmations(sharedPreferencesBuilder.loadConfirmations());
+    }
+
+    private void removeDeletedDebts(List<Debt> onlineDebts) {
+        List<Debt> toDelete = new ArrayList<Debt>();
+        for (Debt debt : onlineDebts) {
+            if (debt.getDebtState().equals(DebtState.DELETED))
+                toDelete.add(debt);
+        }
+
+        for (Debt debt : toDelete) {
+            onlineDebts.remove(debt);
+        }
     }
 }

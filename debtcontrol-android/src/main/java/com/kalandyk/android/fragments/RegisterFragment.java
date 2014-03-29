@@ -1,8 +1,6 @@
 package com.kalandyk.android.fragments;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +20,6 @@ import com.kalandyk.api.model.security.PasswordUtils;
 public class RegisterFragment extends AbstractFragment {
 
     private EditText email;
-    private EditText login;
     private EditText password;
     private EditText passwordConfirmation;
     private Button registerButton;
@@ -61,7 +58,6 @@ public class RegisterFragment extends AbstractFragment {
 
     private User prepareUserObject() {
         User user = new User();
-        user.setLogin(login.getText().toString());
         user.setEmail(email.getText().toString());
         String decodedPassword = PasswordUtils.getHashFromPassword(password.getText().toString());
         user.setPassword(decodedPassword);
@@ -71,7 +67,6 @@ public class RegisterFragment extends AbstractFragment {
     private void initUIItems(View view) {
         email = (EditText) view.findViewById(R.id.et_email);
         email.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        login = (EditText) view.findViewById(R.id.et_login);
         password = (EditText) view.findViewById(R.id.et_password);
         passwordConfirmation = (EditText) view.findViewById(R.id.et_password_confirmation);
         registerButton = (Button) view.findViewById(R.id.bt_register);

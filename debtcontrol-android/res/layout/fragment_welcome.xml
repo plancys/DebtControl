@@ -46,11 +46,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:text="Login:"
+                android:text="@string/label_email"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <EditText
-                android:id="@+id/et_login"
+                android:id="@+id/et_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

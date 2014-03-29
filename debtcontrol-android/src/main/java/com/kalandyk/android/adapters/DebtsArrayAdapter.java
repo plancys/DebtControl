@@ -141,9 +141,9 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
     private String getDebtMessageForDebtWithConfirmation(Debt currentDebt) {
         String message = null;
         if (currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)) {
-            message = activity.getString(R.string.debt_you_owe, currentDebt.getCreditor().getLogin(), currentDebt.getAmount());
+            message = activity.getString(R.string.debt_you_owe, currentDebt.getCreditor().getEmail(), currentDebt.getAmount());
         } else {
-            message = activity.getString(R.string.debt_you_lend, currentDebt.getDebtor().getLogin(), currentDebt.getAmount());
+            message = activity.getString(R.string.debt_you_lend, currentDebt.getDebtor().getEmail(), currentDebt.getAmount());
         }
         return message;
     }

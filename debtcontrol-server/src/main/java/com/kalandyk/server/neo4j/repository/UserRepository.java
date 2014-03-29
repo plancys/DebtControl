@@ -9,7 +9,7 @@ public interface UserRepository extends GraphRepository<UserEntity> {
 
     UserEntity findOne(Long id);
 
-    UserEntity findByLogin(String name);
+    UserEntity findByEmail(String name);
 
     @Query("START user={0} MATCH user<-[:HAS_DEBTOR]-debt RETURN sum(debt.amount)")
     Long getUsersDebt(UserEntity userEntity);

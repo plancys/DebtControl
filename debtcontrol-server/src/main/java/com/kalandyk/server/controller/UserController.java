@@ -87,7 +87,7 @@ public class UserController {
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
     public User login(@RequestBody UserCredentials credentials) throws DebtControlException {
-        return userService.authenticateUser(credentials.getLogin(), credentials.getPassword());
+        return userService.authenticateUser(credentials.getEmail(), credentials.getPassword());
     }
 
     private UserEntity mapToEntity(User user) {

@@ -33,9 +33,9 @@ public class UserService {
     private Mapper mapper;
 
     public UserEntity createUser(UserEntity user) throws DebtControlException {
-        if (userRepository.findByLogin(user.getLogin()) != null) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new DebtControlException(ExceptionType.DEBT_CREATION_EXCEPTION,
-                    "User with that login already exist (" + user.getLogin() + ")");
+                    "User with that login already exist (" + user.getEmail() + ")");
         }
         user = userRepository.save(user);
         //addRelationToRootNode(user);
@@ -51,9 +51,9 @@ public class UserService {
             throw new DebtControlException(ExceptionType.USER_EDITING_EXCEPTION,
                     new StringBuilder()
                             .append("Error with approving friendship request: ")
-                            .append("User ").append(approver.getLogin())
+                            .append("User ").append(approver.getEmail())
                             .append(" doesn't have invitation from user ")
-                            .append(requester.getLogin()).toString());
+                            .append(requester.getEmail()).toString());
         }
 
         if (decision) {
@@ -77,7 +77,7 @@ public class UserService {
     }
 
     public User findUserByLogin(String username) {
-        UserEntity byUsername = userRepository.findByLogin(username);
+        UserEntity byUsername = userRepository.findByEmail(username);
         if (byUsername == null) {
             return null;
         }
@@ -86,7 +86,7 @@ public class UserService {
 
     public Set<User> findUserFriendsByLogin(String login) {
         Set<User> usersFriends = new HashSet<User>();
-        UserEntity user = userRepository.findByLogin(login);
+        UserEntity user = userRepository.findByEmail(login);
         for (UserEntity friend : user.getFriends()) {
             UserEntity friendFetched = userRepository.findOne(friend.getId());
             usersFriends.add(mapper.map(friendFetched, User.class));
@@ -95,7 +95,7 @@ public class UserService {
     }
 
     public User authenticateUser(String login, String password) throws DebtControlException {
-        UserEntity user = userRepository.findByLogin(login);
+        UserEntity user = userRepository.findByEmail(login);
         if (user == null) {
             throw new DebtControlException(ExceptionType.AUTHENTICATION_ERROR, "User doesn't exist.");
         }
@@ -103,7 +103,6 @@ public class UserService {
         if (user.getPassword() != null && !user.getPassword().equals(password)) {
             throw new DebtControlException(ExceptionType.AUTHENTICATION_ERROR, "Incorrect login or password");
         }
-
         return mapper.map(user, User.class);
     }
 

@@ -95,11 +95,11 @@ public class ConfirmationsArrayAdapter extends AbstractArrayAdapter<Confirmation
         switch (item.getConfirmationType()){
             case REQUEST_DEBT_ADDING:
                 //TODO: vary when user owes and lend
-                message = activity.getString(R.string.confirmation_he_owes, otherSide.getLogin(), connectedDebt.getAmount(), "PLN" );
+                message = activity.getString(R.string.confirmation_he_owes, otherSide.getEmail(), connectedDebt.getAmount(), "PLN" );
                 break;
             case REQUEST_DEBT_REPAYING:
                 //TODO: vary when user owes and lend
-                message = activity.getString(R.string.confirmation_he_paid, otherSide.getLogin(), connectedDebt.getDescription(), connectedDebt.getAmount(), "PLN" );
+                message = activity.getString(R.string.confirmation_he_paid, otherSide.getEmail(), connectedDebt.getDescription(), connectedDebt.getAmount(), "PLN" );
 
         }
 

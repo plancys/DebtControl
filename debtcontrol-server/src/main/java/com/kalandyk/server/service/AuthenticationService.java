@@ -16,7 +16,7 @@ public class AuthenticationService {
 
     public UserEntity authenticateUser(String login, String password){
         //TODO: add real auth
-        return userRepository.findByLogin(login);
+        return userRepository.findByEmail(login);
     }
 
 }

@@ -23,7 +23,7 @@ public class DebtUrls {
         return baseUrl + activity.getString(R.string.url_get_user_friends, user);
     }
 
-    public String getLoginUrl(){
+    public String getEmailUrl(){
         return baseUrl + activity.getString(R.string.url_login);
     }
 

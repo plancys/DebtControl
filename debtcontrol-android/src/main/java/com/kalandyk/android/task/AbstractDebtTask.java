@@ -33,7 +33,7 @@ public abstract class AbstractDebtTask<Params, Progress, Result> extends AsyncTa
             return null;
         }
         UserCredentials credentials = new UserCredentials();
-        credentials.setLogin(loggedUser.getLogin());
+        credentials.setEmail(loggedUser.getEmail());
         credentials.setPassword(loggedUser.getPassword());
         return credentials;
     }

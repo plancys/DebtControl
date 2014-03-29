@@ -173,7 +173,7 @@ public class DebtAddingFragment extends AbstractFragment {
     private void loadGuiFromDebtObject() {
         User connectedPerson = debt.getConnectedPerson();
         if (connectedPerson != null) {
-            personConnected.setText(connectedPerson.getLogin());
+            personConnected.setText(connectedPerson.getEmail());
         }
 
         description.setText(debt.getDescription());
@@ -193,7 +193,7 @@ public class DebtAddingFragment extends AbstractFragment {
         debt.setCreationDate(new Date());
         //TODO: find user
         User user = new User();
-        user.setLogin(personConnected.getText().toString());
+        user.setEmail(personConnected.getText().toString());
 
         debt.setDescription(description.getText().toString());
 

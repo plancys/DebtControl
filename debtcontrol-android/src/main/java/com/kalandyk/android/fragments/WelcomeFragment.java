@@ -1,7 +1,7 @@
 package com.kalandyk.android.fragments;
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,6 @@ import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.task.AbstractDebtTask;
-import com.kalandyk.android.utils.PasswordDecoder;
 import com.kalandyk.api.model.User;
 import com.kalandyk.api.model.UserCredentials;
 
@@ -27,7 +26,7 @@ import com.kalandyk.api.model.wrapers.Friends;
  */
 public class WelcomeFragment extends AbstractFragment {
 
-    private EditText loginEditText;
+    private EditText emailEditText;
     private EditText passwordEditText;
 
     private Button loginButton;
@@ -45,14 +44,15 @@ public class WelcomeFragment extends AbstractFragment {
     }
 
     private void initUIItems(View view) {
-        loginEditText = (EditText) view.findViewById(R.id.et_login);
+        emailEditText = (EditText) view.findViewById(R.id.et_email);
+        emailEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         passwordEditText = (EditText) view.findViewById(R.id.et_password);
         loginButton = (Button) view.findViewById(R.id.bt_login);
         registerButton = (Button) view.findViewById(R.id.bt_register);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String login = loginEditText.getText().toString();
+                String login = emailEditText.getText().toString();
                 String plainPassword = passwordEditText.getText().toString();
                 String decodedPassword = PasswordUtils.getHashFromPassword(plainPassword);
                 WelcomeFragment.this.login(login, decodedPassword);
@@ -67,10 +67,10 @@ public class WelcomeFragment extends AbstractFragment {
         progressDialog = getAbstractDebtActivity().getProgressDialog("Application is logging to server");
     }
 
-    protected void login(String login, String encodedPassword) {
+    protected void login(String email, String encodedPassword) {
         progressDialog.show();
         UserCredentials userCredentials = new UserCredentials();
-        userCredentials.setLogin(login);
+        userCredentials.setEmail(email);
         userCredentials.setPassword(encodedPassword);
         new DownloadFilesTask().execute(userCredentials);
     }
@@ -100,8 +100,8 @@ public class WelcomeFragment extends AbstractFragment {
             Log.d(AbstractDebtActivity.TAG, "Started TASK");
             User user = null;
             try {
-                user = restTemplate.postForObject(urls.getLoginUrl(), credentials[0], User.class);
-                Friends friends = restTemplate.getForObject(urls.getUserFriendsUrl(user.getLogin()), Friends.class);
+                user = restTemplate.postForObject(urls.getEmailUrl(), credentials[0], User.class);
+                Friends friends = restTemplate.getForObject(urls.getUserFriendsUrl(user.getEmail()), Friends.class);
                 cachedData.setFriends(friends.getFriends());
             } catch (Exception e) {
                 Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);

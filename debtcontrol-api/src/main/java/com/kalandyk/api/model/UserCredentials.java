@@ -1,18 +1,15 @@
 package com.kalandyk.api.model;
 
-/**
- * Created by kamil on 1/19/14.
- */
 public class UserCredentials {
-    private String login;
+    private String email;
     private String password;
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String login) {
+        this.email = login;
     }
 
     public String getPassword() {

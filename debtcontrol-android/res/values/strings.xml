@@ -101,6 +101,8 @@
     <string name="password_label">Password:</string>
     <string name="password_confirm_label">Confirm password:</string>
     <string name="url_register">users/createUser</string>
+    <string name="label_email">Email:</string>
+    <string name="label_find">Find</string>
 
 
 </resources>

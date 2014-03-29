@@ -4,13 +4,49 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:weightSum="1">
+              android:weightSum="1"
+        android:padding="5dp">
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.15"
+            android:gravity="center"
+            android:padding="5dp"
+            android:background="@drawable/gradient_bg">
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:gravity="center">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email_label"
+                    style="@style/TextLogin"
+                    android:layout_weight="0.15"/>
+            <EditText
+                    android:id="@+id/et_email_to_find"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:layout_weight="0.55"/>
+            <Button
+                    android:id="@+id/bt_find_friend"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/ButtonInListStyleGrey"
+                    android:layout_weight="0.3"
+                    android:text="@string/label_find"/>
 
+        </LinearLayout>
+
+    </LinearLayout>
     <ListView
             android:id="@+id/list_view_friends"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="0.85" />
 
 
     <!-- bottom menu needs 15% of height -->

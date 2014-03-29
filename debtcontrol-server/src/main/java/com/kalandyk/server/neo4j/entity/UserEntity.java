@@ -18,10 +18,8 @@ public class UserEntity extends AbstractEntity {
     public static final String USER_FRIENDSHIP_RELATION = "KNOWS";
     public static final String USER_FRIENDSHIP_REQUEST = "REQUESTS_FRIENDSHIP";
     public static final String USERS_DEBTS = "HAS_DEBT";
-    //@Indexed(unique = true)
-    private String email;
     @Indexed(unique = true)
-    private String login;
+    private String email;
     private String name;
     private String forename;
     private String password;
@@ -42,34 +40,12 @@ public class UserEntity extends AbstractEntity {
         super();
     }
 
-    public UserEntity(User user) {
-        setEmail(user.getEmail());
-        setLogin(user.getLogin());
-        setPassword(user.getPassword());
-        setName(user.getName());
-        setForename(user.getForename());
-    }
-
-    public UserEntity(String email, String login, String password) {
-        this.email = email;
-        this.password = password;
-        this.login = login;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getPassword() {
