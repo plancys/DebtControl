@@ -59,7 +59,7 @@ public class DebtPayOffActionWithConfirmation extends DebtAction {
             try {
 //                debt = restTemplate.postForObject(urls.getRequestDebtRepayingUrl(), debt, Debt.class);
                 ResponseEntity<Debt> responseDebt = restTemplate
-                        .exchange(urls.getRequestDebtRepayingUrl(), HttpMethod.POST, getAuthHeaders(), Debt.class, debt);
+                        .exchange(urls.getRequestDebtRepayingUrl(), HttpMethod.POST, getAuthHeadersWithRequestObject(debt), Debt.class);
                 debt = responseDebt.getBody();
             }catch (Exception e){
                 Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);

@@ -89,7 +89,7 @@ public class ConfirmationFragment extends AbstractFragment {
             try {
 //                Boolean decisionMade = restTemplate.postForObject(urls.getSendConfirmationDecisionUrl(), confirmationDecisions[0], Boolean.class);
                 ResponseEntity<Debt> responseDebt = restTemplate
-                        .exchange(urls.getSendConfirmationDecisionUrl(), HttpMethod.POST, getAuthHeaders(), Debt.class, confirmationDecisions[0]);
+                        .exchange(urls.getSendConfirmationDecisionUrl(), HttpMethod.POST, getAuthHeadersWithRequestObject(confirmationDecisions[0]), Debt.class);
                 debt = responseDebt.getBody();
                 if (debt != null) {
                     //TODO: do it another way - replace debt/remove confirmation
