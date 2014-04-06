@@ -6,6 +6,9 @@ import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.User;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Created by kamil on 12/22/13.
@@ -32,7 +35,7 @@ public class DebtCancelPaidOfRequestAction extends DebtAction {
 
     @Override
     protected void taskFinished(Debt debt) {
-        if(debtActionListener != null){
+        if (debtActionListener != null) {
             debtActionListener.onChangeDebtState(debt);
         }
         progressDialog.dismiss();
@@ -49,8 +52,11 @@ public class DebtCancelPaidOfRequestAction extends DebtAction {
         protected Debt doInBackground(Debt... debts) {
             Debt debt = debts[0];
             try {
-                debt = restTemplate.postForObject(urls.getCancelRepayingRequestUrl(), debt, Debt.class);
-            }catch (Exception e){
+//                debt = restTemplate.postForObject(urls.getCancelRepayingRequestUrl(), debt, Debt.class);
+                ResponseEntity<Debt> responseDebt = restTemplate
+                        .exchange(urls.getCancelRepayingRequestUrl(), HttpMethod.POST, getAuthHeaders(), Debt.class, debt);
+                debt = responseDebt.getBody();
+            } catch (Exception e) {
                 Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
             }
             return debt;

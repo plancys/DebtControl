@@ -11,6 +11,8 @@ import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.fragments.AbstractFragment;
 import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.api.model.Debt;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Created by kamil on 12/22/13.
@@ -55,7 +57,10 @@ public class DebtPayOffActionWithConfirmation extends DebtAction {
         protected Debt doInBackground(Debt... debts) {
             Debt debt = debts[0];
             try {
-                debt = restTemplate.postForObject(urls.getRequestDebtRepayingUrl(), debt, Debt.class);
+//                debt = restTemplate.postForObject(urls.getRequestDebtRepayingUrl(), debt, Debt.class);
+                ResponseEntity<Debt> responseDebt = restTemplate
+                        .exchange(urls.getRequestDebtRepayingUrl(), HttpMethod.POST, getAuthHeaders(), Debt.class, debt);
+                debt = responseDebt.getBody();
             }catch (Exception e){
                 Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
             }

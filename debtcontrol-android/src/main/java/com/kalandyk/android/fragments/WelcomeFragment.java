@@ -9,29 +9,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.kalandyk.R;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.adapters.AbstractArrayAdapter;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.task.AbstractDebtTask;
+import com.kalandyk.android.utils.SharedPreferencesBuilder;
 import com.kalandyk.api.model.User;
 import com.kalandyk.api.model.UserCredentials;
-
 import com.kalandyk.api.model.security.PasswordUtils;
 import com.kalandyk.api.model.wrapers.Friends;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
-/**
- * Created by kamil on 1/19/14.
- */
 public class WelcomeFragment extends AbstractFragment {
 
     private EditText emailEditText;
     private EditText passwordEditText;
-
     private Button loginButton;
     private Button registerButton;
-
     private ProgressDialog progressDialog;
     private DebtDataContainer cachedData;
 
@@ -41,6 +37,19 @@ public class WelcomeFragment extends AbstractFragment {
         cachedData = getAbstractDebtActivity().getCachedData();
         initUIItems(debtListItemView);
         return debtListItemView;
+    }
+
+    @Override
+    public AbstractArrayAdapter getFragmentArrayAdapter() {
+        return null;
+    }
+
+    protected void login(String email, String decodedPassword) {
+        progressDialog.show();
+        UserCredentials userCredentials = new UserCredentials();
+        userCredentials.setEmail(email);
+        userCredentials.setPassword(decodedPassword);
+        new DownloadFilesTask().execute(userCredentials);
     }
 
     private void initUIItems(View view) {
@@ -67,19 +76,11 @@ public class WelcomeFragment extends AbstractFragment {
         progressDialog = getAbstractDebtActivity().getProgressDialog("Application is logging to server");
     }
 
-    protected void login(String email, String encodedPassword) {
-        progressDialog.show();
-        UserCredentials userCredentials = new UserCredentials();
-        userCredentials.setEmail(email);
-        userCredentials.setPassword(encodedPassword);
-        new DownloadFilesTask().execute(userCredentials);
-    }
-
     private void finished(User user) {
         progressDialog.dismiss();
         AbstractDebtActivity activity = getAbstractDebtActivity();
         Log.d(AbstractDebtActivity.TAG, "TASK FINISHED!");
-        if(user == null){
+        if (user == null) {
             Log.d(AbstractDebtActivity.TAG, "Login failed.");
             Toast.makeText(activity, "Login failed. Incorrect login or password", Toast.LENGTH_LONG).show();
             return;
@@ -89,20 +90,23 @@ public class WelcomeFragment extends AbstractFragment {
         activity.replaceFragmentWithStackClearing(new DebtsListFragment());
     }
 
-    @Override
-    public AbstractArrayAdapter getFragmentArrayAdapter() {
-        return null;
-    }
-
     private class DownloadFilesTask extends AbstractDebtTask<UserCredentials, Void, User> {
         @Override
         protected User doInBackground(UserCredentials... credentials) {
             Log.d(AbstractDebtActivity.TAG, "Started TASK");
             User user = null;
             try {
-                user = restTemplate.postForObject(urls.getEmailUrl(), credentials[0], User.class);
-                Friends friends = restTemplate.getForObject(urls.getUserFriendsUrl(user.getEmail()), Friends.class);
-                cachedData.setFriends(friends.getFriends());
+                SharedPreferencesBuilder sharedPreferencesBuilder = new SharedPreferencesBuilder(getDebtActivity());
+                sharedPreferencesBuilder.saveCredentials(credentials[0]);
+                cachedData.setCredentials(credentials[0]);
+                ResponseEntity<User> responseUser = restTemplate
+                        .exchange(urls.getEmailUrl(), HttpMethod.GET, getAuthHeaders(), User.class);
+                user = responseUser.getBody();
+
+                ResponseEntity<Friends> responseFriends = restTemplate
+                        .exchange(urls.getUserFriendsUrl(), HttpMethod.GET, getAuthHeaders(), Friends.class);
+
+                cachedData.setFriends(responseFriends.getBody().getFriends());
             } catch (Exception e) {
                 Log.e(AbstractDebtActivity.TAG, e.getMessage(), e);
             }

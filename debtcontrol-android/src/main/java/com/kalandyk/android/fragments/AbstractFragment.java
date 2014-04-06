@@ -26,9 +26,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kamil on 1/25/14.
- */
 public abstract class AbstractFragment extends Fragment {
 
     private AbstractDebtActivity abstractDebtActivity;
@@ -51,12 +48,10 @@ public abstract class AbstractFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         cachedData = getAbstractDebtActivity().getCachedData();
         View view = initFragment(inflater, container);
         view = initConfirmationNotifier(view);
         return view;
-
     }
 
     private View initConfirmationNotifier(final View view) {

@@ -17,18 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by kamil on 1/5/14.
- */
-
 @Service
 @Transactional
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private Neo4jTemplate neo4jTemplate;
     @Autowired
     private Mapper mapper;
 
@@ -38,7 +32,6 @@ public class UserService {
                     "User with that login already exist (" + user.getEmail() + ")");
         }
         user = userRepository.save(user);
-        //addRelationToRootNode(user);
         return user;
     }
 
@@ -76,34 +69,13 @@ public class UserService {
         return saveUser(requester);
     }
 
-    public User findUserByLogin(String username) {
-        UserEntity byUsername = userRepository.findByEmail(username);
+    public User findUserByEmail(String email) {
+        UserEntity byUsername = userRepository.findByEmail(email);
         if (byUsername == null) {
             return null;
         }
+        byUsername.setPassword(null);
         return mapper.map(byUsername, User.class);
-    }
-
-    public Set<User> findUserFriendsByLogin(String login) {
-        Set<User> usersFriends = new HashSet<User>();
-        UserEntity user = userRepository.findByEmail(login);
-        for (UserEntity friend : user.getFriends()) {
-            UserEntity friendFetched = userRepository.findOne(friend.getId());
-            usersFriends.add(mapper.map(friendFetched, User.class));
-        }
-        return usersFriends;
-    }
-
-    public User authenticateUser(String login, String password) throws DebtControlException {
-        UserEntity user = userRepository.findByEmail(login);
-        if (user == null) {
-            throw new DebtControlException(ExceptionType.AUTHENTICATION_ERROR, "User doesn't exist.");
-        }
-
-        if (user.getPassword() != null && !user.getPassword().equals(password)) {
-            throw new DebtControlException(ExceptionType.AUTHENTICATION_ERROR, "Incorrect login or password");
-        }
-        return mapper.map(user, User.class);
     }
 
     private UserEntity saveUser(UserEntity requester) throws DebtControlException {
@@ -127,23 +99,5 @@ public class UserService {
                             .toString());
         }
         return user;
-    }
-
-    private Relationship addRelationToRootNode(UserEntity user) {
-        Node node = getNodeById(user.getId());
-        Relationship relationshipTo = getRootNode().createRelationshipTo(node, RelationFromRootToUsers.EXIST_USER);
-        return relationshipTo;
-    }
-
-    private Node getRootNode() {
-        return neo4jTemplate.getGraphDatabaseService().getNodeById(0l);
-    }
-
-    private Node getNodeById(long id) {
-        return neo4jTemplate.getGraphDatabaseService().getNodeById(id);
-    }
-
-    enum RelationFromRootToUsers implements RelationshipType {
-        EXIST_USER
     }
 }

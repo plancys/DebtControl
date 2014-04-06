@@ -16,7 +16,10 @@ import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.android.task.AbstractDebtTask;
 import com.kalandyk.api.model.Confirmation;
 import com.kalandyk.android.listeners.ConfirmationDecisionListener;
+import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.wrapers.ConfirmationDecision;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Created by kamil on 12/18/13.
@@ -82,9 +85,14 @@ public class ConfirmationFragment extends AbstractFragment {
     private class SendConfirmationDecisionTask extends AbstractDebtTask<ConfirmationDecision, Void, Confirmation> {
         @Override
         protected Confirmation doInBackground(ConfirmationDecision... confirmationDecisions) {
+            Debt debt = null;
             try {
-                Boolean decisionMade = restTemplate.postForObject(urls.getSendConfirmationDecisionUrl(), confirmationDecisions[0], Boolean.class);
-                if (decisionMade) {
+//                Boolean decisionMade = restTemplate.postForObject(urls.getSendConfirmationDecisionUrl(), confirmationDecisions[0], Boolean.class);
+                ResponseEntity<Debt> responseDebt = restTemplate
+                        .exchange(urls.getSendConfirmationDecisionUrl(), HttpMethod.POST, getAuthHeaders(), Debt.class, confirmationDecisions[0]);
+                debt = responseDebt.getBody();
+                if (debt != null) {
+                    //TODO: do it another way - replace debt/remove confirmation
                     loadDebtsToCacheTask();
                     loadConfirmationsToCacheTask();
                 }

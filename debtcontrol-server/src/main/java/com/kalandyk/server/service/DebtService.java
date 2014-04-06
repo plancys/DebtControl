@@ -6,6 +6,7 @@ import com.kalandyk.exception.DebtControlException;
 import com.kalandyk.exception.ExceptionType;
 import com.kalandyk.server.neo4j.entity.*;
 import com.kalandyk.server.neo4j.repository.*;
+import com.kalandyk.server.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,6 @@ import java.util.List;
 @Transactional
 public class DebtService extends AbstractDebtService {
 
-    @Autowired
-    private Neo4jTemplate neo4jTemplate;
     @Autowired
     private DebtRepository debtRepository;
     @Autowired
@@ -36,7 +35,7 @@ public class DebtService extends AbstractDebtService {
 
     public DebtEntity createDebt(UserEntity debtCreator, DebtEntity debt) throws DebtControlException {
         debtCreator = fetchUser(debtCreator);
-
+        //TODO: handle situation when debtCreator doesn't have debtor/creditor in friends
         if (debtExist(debt)) {
             return debt;
         }
@@ -113,6 +112,8 @@ public class DebtService extends AbstractDebtService {
                             .append(debt.getDebtState()).toString());
 
         }
+        checkPermisionForDebtRepaying(debt);
+
         debt.setDebtState(DebtState.CONFIRMED_DEBT_WITH_PENDING_REPAYMENT_APPROVAL);
         prepareEventForDebt(debt, DebtEventType.DEBT_REPAYMENT_REQUEST);
         confirmationService.createDebtRepayingConfirmation(debt);
@@ -129,11 +130,21 @@ public class DebtService extends AbstractDebtService {
                             .append("only on CONFIRMED_DEBT_WITH_PENDING_REPAYMENT_APPROVAL state ")
                             .append("not on ").append(debt.getDebtState()).toString());
         }
+        checkPermisionForDebtRepaying(debt);
         debt.setDebtState(DebtState.CONFIRMED_NOT_REPAID_DEBT);
         prepareEventForDebt(debt, DebtEventType.DEBT_CANCELING_REPAYMENT_REQUEST);
         debt = debtRepository.save(debt);
         removeConnectedConfirmation(debt);
         return debt;
+    }
+
+    private void checkPermisionForDebtRepaying(DebtEntity debt) throws DebtControlException {
+        if (!debt.getDebtor().equals(AuthUtil.getAuthenticatedUser(userRepository))) {
+            throw new DebtControlException(ExceptionType.PERMISSION_DENIED,
+                    new StringBuilder()
+                            .append("Only debtor can request this change.").toString());
+
+        }
     }
 
     private DebtEntity saveDebt(DebtEntity debt) throws DebtControlException {

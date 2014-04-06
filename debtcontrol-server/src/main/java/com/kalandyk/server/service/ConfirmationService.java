@@ -1,6 +1,7 @@
 package com.kalandyk.server.service;
 
 import com.kalandyk.api.model.ConfirmationType;
+import com.kalandyk.api.model.Debt;
 import com.kalandyk.exception.DebtControlException;
 import com.kalandyk.exception.ExceptionType;
 import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
@@ -18,8 +19,6 @@ public class ConfirmationService {
     @Autowired
     private ConfirmationRepository confirmationRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private DebtService debtService;
 
     public void createNewDebtConfirmation(UserEntity creator, DebtEntity debt) throws DebtControlException {
@@ -35,15 +34,16 @@ public class ConfirmationService {
         saveConfirmation(confirmation);
     }
 
-    public Boolean sendDecision(ConfirmationEntity confirmation, boolean decision) throws DebtControlException {
+    public DebtEntity sendDecision(ConfirmationEntity confirmation, boolean decision) throws DebtControlException {
         ConfirmationType confirmationType = confirmation.getConfirmationType();
+        DebtEntity debtAfterDecision = null;
         //TODO: add abstract builder or sth
         switch (confirmationType) {
             case REQUEST_DEBT_ADDING:
-                debtService.makeDecisionRegardingAddingDebtRequest(confirmation.getConnectedDebt(), decision);
+                debtAfterDecision = debtService.makeDecisionRegardingAddingDebtRequest(confirmation.getConnectedDebt(), decision);
                 break;
             case REQUEST_DEBT_REPAYING:
-                debtService.makeDecisionRegardingRepayDebtRequest(confirmation.getConnectedDebt(), decision);
+                debtAfterDecision = debtService.makeDecisionRegardingRepayDebtRequest(confirmation.getConnectedDebt(), decision);
                 break;
         }
         try {
@@ -54,7 +54,7 @@ public class ConfirmationService {
                             .append("Error with deleting confirmation: ")
                             .append(e.getMessage()).toString());
         }
-        return true;
+        return debtAfterDecision;
     }
 
     public void createDebtRepayingConfirmation(DebtEntity debt) throws DebtControlException {
@@ -84,13 +84,5 @@ public class ConfirmationService {
             return connectedDebt.getCreditor();
         }
         return connectedDebt.getDebtor();
-    }
-
-    private void eraseFriendsFromEntity(ConfirmationEntity confirmationEntity) {
-        //TODO: find a better way to do that
-        if (confirmationEntity != null) {
-            confirmationEntity.getReceiver().setFriends(null);
-            confirmationEntity.getRequestApplicant().setFriends(null);
-        }
     }
 }

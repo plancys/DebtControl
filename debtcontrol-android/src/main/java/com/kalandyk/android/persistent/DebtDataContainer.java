@@ -2,17 +2,13 @@ package com.kalandyk.android.persistent;
 
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.android.utils.SharedPreferencesBuilder;
-import com.kalandyk.api.model.Confirmation;
-import com.kalandyk.api.model.Debt;
-import com.kalandyk.api.model.DebtState;
-import com.kalandyk.api.model.User;
+import com.kalandyk.api.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DebtDataContainer {
 
-    private AbstractDebtActivity activity;
     private SharedPreferencesBuilder sharedPreferencesBuilder;
     private User loggedUser;
     //debts with confirmation
@@ -22,9 +18,9 @@ public class DebtDataContainer {
     private List<Confirmation> confirmations;
     private List<User> friends;
     private List<Debt> debts;
+    private UserCredentials credentials;
 
     public DebtDataContainer(AbstractDebtActivity activity) {
-        this.activity = activity;
         this.sharedPreferencesBuilder = new SharedPreferencesBuilder(activity);
         initializeData();
     }
@@ -109,8 +105,17 @@ public class DebtDataContainer {
         sharedPreferencesBuilder.saveOfflineDebts(getOfflineDebts());
     }
 
+    public UserCredentials getCredentials() {
+        return credentials;
+    }
+
+    public void setCredentials(UserCredentials credentials) {
+        this.credentials = credentials;
+    }
+
     private void initializeData() {
         setLoggedUser(sharedPreferencesBuilder.loadCurrentUser());
+        setCredentials(sharedPreferencesBuilder.loadCredentials());
         //setFriends(sharedPreferencesBuilder.loadFriends());
         //TODO: add synchronization with server
         //setOnlineDebts(sharedPreferencesBuilder.loadOnlineDebts());
@@ -124,7 +129,6 @@ public class DebtDataContainer {
             if (debt.getDebtState().equals(DebtState.DELETED))
                 toDelete.add(debt);
         }
-
         for (Debt debt : toDelete) {
             onlineDebts.remove(debt);
         }

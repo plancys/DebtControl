@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.kalandyk.android.activities.AbstractDebtActivity;
 import com.kalandyk.api.model.Confirmation;
 import com.kalandyk.api.model.Debt;
+import com.kalandyk.api.model.UserCredentials;
 import com.kalandyk.api.model.wrapers.Debts;
 import com.kalandyk.api.model.wrapers.Friends;
 import com.kalandyk.api.model.User;
@@ -26,7 +27,7 @@ public class SharedPreferencesBuilder {
     private static final String OFFLINE_DEBTS = "offline_debts";
     private static final String ONLINE_DEBTS = "online_debts";
     private static final String OFFLINE_ID = "offline_id";
-
+    private static final String CREDENTIALS = "credentials";
     private Activity activity;
     private Gson gson;
 
@@ -35,7 +36,7 @@ public class SharedPreferencesBuilder {
         gson = new Gson();
     }
 
-    public Long generateOfflineDebtId(){
+    public Long generateOfflineDebtId() {
         SharedPreferences sharedPref = getSharedPreferences();
         long id = sharedPref.getLong(OFFLINE_ID, -1);
 
@@ -44,16 +45,6 @@ public class SharedPreferencesBuilder {
         editor.commit();
 
         return id;
-    }
-
-    private void saveValue(String key, String value) {
-        SharedPreferences sharedPref = getSharedPreferences();
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.remove(key);
-        if (value != null) {
-            editor.putString(key, value);
-        }
-        editor.commit();
     }
 
     public void saveCurrentUser(User user) {
@@ -73,6 +64,21 @@ public class SharedPreferencesBuilder {
         saveValue(FRIENDS_KEY, jsonValue);
     }
 
+    public void saveCredentials(UserCredentials credentials) {
+        String jsonValue = gson.toJson(credentials);
+        Log.d(AbstractDebtActivity.TAG, "SAVING: " + jsonValue);
+        saveValue(CREDENTIALS, jsonValue);
+    }
+
+    public UserCredentials loadCredentials() {
+        String credientialsString = getSharedPreferences().getString(CREDENTIALS, "");
+        if (credientialsString.equals("")) {
+            return null;
+        }
+        UserCredentials credentials = gson.fromJson(credientialsString, UserCredentials.class);
+        return credentials;
+    }
+
     public List<User> loadFriends() {
         String friendsJson = getSharedPreferences().getString(FRIENDS_KEY, "");
         if (friendsJson.equals("")) {
@@ -82,7 +88,7 @@ public class SharedPreferencesBuilder {
         return friends.getFriends();
     }
 
-    public void saveOfflineDebts(List<Debt> debts){
+    public void saveOfflineDebts(List<Debt> debts) {
         Debts offlineDebtsWrapper = new Debts(debts);
         String jsonValue = gson.toJson(offlineDebtsWrapper);
         saveValue(OFFLINE_DEBTS, jsonValue);
@@ -97,8 +103,7 @@ public class SharedPreferencesBuilder {
         return debts.getDebts();
     }
 
-
-    public void saveOnlineDebts(List<Debt> debts){
+    public void saveOnlineDebts(List<Debt> debts) {
         Debts onlineDebtsWrapper = new Debts(debts);
         String jsonValue = gson.toJson(onlineDebtsWrapper);
         saveValue(ONLINE_DEBTS, jsonValue);
@@ -123,13 +128,22 @@ public class SharedPreferencesBuilder {
         return user;
     }
 
+    public List<Confirmation> loadConfirmations() {
+        return new ArrayList<Confirmation>();
+    }
+
+    private void saveValue(String key, String value) {
+        SharedPreferences sharedPref = getSharedPreferences();
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove(key);
+        if (value != null) {
+            editor.putString(key, value);
+        }
+        editor.commit();
+    }
 
     private SharedPreferences getSharedPreferences() {
         return activity.getPreferences(Context.MODE_PRIVATE);
-    }
-
-    public List<Confirmation> loadConfirmations() {
-        return new ArrayList<Confirmation>();
     }
 }
 

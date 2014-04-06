@@ -3,16 +3,19 @@
 
     <!--       U R L ' s         -->
     <string name="url_base">http://192.168.0.22:8080/</string>
+    <!--<string name="url_base">http://192.168.1.73:8080/</string>-->
     <!--<string name="url_base">http://185.25.150.219:8080/debtcontrol-server/</string>-->
+    <string name="url_register">unsecured/createUser</string>
     <string name="url_add_user"></string>
-    <string name="url_add_debt">debts/createDebt</string>
-    <string name="url_get_user_debts">debts/getUserDebts</string>
-    <string name="url_debt_request_repaying">debts/requestDebtRepaying</string>
-    <string name="url_cancel_debt_request_repaying">debts/cancelDebtRepayingRequest</string>
-    <string name="url_get_user_friends">users/getUsersFriends/%1$s</string>
-    <string name="url_login">users/login</string>
-    <string name="url_get_confirmations">confirmations/getUserConfirmations</string>
-    <string name="url_confirmation_send_decision">confirmations/sendConfirmationDecision</string>
+    <string name="url_find_user">secured/users/getUserByEmail</string>
+    <string name="url_add_debt">secured/debts/createDebt</string>
+    <string name="url_get_user_debts">secured/debts/getUserDebts</string>
+    <string name="url_debt_request_repaying">secured/debts/requestDebtRepaying</string>
+    <string name="url_cancel_debt_request_repaying">secured/debts/cancelDebtRepayingRequest</string>
+    <string name="url_get_user_friends">secured/users/getUsersFriends</string>
+    <string name="url_login">secured/users/getUserData</string>
+    <string name="url_get_confirmations">secured/confirmations/getUserConfirmations</string>
+    <string name="url_confirmation_send_decision">secured/confirmations/sendConfirmationDecision</string>
 
 
     <string name="app_name">DebtControl</string>
@@ -100,7 +103,6 @@
     <string name="login_label">Login:</string>
     <string name="password_label">Password:</string>
     <string name="password_confirm_label">Confirm password:</string>
-    <string name="url_register">users/createUser</string>
     <string name="label_email">Email:</string>
     <string name="label_find">Find</string>
 

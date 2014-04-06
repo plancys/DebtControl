@@ -126,14 +126,6 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         return cachedData;
     }
 
-    public void setCachedData(DebtDataContainer cachedData) {
-        this.cachedData = cachedData;
-    }
-
-    public SharedPreferencesBuilder getSharedPreferencesBuilder() {
-        return sharedPreferencesBuilder;
-    }
-
     public ProgressDialog getProgressDialog(String message) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);

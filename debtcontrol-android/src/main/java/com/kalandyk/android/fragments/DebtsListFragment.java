@@ -14,9 +14,6 @@ import com.kalandyk.android.listeners.DebtActionListener;
 import com.kalandyk.android.persistent.DebtDataContainer;
 import com.kalandyk.api.model.Debt;
 
-/**
- * Created by kamil on 12/1/13.
- */
 public class DebtsListFragment extends AbstractFragment {
 
     private DebtsArrayAdapter adapter;
@@ -29,16 +26,9 @@ public class DebtsListFragment extends AbstractFragment {
     public View initFragment(LayoutInflater inflater, ViewGroup container) {
         cachedData = getAbstractDebtActivity().getCachedData();
         View debtListItemView = inflater.inflate(R.layout.fragment_debt_list, container, false);
-
         adapter = initDebtsArrayAdapter();
-
         initListView(debtListItemView);
-
         return debtListItemView;
-    }
-
-    public void notifyDataChanged() {
-        adapter.notifyDataSetChanged();
     }
 
     protected void showDetailsFragment(Debt debt) {
@@ -47,8 +37,6 @@ public class DebtsListFragment extends AbstractFragment {
 
     private DebtsArrayAdapter initDebtsArrayAdapter() {
         DebtsArrayAdapter debtsArrayAdapter = new DebtsArrayAdapter(getAbstractDebtActivity(), cachedData.getDebts());
-
-
         debtsArrayAdapter.setDebtActionListener(new DebtActionListener() {
             @Override
             public void onDetails(Debt debt) {
@@ -67,9 +55,7 @@ public class DebtsListFragment extends AbstractFragment {
 
     private void initListView(View inflate) {
         ListView listView = (ListView) inflate.findViewById(R.id.debt_details_list_view);
-
         listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

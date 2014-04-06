@@ -19,8 +19,8 @@ public class DebtUrls {
         baseUrl = activity.getString(R.string.url_base);
     }
 
-    public String getUserFriendsUrl(String user){
-        return baseUrl + activity.getString(R.string.url_get_user_friends, user);
+    public String getUserFriendsUrl(){
+        return baseUrl + activity.getString(R.string.url_get_user_friends);
     }
 
     public String getEmailUrl(){
@@ -51,6 +51,12 @@ public class DebtUrls {
     public String getCancelRepayingRequestUrl() {
         return baseUrl + activity.getString(R.string.url_cancel_debt_request_repaying);
     }
+
+    public String findUserByEmailUrl() {
+        return baseUrl + activity.getString(R.string.url_find_user);
+    }
+
+
 
     public String getRegisterUrl(){
         return baseUrl + activity.getString(R.string.url_register);
