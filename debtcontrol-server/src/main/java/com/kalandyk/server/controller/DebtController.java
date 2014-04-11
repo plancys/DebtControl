@@ -9,8 +9,8 @@ import com.kalandyk.server.neo4j.entity.DebtEntity;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.DebtRepository;
 import com.kalandyk.server.neo4j.repository.UserRepository;
+import com.kalandyk.server.service.AuthenticationService;
 import com.kalandyk.server.service.DebtService;
-import com.kalandyk.server.utils.AuthUtil;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,12 +37,14 @@ public class DebtController {
     private UserRepository userRepository;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @RequestMapping(value = "createDebt", method = RequestMethod.POST)
     @ResponseBody
     public Debt createDebt(@RequestBody Debt debt) throws DebtControlException {
         DebtEntity savedDebt = debtService
-                .createDebt(AuthUtil.getAuthenticatedUser(userRepository), mapToEntity(debt));
+                .createDebt(authenticationService.getAuthenticatedUser(), mapToEntity(debt));
         return mapToDTO(savedDebt);
     }
 
@@ -51,7 +53,7 @@ public class DebtController {
     @ResponseBody
     public Debts getUserDebts() throws DebtControlException {
         Debts debts = new Debts();
-        UserEntity authenticatedUser = AuthUtil.getAuthenticatedUser(userRepository);
+        UserEntity authenticatedUser = authenticationService.getAuthenticatedUser();
         for (DebtEntity debtEntity : debtService.getUserDebts(authenticatedUser)) {
             debtEntity = debtRepository.findOne(debtEntity.getId());
             Debt debt = mapToDTO(debtEntity);

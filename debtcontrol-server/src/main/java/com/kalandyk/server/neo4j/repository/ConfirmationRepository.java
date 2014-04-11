@@ -1,10 +1,10 @@
 package com.kalandyk.server.neo4j.repository;
 
-import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
+import com.kalandyk.server.neo4j.entity.DebtConfirmationEntity;
 
-public interface ConfirmationRepository extends GraphRepository<ConfirmationEntity> {
+public interface ConfirmationRepository extends GraphRepository<DebtConfirmationEntity> {
 
-    ConfirmationEntity save(ConfirmationEntity confirmationEntity);
+    DebtConfirmationEntity save(DebtConfirmationEntity confirmationEntity);
 
-    ConfirmationEntity findOne(Long id);
+    DebtConfirmationEntity findOne(Long id);
 }

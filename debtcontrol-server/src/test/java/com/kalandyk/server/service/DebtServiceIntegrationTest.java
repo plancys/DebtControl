@@ -10,30 +10,41 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/DebtControlTest-context.xml"})
 @Transactional
-@Ignore//Mock AuthUtil
+//@Ignore//Mock AuthUtil
 public class DebtServiceIntegrationTest extends DebtTestPreparation {
 
     private final static String DEBT_DESC = "DebtSampleDescription";
     @Autowired
+    @InjectMocks
     private DebtService debtService;
+
     @Autowired
     private UserService userService;
     @Autowired
     private Mapper mapper;
+    @Mock
+    private AuthenticationService authenticationService;
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         prepareTwoUsers(userService);
+        when(authenticationService.getAuthenticatedUser()).thenReturn(getUserA());
     }
 
     @Test

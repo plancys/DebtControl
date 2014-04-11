@@ -25,7 +25,7 @@
     </mapping>
     <mapping>
         <class-a>com.kalandyk.api.model.Confirmation</class-a>
-        <class-b>com.kalandyk.server.neo4j.entity.ConfirmationEntity</class-b>
+        <class-b>com.kalandyk.server.neo4j.entity.DebtConfirmationEntity</class-b>
         <field>
             <a>id</a>
             <b>id</b>

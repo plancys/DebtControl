@@ -11,7 +11,7 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
  * Created by kamil on 1/13/14.
  */
 @NodeEntity
-public class ConfirmationEntity extends AbstractEntity {
+public class DebtConfirmationEntity extends AbstractEntity {
 
     public static final String CONFIRMATION_APPLICANT_RELATION = "TRIGGER_PERSON";
     public static final String CONFIRMATION_RELATED_DEBT_RELATION = "CONCERNS";
@@ -32,7 +32,7 @@ public class ConfirmationEntity extends AbstractEntity {
     private ConfirmationType confirmationType;
 
 
-    public ConfirmationEntity() {
+    public DebtConfirmationEntity() {
         super();
     }
 

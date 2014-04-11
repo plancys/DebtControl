@@ -5,13 +5,16 @@ import com.kalandyk.api.model.wrapers.Friends;
 import com.kalandyk.exception.DebtControlException;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.UserRepository;
+import com.kalandyk.server.service.AuthenticationService;
 import com.kalandyk.server.service.UserService;
-import com.kalandyk.server.utils.AuthUtil;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("secured/users")
@@ -22,6 +25,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AuthenticationService authenticationService;
     @Autowired
     private Mapper mapper;
 
@@ -39,7 +44,7 @@ public class UserController {
     public Friends getUsersFriends() {
         //TODO: create some abstract method for this + debt to yourself
         Friends friendsObj = new Friends();
-        UserEntity authenticatedUser = AuthUtil.getAuthenticatedUser(userRepository);
+        UserEntity authenticatedUser = authenticationService.getAuthenticatedUser();
         for (UserEntity userEntity : authenticatedUser.getFriends()) {
             UserEntity fetchedUser = userRepository.findOne(userEntity.getId());
             fetchedUser.setPassword(null);
@@ -54,7 +59,7 @@ public class UserController {
     public User createFriendshipRequest(@RequestBody User friend) throws DebtControlException {
         UserEntity user = userService
                 .createAddingToFriendRequest(mapToEntity(friend),
-                        AuthUtil.getAuthenticatedUser(userRepository));
+                        authenticationService.getAuthenticatedUser());
         return mapToDTO(user);
     }
 
@@ -63,7 +68,7 @@ public class UserController {
     //TODO: change in android from Boolean to User , change arguments
     public User acceptFriendshipRequest(@RequestBody User acceptedFriend) throws DebtControlException {
         UserEntity approver = userService.makeDecisionRegardingFriendshipRequest(
-                AuthUtil.getAuthenticatedUser(userRepository),
+                authenticationService.getAuthenticatedUser(),
                 mapToEntity(acceptedFriend), true);
         return mapToDTO(approver);
     }
@@ -73,7 +78,7 @@ public class UserController {
     //TODO: change in android from Boolean to User, , change arguments
     public User cancelFriendshipRequest(@RequestBody User acceptedFriend) throws DebtControlException {
         UserEntity approver = userService.makeDecisionRegardingFriendshipRequest(
-                AuthUtil.getAuthenticatedUser(userRepository),
+                authenticationService.getAuthenticatedUser(),
                 mapToEntity(acceptedFriend), false);
         return mapToDTO(approver);
     }
@@ -82,7 +87,7 @@ public class UserController {
     @RequestMapping(value = "getUserData", method = RequestMethod.GET)
     @ResponseBody
     public User getUserData() throws DebtControlException {
-        UserEntity authenticatedUser = AuthUtil.getAuthenticatedUser(userRepository);
+        UserEntity authenticatedUser = authenticationService.getAuthenticatedUser();
         authenticatedUser.setPassword(null);
         return mapToDTO(authenticatedUser);
     }

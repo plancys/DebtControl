@@ -9,4 +9,6 @@ public enum ConfirmationType {
 
     REQUEST_DEBT_REPAYING,
 
+    REQUEST_CREATE_FRIENDSHIP
+
 }

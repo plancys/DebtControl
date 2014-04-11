@@ -6,9 +6,7 @@ import com.kalandyk.exception.DebtControlException;
 import com.kalandyk.exception.ExceptionType;
 import com.kalandyk.server.neo4j.entity.*;
 import com.kalandyk.server.neo4j.repository.*;
-import com.kalandyk.server.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +30,8 @@ public class DebtService extends AbstractDebtService {
     private DebtEventRepository debtEventRepository;
     @Autowired
     private DebtHistoryRepository debtHistoryRepository;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     public DebtEntity createDebt(UserEntity debtCreator, DebtEntity debt) throws DebtControlException {
         debtCreator = fetchUser(debtCreator);
@@ -47,6 +47,7 @@ public class DebtService extends AbstractDebtService {
             throw new DebtControlException(ExceptionType.DEBT_CREATION_EXCEPTION,
                     "Lack of debtor/creditor in creating debt");
         }
+        addFriendshipRequestIfNeeded(debtCreator, debt);
         debt.updateTimestamp();
         debt.setDebtState(DebtState.NOT_CONFIRMED_DEBT);
         addRelationToDebtFromUsers(debt);
@@ -138,8 +139,20 @@ public class DebtService extends AbstractDebtService {
         return debt;
     }
 
+    private void addFriendshipRequestIfNeeded(UserEntity debtCreator, DebtEntity debt) {
+        if (!debt.getCreditor().getFriends().contains(debt.getDebtor())) {
+            UserEntity target;
+            if (debtCreator.equals(debt.getDebtor())) {
+                target = debt.getCreditor();
+            } else {
+                target = debt.getDebtor();
+            }
+            target.getFriendshipInvitation().add(target);
+        }
+    }
+
     private void checkPermisionForDebtRepaying(DebtEntity debt) throws DebtControlException {
-        if (!debt.getDebtor().equals(AuthUtil.getAuthenticatedUser(userRepository))) {
+        if (!debt.getDebtor().equals(authenticationService.getAuthenticatedUser())) {
             throw new DebtControlException(ExceptionType.PERMISSION_DENIED,
                     new StringBuilder()
                             .append("Only debtor can request this change.").toString());
@@ -213,8 +226,8 @@ public class DebtService extends AbstractDebtService {
 
     private void removeConnectedConfirmation(DebtEntity savedDebt) {
         UserEntity creditor = fetchUser(savedDebt.getCreditor());
-        ConfirmationEntity confirmationToRemove = null;
-        for (ConfirmationEntity confirmation : creditor.getConfirmations()) {
+        DebtConfirmationEntity confirmationToRemove = null;
+        for (DebtConfirmationEntity confirmation : creditor.getConfirmations()) {
             confirmation = confirmationRepository.findOne(confirmation.getId());
             if (confirmation.getConnectedDebt().equals(savedDebt)) {
                 confirmationToRemove = confirmation;

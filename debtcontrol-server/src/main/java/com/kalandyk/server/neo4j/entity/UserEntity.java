@@ -1,6 +1,5 @@
 package com.kalandyk.server.neo4j.entity;
 
-import com.kalandyk.api.model.User;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -17,7 +16,6 @@ public class UserEntity extends AbstractEntity {
 
     public static final String USER_FRIENDSHIP_RELATION = "KNOWS";
     public static final String USER_FRIENDSHIP_REQUEST = "REQUESTS_FRIENDSHIP";
-
     @Indexed(unique = true)
     private String email;
     private String name;
@@ -33,8 +31,8 @@ public class UserEntity extends AbstractEntity {
     private Set<DebtEntity> weOwesSbDebts;
     @RelatedTo(type = DebtEntity.DEBT_CREDITOR_RELATION, elementClass = DebtEntity.class, direction = Direction.INCOMING)
     private Set<DebtEntity> sbOwesToUsDebts;
-    @RelatedTo(type = ConfirmationEntity.CONFIRMATION_RECEIVER_RELATION, elementClass = ConfirmationEntity.class, direction = Direction.INCOMING)
-    private Set<ConfirmationEntity> confirmations;
+    @RelatedTo(type = DebtConfirmationEntity.CONFIRMATION_RECEIVER_RELATION, elementClass = DebtConfirmationEntity.class, direction = Direction.INCOMING)
+    private Set<DebtConfirmationEntity> confirmations;
 
     public UserEntity() {
         super();
@@ -57,6 +55,9 @@ public class UserEntity extends AbstractEntity {
     }
 
     public Set<UserEntity> getFriends() {
+        if (friends == null) {
+            friends = new HashSet<UserEntity>();
+        }
         return friends;
     }
 
@@ -91,14 +92,14 @@ public class UserEntity extends AbstractEntity {
         this.friendshipInvitation = friendshipInvitation;
     }
 
-    public Set<ConfirmationEntity> getConfirmations() {
+    public Set<DebtConfirmationEntity> getConfirmations() {
         if (confirmations == null) {
-            confirmations = new HashSet<ConfirmationEntity>();
+            confirmations = new HashSet<DebtConfirmationEntity>();
         }
         return confirmations;
     }
 
-    public void setConfirmations(Set<ConfirmationEntity> confirmations) {
+    public void setConfirmations(Set<DebtConfirmationEntity> confirmations) {
         this.confirmations = confirmations;
     }
 

@@ -1,14 +1,12 @@
 package com.kalandyk.server.service;
 
 import com.kalandyk.api.model.ConfirmationType;
-import com.kalandyk.api.model.Debt;
 import com.kalandyk.exception.DebtControlException;
 import com.kalandyk.exception.ExceptionType;
-import com.kalandyk.server.neo4j.entity.ConfirmationEntity;
+import com.kalandyk.server.neo4j.entity.DebtConfirmationEntity;
 import com.kalandyk.server.neo4j.entity.DebtEntity;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.ConfirmationRepository;
-import com.kalandyk.server.neo4j.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ public class ConfirmationService {
     private DebtService debtService;
 
     public void createNewDebtConfirmation(UserEntity creator, DebtEntity debt) throws DebtControlException {
-        ConfirmationEntity confirmation = new ConfirmationEntity();
+        DebtConfirmationEntity confirmation = new DebtConfirmationEntity();
         confirmation.setConfirmationType(ConfirmationType.REQUEST_DEBT_ADDING);
         confirmation.setConnectedDebt(debt);
         creator.updateTimestamp();
@@ -34,7 +32,7 @@ public class ConfirmationService {
         saveConfirmation(confirmation);
     }
 
-    public DebtEntity sendDecision(ConfirmationEntity confirmation, boolean decision) throws DebtControlException {
+    public DebtEntity sendDecision(DebtConfirmationEntity confirmation, boolean decision) throws DebtControlException {
         ConfirmationType confirmationType = confirmation.getConfirmationType();
         DebtEntity debtAfterDecision = null;
         //TODO: add abstract builder or sth
@@ -58,7 +56,7 @@ public class ConfirmationService {
     }
 
     public void createDebtRepayingConfirmation(DebtEntity debt) throws DebtControlException {
-        ConfirmationEntity confirmation = new ConfirmationEntity();
+        DebtConfirmationEntity confirmation = new DebtConfirmationEntity();
         confirmation.setConnectedDebt(debt);
         confirmation.setConfirmationType(ConfirmationType.REQUEST_DEBT_REPAYING);
         confirmation.setReceiver(debt.getCreditor());
@@ -66,10 +64,18 @@ public class ConfirmationService {
         saveConfirmation(confirmation);
     }
 
-    private void saveConfirmation(ConfirmationEntity confirmation) throws DebtControlException {
+//    public void createFriendInvitationConfirmation(UserEntity requester, UserEntity target) throws DebtControlException {
+//        DebtConfirmationEntity confirmationEntity = new DebtConfirmationEntity();
+//        confirmationEntity.setReceiver(target);
+//        confirmationEntity.setRequestApplicant(requester);
+//        confirmationEntity.setConfirmationType(ConfirmationType.REQUEST_CREATE_FRIENDSHIP);
+//        saveConfirmation(confirmationEntity);
+//
+//    }
+
+    private void saveConfirmation(DebtConfirmationEntity confirmation) throws DebtControlException {
         try {
             confirmationRepository.save(confirmation);
-
         } catch (Exception e) {
             throw new DebtControlException(ExceptionType.CONFIRMATION_CREATION_EXCEPTION,
                     new StringBuilder()
