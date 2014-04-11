@@ -85,9 +85,8 @@ public class ConfirmationFragment extends AbstractFragment {
     private class SendConfirmationDecisionTask extends AbstractDebtTask<ConfirmationDecision, Void, Confirmation> {
         @Override
         protected Confirmation doInBackground(ConfirmationDecision... confirmationDecisions) {
-            Debt debt = null;
+            Debt debt;
             try {
-//                Boolean decisionMade = restTemplate.postForObject(urls.getSendConfirmationDecisionUrl(), confirmationDecisions[0], Boolean.class);
                 ResponseEntity<Debt> responseDebt = restTemplate
                         .exchange(urls.getSendConfirmationDecisionUrl(), HttpMethod.POST, getAuthHeadersWithRequestObject(confirmationDecisions[0]), Debt.class);
                 debt = responseDebt.getBody();

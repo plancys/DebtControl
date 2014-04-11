@@ -1,9 +1,5 @@
 package com.kalandyk.api.model;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
 public class User extends AbstractModel {
 
     private String email;

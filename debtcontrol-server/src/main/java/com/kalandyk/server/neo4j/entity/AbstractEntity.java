@@ -14,7 +14,7 @@ public abstract class AbstractEntity {
 
     private Date timestamp;
 
-    public AbstractEntity(){
+    AbstractEntity(){
         timestamp = new Date();
     }
 

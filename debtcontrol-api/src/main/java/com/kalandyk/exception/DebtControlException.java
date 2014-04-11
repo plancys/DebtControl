@@ -3,7 +3,8 @@ package com.kalandyk.exception;
 import com.kalandyk.api.model.Debt;
 
 /**
- * Created by kamil on 3/20/14.
+ * DEBT CONTROL
+ * Created by Kamil Kalandyk on 3/20/14.
  */
 public class DebtControlException extends Exception {
 

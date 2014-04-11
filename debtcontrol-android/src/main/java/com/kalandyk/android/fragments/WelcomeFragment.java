@@ -116,7 +116,7 @@ public class WelcomeFragment extends AbstractFragment {
 
         @Override
         protected void onPostExecute(User result) {
-            Log.d(AbstractDebtActivity.TAG, "onPostExcecute");
+            Log.d(AbstractDebtActivity.TAG, "Downloading user data finished.");
             WelcomeFragment.this.finished(result);
         }
 

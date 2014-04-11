@@ -143,12 +143,6 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
         return restTemplate;
     }
 
-    public void setNotificationCounter(int value) {
-        if (currentFragment != null) {
-            currentFragment.setConfirmationCounter(value);
-        }
-    }
-
     public Long generateOfflineDebtId() {
         return sharedPreferencesBuilder.generateOfflineDebtId();
     }
@@ -169,13 +163,6 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
 
             }
         };
-    }
-
-    private void refreshLists() {
-        AbstractArrayAdapter fragmentArrayAdapter = currentFragment.getFragmentArrayAdapter();
-        if (fragmentArrayAdapter != null) {
-            fragmentArrayAdapter.refreshDataInList();
-        }
     }
 
     private void showProgressDialog() {
@@ -215,7 +202,7 @@ public abstract class AbstractDebtActivity extends BaseAbstractActivity {
                 replaceFragment(new WelcomeFragment());
                 return;
             }
-            replaceFragment((AbstractFragment) getContentFragment());
+            replaceFragment(getContentFragment());
         }
 
         @Override

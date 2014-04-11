@@ -2,6 +2,7 @@ package com.kalandyk.server.controller;
 
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtPosition;
+import com.kalandyk.api.model.User;
 import com.kalandyk.api.model.wrapers.Debts;
 import com.kalandyk.exception.DebtControlException;
 import com.kalandyk.server.neo4j.entity.DebtEntity;
@@ -54,7 +55,7 @@ public class DebtController {
         for (DebtEntity debtEntity : debtService.getUserDebts(authenticatedUser)) {
             debtEntity = debtRepository.findOne(debtEntity.getId());
             Debt debt = mapToDTO(debtEntity);
-            if (debt.getCreditor().equals(authenticatedUser)) {
+            if (debt.getCreditor().equals(mapper.map(authenticatedUser, User.class))) {
                 debt.setDebtPosition(DebtPosition.CREDITOR);
             } else {
                 debt.setDebtPosition(DebtPosition.DEBTOR);

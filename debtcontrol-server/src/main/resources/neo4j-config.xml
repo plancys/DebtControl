@@ -15,8 +15,8 @@
 
     <neo4j:config graphDatabaseService="graphDatabaseService"/>
     <bean id="graphDatabaseService" class="org.springframework.data.neo4j.rest.SpringRestGraphDatabase">
-        <!--<constructor-arg value="http://localhost:7474/db/data/" index="0"/>-->
-        <constructor-arg value="http://185.25.150.219:7474/db/data/" index="0"/>
+        <constructor-arg value="http://localhost:7474/db/data/" index="0"/>
+        <!--<constructor-arg value="http://185.25.150.219:7474/db/data/" index="0"/>-->
         <!--<constructor-arg value="DebtControll" index="1"/>-->
         <!--<constructor-arg value="zyMqc2ZFePKIZiFw4Pxz" index="2"/>-->
 

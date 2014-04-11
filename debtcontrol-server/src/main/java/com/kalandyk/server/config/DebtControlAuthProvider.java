@@ -26,11 +26,9 @@ public class DebtControlAuthProvider implements AuthenticationProvider {
         if (authenticationService.authenticateUser(name, password)) {
             List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
             grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
-            Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
-            return auth;
-        } else {
-            return null;
+            return new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
         }
+        return null;
     }
 
     @Override

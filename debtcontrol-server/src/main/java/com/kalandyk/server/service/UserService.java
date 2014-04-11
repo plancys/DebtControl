@@ -6,15 +6,10 @@ import com.kalandyk.exception.ExceptionType;
 import com.kalandyk.server.neo4j.entity.UserEntity;
 import com.kalandyk.server.neo4j.repository.UserRepository;
 import org.dozer.Mapper;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -56,7 +51,7 @@ public class UserService {
 
         approver.getFriendshipInvitation().remove(requester);
         requester.getOutgoingFriendshipInvitation().remove(approver);
-        requester = saveUser(requester);
+        saveUser(requester);
         return saveUser(approver);
     }
 

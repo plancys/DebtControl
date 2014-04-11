@@ -72,8 +72,7 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
     }
 
     private void initDebtActionButtons(final Debt currentDebt, List<DebtAction> possibleDebtActions) {
-        for (int i = 0; i < possibleDebtActions.size(); i++) {
-            final DebtAction debtAction = possibleDebtActions.get(i);
+        for (final DebtAction debtAction : possibleDebtActions) {
             debtAction.setDebtActionListener(new DebtActionListener() {
                 @Override
                 public void onDetails(Debt debt) {
@@ -111,7 +110,7 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
     }
 
     private void setDebtMessages(Debt currentDebt) {
-        String message = null;
+        String message;
         if(currentDebt.getDebtType().equals(DebtType.DEBT_WITH_CONFIRMATION)){
             message = getDebtMessageForDebtWithConfirmation(currentDebt);
         } else {
@@ -129,23 +128,19 @@ public class DebtsArrayAdapter extends AbstractArrayAdapter<Debt> {
     }
 
     private String getDebtMessageForDebtWithoutConfirmation(Debt currentDebt) {
-        String message = null;
         if (currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)) {
-            message = activity.getString(R.string.debt_without_confirm_owe, currentDebt.getAmount());
+            return activity.getString(R.string.debt_without_confirm_owe, currentDebt.getAmount());
         } else {
-            message = activity.getString(R.string.debt_without_confirm_lend, currentDebt.getAmount());
+            return activity.getString(R.string.debt_without_confirm_lend, currentDebt.getAmount());
         }
-        return message;
     }
 
     private String getDebtMessageForDebtWithConfirmation(Debt currentDebt) {
-        String message = null;
         if (currentDebt.getDebtPosition().equals(DebtPosition.DEBTOR)) {
-            message = activity.getString(R.string.debt_you_owe, currentDebt.getCreditor().getEmail(), currentDebt.getAmount());
+            return activity.getString(R.string.debt_you_owe, currentDebt.getCreditor().getEmail(), currentDebt.getAmount());
         } else {
-            message = activity.getString(R.string.debt_you_lend, currentDebt.getDebtor().getEmail(), currentDebt.getAmount());
+            return activity.getString(R.string.debt_you_lend, currentDebt.getDebtor().getEmail(), currentDebt.getAmount());
         }
-        return message;
     }
 
     protected void onClickDetailsButtonAction(Debt debt) {

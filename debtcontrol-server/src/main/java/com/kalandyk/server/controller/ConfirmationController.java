@@ -33,8 +33,6 @@ public class ConfirmationController {
     @Autowired
     private ConfirmationService confirmationService;
     @Autowired
-    private AuthenticationService authenticationService;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private ConfirmationRepository confirmationRepository;
@@ -49,9 +47,13 @@ public class ConfirmationController {
         Confirmations confirmationsWrapper = new Confirmations();
         for(ConfirmationEntity confirmationEntity : confirmations){
             confirmationEntity = fetchConfirmation(confirmationEntity);
-            confirmationsWrapper.getConfirmationList().add(mapper.map(confirmationEntity, Confirmation.class));
+            confirmationsWrapper.getConfirmationList().add(mapToDTO(confirmationEntity));
         }
         return confirmationsWrapper;
+    }
+
+    private Confirmation mapToDTO(ConfirmationEntity confirmationEntity) {
+        return mapper.map(confirmationEntity, Confirmation.class);
     }
 
     private ConfirmationEntity fetchConfirmation(ConfirmationEntity confirmationEntity) {

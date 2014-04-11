@@ -1,12 +1,11 @@
 package com.kalandyk.android.debt.logic;
 
-import com.kalandyk.android.debt.action.*;
-import com.kalandyk.api.model.DebtState;
 import com.kalandyk.android.activities.AbstractDebtActivity;
+import com.kalandyk.android.debt.action.*;
 import com.kalandyk.api.model.Debt;
 import com.kalandyk.api.model.DebtPosition;
+import com.kalandyk.api.model.DebtState;
 import com.kalandyk.api.model.DebtType;
-import com.kalandyk.android.debt.action.DebtArchiveAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +30,10 @@ public class DebtStateObject {
 
     public List<DebtAction> getPossibleDebtActions() {
         List<DebtAction> debtActions = new ArrayList<DebtAction>();
-        DebtType debtType = debt.getDebtType();
 
-        if(debt.getDebtPosition().equals(DebtPosition.CREDITOR)){
-            if(debt.getDebtType().equals(DebtType.DEBT_WITHOUT_CONFIRMATION)){
+        if (debt.getDebtPosition().equals(DebtPosition.CREDITOR)) {
+            if (debt.getDebtType().equals(DebtType.DEBT_WITHOUT_CONFIRMATION)) {
                 prepareUnconfirmedDebtActions(debtActions);
-            } else {
-
             }
         } else {
             prepareDebtActionsForDebtor(debtActions);
@@ -51,13 +47,13 @@ public class DebtStateObject {
         if (debtType.equals(DebtType.DEBT_WITHOUT_CONFIRMATION)) {
             prepareUnconfirmedDebtActions(debtActions);
         } else if (debtType.equals(DebtType.DEBT_WITH_CONFIRMATION)) {
-           prepareConfirmedDebtActions(debtActions);
+            prepareConfirmedDebtActions(debtActions);
         }
     }
 
     private void prepareUnconfirmedDebtActions(List<DebtAction> debtActions) {
         DebtState debtState = debt.getDebtState();
-        switch (debtState){
+        switch (debtState) {
             case UNPAID_DEBT:
                 debtActions.add(new DebtArchiveAction(activity));
                 debtActions.add(new DebtPayOffActionWithoutConfirmation(activity));
@@ -71,7 +67,7 @@ public class DebtStateObject {
 
     private void prepareConfirmedDebtActions(List<DebtAction> debtActions) {
         DebtState debtState = debt.getDebtState();
-        switch (debtState){
+        switch (debtState) {
             case NOT_CONFIRMED_DEBT:
                 //debtActions.add(new DebtArchiveAction(activity));
                 break;

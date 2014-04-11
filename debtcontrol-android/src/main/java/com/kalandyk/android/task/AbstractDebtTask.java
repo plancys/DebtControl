@@ -53,8 +53,7 @@ public abstract class AbstractDebtTask<Params, Progress, Result> extends AsyncTa
     }
 
     protected void loadConfirmationsToCacheTask() {
-        Confirmations confirmations = null;
-//  Confirmations confirmations = restTemplate.postForObject(urls.getUserConfirmationsUrl(), getUserCredentials(), Confirmations.class);
+        Confirmations confirmations;
         ResponseEntity<Confirmations> responseConfirmations = restTemplate
                 .exchange(urls.getUserConfirmationsUrl(), HttpMethod.GET, getAuthHeaders(), Confirmations.class);
         confirmations = responseConfirmations.getBody();

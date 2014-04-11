@@ -17,7 +17,7 @@ public class UserEntity extends AbstractEntity {
 
     public static final String USER_FRIENDSHIP_RELATION = "KNOWS";
     public static final String USER_FRIENDSHIP_REQUEST = "REQUESTS_FRIENDSHIP";
-    public static final String USERS_DEBTS = "HAS_DEBT";
+
     @Indexed(unique = true)
     private String email;
     private String name;
